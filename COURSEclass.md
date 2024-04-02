@@ -12,6 +12,7 @@ public class Course {
     public String endTime;
     public int credits;
     public Semester semester;
+    public int hoursTaught;
     
     
     // Constructors 
