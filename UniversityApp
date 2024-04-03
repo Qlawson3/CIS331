@@ -1,0 +1,156 @@
+
+package Project1;
+import java.util.*;
+
+
+public class UniversityApp {
+
+    // initialize Student array??
+    public static Student[] students = new Student[500];
+    public static int studentCount = 0;
+    public static Scanner in = new Scanner(System.in);
+    
+    public static void main(String[] args) {
+       
+        
+        // CREATE MENU
+        int menuChoice = -1;
+        
+        while (menuChoice != 6)
+        {
+            System.out.println("\nUNIVERSITY MAIN MENU");
+            System.out.println("\n\tPlease Select A Menu Choice");
+            System.out.println("\t-------------------------");
+            System.out.println("\t1: Create");
+            System.out.println("\t2: Edit");
+            System.out.println("\t3: Enroll a Student");
+            System.out.println("\t4: Assign Course to Faculty");
+            System.out.println("\t5: Print Reports");
+            System.out.println("\t6: Exit Application");
+            System.out.println("\t-------------------------");
+            System.out.println();
+            System.out.println("Choice (1-6): ");
+            menuChoice = in.nextInt();
+            
+            // consumer errant new line character
+            in.nextLine();
+            
+            System.out.println();
+            
+            switch (menuChoice)
+            {
+            case 1: 
+            {
+                
+                int optionChoice = -1;
+                while (optionChoice != 4) 
+                {
+                    System.out.println("\t\tWhat are you creating? ");
+                    System.out.println("\t\t-------------------------");
+                    System.out.println("\t\t1: Student");
+                    System.out.println("\t\t2: Faculty");
+                    System.out.println("\t\t3: Course");
+                    System.out.println("\t\t4: Exit");
+                    System.out.println("\t\t-------------------------");
+                    System.out.println();
+                    System.out.println("Choice (1-4): ");
+                    optionChoice = in.nextInt();
+                    
+                    switch (optionChoice)
+                    {
+                        case 1: 
+                            // createStudent()
+                            break;
+                        case 2:
+                            // createFaculty()
+                            break;
+                        case 3:
+                            // createCourse()
+                            break;
+                    }
+                    
+                } 
+                
+            }
+        case 2: 
+        {
+           int optionChoice = -1;
+                while (optionChoice != 4) 
+                {
+                    System.out.println("\t\tWhat are you editing? ");
+                    System.out.println("\t\t-------------------------");
+                    System.out.println("\t\t1: Student");
+                    System.out.println("\t\t2: Faculty");
+                    System.out.println("\t\t3: Course");
+                    System.out.println("\t\t4: Exit");
+                    System.out.println("\t\t-------------------------");
+                    System.out.println();
+                    System.out.println("Choice (1-4): ");
+                    optionChoice = in.nextInt();
+                    
+                    switch (optionChoice)
+                    {
+                        case 1: 
+                            // editStudent()
+                            break;
+                        case 2:
+                            // editFaculty()
+                            break;
+                        case 3:
+                            // editCourse()
+                            break;
+                    }
+                    
+                }  
+        }
+        case 3:
+            // enrollStudent();
+            break;
+        case 4:
+            // assignCourse();
+            break;
+        case 5: 
+        {
+            int optionChoice = -1;
+                while (optionChoice != 5) 
+                {
+                    System.out.println("\t\tWhat kind of report? ");
+                    System.out.println("\t\t-------------------------");
+                    System.out.println("\t\t1: Courses Taught per Semester");
+                    System.out.println("\t\t2: Courses Taught by Specific Faculty");
+                    System.out.println("\t\t3: Student Schedule by Semester");
+                    System.out.println("\t\t4: Course Roster per Semester");
+                    System.out.println("\t\t5: Exit");
+                    System.out.println("\t\t-------------------------");
+                    System.out.println();
+                    System.out.println("Choice (1-5): ");
+                    optionChoice = in.nextInt();
+                    
+                    switch (optionChoice)
+                    {
+                        case 1: 
+                            // coursePerSemester()
+                            break;
+                        case 2:
+                            // coursePerFaculty()
+                            break;
+                        case 3:
+                            // studentSchedule()
+                            break;
+                        case 4:
+                            // courseRoster()
+                            break;
+                    }
+                    
+                } 
+            }
+                   
+        
+        }
+        
+        
+    }
+    
+}
+    
+}
