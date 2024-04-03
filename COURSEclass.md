@@ -12,7 +12,9 @@ public class Course {
     public String endTime;
     public int credits;
     public Semester semester;
-    public int hoursTaught;
+    private Student[] assignedStudents;
+    private int enrollLimit; 
+    private Course[] courses;
     
     
     // Constructors 
@@ -26,6 +28,9 @@ public class Course {
         this.endTime = "n/a";
         this.credits = 0;
         this.semester = null;
+        this.assignedStudents = new Student[30];
+        this.enrollLimit = 30;
+        this.courses = new Course[5];
     }
     
     public Course(String coursePrefix, int courseNum, String daysTaught, String startTime,
@@ -38,6 +43,10 @@ public class Course {
         this.endTime = endTime;
         this.credits = credits;
         this.semester = semester;
+        this.assignedStudents = new Student[30];
+        this.enrollLimit = 30;
+        this.courses = new Course[5];
+        
     }
     
     // Member Methods
@@ -46,5 +55,14 @@ public class Course {
         this.semester = semester;
     }
     
+    public void addCourse(Course course, Student student) {
+        
+        
+    }
+    
+    public void countStudents(Student studentEnrolled) {
+        
+        
+    }
     
 }
