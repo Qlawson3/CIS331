@@ -6,17 +6,15 @@ public class Course {
     
     // Data Fields
     public String coursePrefix;
+    public String name;
     public int courseNum;
     public String daysTaught;
     public String startTime;
     public String endTime;
     public int credits;
-    public Semester semester;
-    private Student[] assignedStudents;
-    private int enrollLimit; 
-    private Course[] courses;
+    public Semester[] semesters;
     
-    
+    private String[] courseSemester;
     // Constructors 
     
     public Course() {
@@ -27,14 +25,12 @@ public class Course {
         this.startTime = "n/a";
         this.endTime = "n/a";
         this.credits = 0;
-        this.semester = null;
-        this.assignedStudents = new Student[30];
-        this.enrollLimit = 30;
-        this.courses = new Course[5];
+        semesters = new Semester[4];
+        this.name = "";
     }
     
     public Course(String coursePrefix, int courseNum, String daysTaught, String startTime,
-            String endTime, int credits, Semester semester) {
+            String endTime, int credits, Semester[] semester, String name) {
         
         this.coursePrefix = coursePrefix;
         this.courseNum = courseNum;
@@ -42,36 +38,70 @@ public class Course {
         this.startTime = startTime;
         this.endTime = endTime;
         this.credits = credits;
-        this.semester = semester;
-        this.assignedStudents = new Student[30];
-        this.enrollLimit = 30;
-        this.courses = new Course[5];
-        
-    }
-    
-    // Member Methods
-    
-    public void assignSemester(Semester semester) {
-        this.semester = semester;
+        semesters = new Semester[4];
+        this.name = name;
     }
 
-    public boolean enrollStudent(Student student) {
-        if (currentEnrollment < enrollLimit) {
-            assignedStudents[currentEnrollment] = student; 
-            currentEnrollment++;
-            return true;
-        } else {
-            System.out.println("Enrollment limit reached for" + coursePrefix +courseNum);
-            return false;
-        } 
-        
-    public void addCourse(Course course, Student student) {
-        
-        
-    }
-    
-    public int countStudents() {
-        return currentEnrollment;  
-    }
-    
+  
+ // All Getters
+  public int getCredits(){
+      return credits;
+  }
+  public String getPrefix(){
+      return coursePrefix;
+  }
+  public int getNum(){
+      return courseNum;
+  }
+  public String getDaysTaught(){
+      return daysTaught;
+  }
+  public String getStartTime(){
+      return startTime;
+  }
+  public String getEndTime(){
+      return endTime;
+  }
+  public String getName(){
+      return name;
+  }
+  
+  public Semester[] getSemesters(){
+      return this.semesters;
+  }
+  // All Setters
+  public void setCredits(int credits){
+      this.credits = credits;
+  }
+  public void setPrefix(String prefix){
+      this.coursePrefix = prefix;
+  }
+  public void setNum(int courseNum){
+      this.courseNum = courseNum;
+  }
+  public void setDaysTaught(String daysTaught){
+      this.daysTaught = daysTaught;
+  }
+  public void setStartTime(String startTime){
+      this.startTime = startTime;
+  }
+  public void setEndTime(String endTime){
+      this.endTime = endTime;
+  }
+  public void setName(String name){
+      this.name = name;
+  }
+
+  public void assignSemester(Semester semester){
+      int count = 0;
+      this.semesters[count++] = semester;
+  }
+  //Print semesters in given course
+  public String semesterInCourse(){
+      String result = "";
+      for(Semester semester : this.semesters){
+       result += semester.toString() +" " + getName();
+      }
+      return result;
+  }
 }
