@@ -54,15 +54,24 @@ public class Course {
     public void assignSemester(Semester semester) {
         this.semester = semester;
     }
-    
+
+    public boolean enrollStudent(Student student) {
+        if (currentEnrollment < enrollLimit) {
+            assignedStudents[currentEnrollment] = student; 
+            currentEnrollment++;
+            return true;
+        } else {
+            System.out.println("Enrollment limit reached for" + coursePrefix +courseNum);
+            return false;
+        } 
+        
     public void addCourse(Course course, Student student) {
         
         
     }
     
-    public void countStudents(Student studentEnrolled) {
-        
-        
+    public int countStudents() {
+        return currentEnrollment;  
     }
     
 }
