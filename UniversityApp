@@ -5,10 +5,25 @@ import java.util.*;
 
 public class UniversityApp {
 
-    // initialize Student array??
-    public static Student[] students = new Student[500];
+    // initialize Student array to make accessible class wide
+    public static Student[] allStudents = new Student[500];
     public static int studentCount = 0;
+    // count number of courses enrolled in
+    public static int enrollCount = 0;
+    
+    
     public static Scanner in = new Scanner(System.in);
+    
+    // initialize Course array to make accessible class wide
+    public static Course[] courses = new Course[500];
+    // count number of courses created
+    public static int courseCount = 0;
+    
+    
+    
+    // initialize semester array
+    public static Semester[] semesters = new Semester[10];
+    public static int semCount = 0;
     
     public static void main(String[] args) {
        
@@ -39,111 +54,123 @@ public class UniversityApp {
             
             switch (menuChoice)
             {
-            case 1: 
-            {
+                case 1: 
+                {
+
+                    int optionChoice = -1;
+                    while (optionChoice != 5) 
+                    {
+                        System.out.println("\t\tWhat are you creating? ");
+                        System.out.println("\t\t-------------------------");
+                        System.out.println("\t\t1: Student");
+                        System.out.println("\t\t2: Faculty");
+                        System.out.println("\t\t3: Course");
+                        System.out.println("\t\t4: Semester");
+                        System.out.println("\t\t5: Exit");
+                        System.out.println("\t\t-------------------------");
+                        System.out.println();
+                        System.out.println("Choice (1-5): ");
+                        optionChoice = in.nextInt();
+
+                        switch (optionChoice)
+                        {
+                            case 1: 
+                                createStudent();
+                                break;
+                            case 2:
+                                // createFaculty();
+                                break;
+                            case 3:
+                                createCourse();
+                                break;
+                            case 4:
+                                createSemester();
+                                break;
+                        }
+
+                    } 
+                    break;
+
+                }
+                case 2: 
+                {
+                   int optionChoice = -1;
+                        while (optionChoice != 5) 
+                        {
+                            System.out.println("\t\tWhat are you editing? ");
+                            System.out.println("\t\t-------------------------");
+                            System.out.println("\t\t1: Student");
+                            System.out.println("\t\t2: Faculty");
+                            System.out.println("\t\t3: Course");
+                            System.out.println("\t\t4: Semester");
+                            System.out.println("\t\t5: Exit");
+                            System.out.println("\t\t-------------------------");
+                            System.out.println();
+                            System.out.println("Choice (1-5): ");
+                            optionChoice = in.nextInt();
+
+                            switch (optionChoice)
+                            {
+                                case 1: 
+                                    // editStudent();
+                                    break;
+                                case 2:
+                                    // editFaculty();
+                                    break;
+                                case 3:
+                                    // editCourse();
+                                    break;
+                                case 4:
+                                    // editSemester();
+                                    break;
+                            }
+
+                        } 
+                        break;
                 
-                int optionChoice = -1;
-                while (optionChoice != 4) 
+                }
+                case 3:
+                    enrollStudent();
+                    break;
+                case 4:
+                    // assignCourse();
+                    break;
+                case 5: 
                 {
-                    System.out.println("\t\tWhat are you creating? ");
-                    System.out.println("\t\t-------------------------");
-                    System.out.println("\t\t1: Student");
-                    System.out.println("\t\t2: Faculty");
-                    System.out.println("\t\t3: Course");
-                    System.out.println("\t\t4: Exit");
-                    System.out.println("\t\t-------------------------");
-                    System.out.println();
-                    System.out.println("Choice (1-4): ");
-                    optionChoice = in.nextInt();
-                    
-                    switch (optionChoice)
-                    {
-                        case 1: 
-                            // createStudent()
-                            break;
-                        case 2:
-                            // createFaculty()
-                            break;
-                        case 3:
-                            // createCourse()
-                            break;
+                    int optionChoice = -1;
+                        while (optionChoice != 5) 
+                        {
+                            System.out.println("\t\tWhat kind of report? ");
+                            System.out.println("\t\t-------------------------");
+                            System.out.println("\t\t1: Courses Taught per Semester");
+                            System.out.println("\t\t2: Courses Taught by Specific Faculty");
+                            System.out.println("\t\t3: Student Schedule by Semester");
+                            System.out.println("\t\t4: Course Roster per Semester");
+                            System.out.println("\t\t5: Exit");
+                            System.out.println("\t\t-------------------------");
+                            System.out.println();
+                            System.out.println("Choice (1-5): ");
+                            optionChoice = in.nextInt();
+
+                            switch (optionChoice)
+                            {
+                                case 1: 
+                                    // coursePerSemester();
+                                    break;
+                                case 2:
+                                    // coursePerFaculty();
+                                    break;
+                                case 3:
+                                    studentSchedule();
+                                    break;
+                                case 4:
+                                    // courseRoster();
+                                    break;
+                        }
+
                     }
-                    
-                } 
-                
-            }
-        case 2: 
-        {
-           int optionChoice = -1;
-                while (optionChoice != 4) 
-                {
-                    System.out.println("\t\tWhat are you editing? ");
-                    System.out.println("\t\t-------------------------");
-                    System.out.println("\t\t1: Student");
-                    System.out.println("\t\t2: Faculty");
-                    System.out.println("\t\t3: Course");
-                    System.out.println("\t\t4: Exit");
-                    System.out.println("\t\t-------------------------");
-                    System.out.println();
-                    System.out.println("Choice (1-4): ");
-                    optionChoice = in.nextInt();
-                    
-                    switch (optionChoice)
-                    {
-                        case 1: 
-                            // editStudent()
-                            break;
-                        case 2:
-                            // editFaculty()
-                            break;
-                        case 3:
-                            // editCourse()
-                            break;
-                    }
-                    
-                }  
-        }
-        case 3:
-            // enrollStudent();
-            break;
-        case 4:
-            // assignCourse();
-            break;
-        case 5: 
-        {
-            int optionChoice = -1;
-                while (optionChoice != 5) 
-                {
-                    System.out.println("\t\tWhat kind of report? ");
-                    System.out.println("\t\t-------------------------");
-                    System.out.println("\t\t1: Courses Taught per Semester");
-                    System.out.println("\t\t2: Courses Taught by Specific Faculty");
-                    System.out.println("\t\t3: Student Schedule by Semester");
-                    System.out.println("\t\t4: Course Roster per Semester");
-                    System.out.println("\t\t5: Exit");
-                    System.out.println("\t\t-------------------------");
-                    System.out.println();
-                    System.out.println("Choice (1-5): ");
-                    optionChoice = in.nextInt();
-                    
-                    switch (optionChoice)
-                    {
-                        case 1: 
-                            // coursePerSemester()
-                            break;
-                        case 2:
-                            // coursePerFaculty()
-                            break;
-                        case 3:
-                            // studentSchedule()
-                            break;
-                        case 4:
-                            // courseRoster()
-                            break;
-                    }
-                    
-                } 
-            }
+                        break;
+                }
                    
         
         }
@@ -152,5 +179,307 @@ public class UniversityApp {
     }
     
 }
+    public static void createStudent() {
+        
+        Student student = new Student();
+        in.nextLine();
+        // initialize course array
+        student.courses = new Course[8];
+        
+        System.out.println("\nEnter First and Last Name: ");
+        student.fullName = in.nextLine();
+        
+        System.out.println("Enter ID #: ");
+        student.studentID = in.nextInt();
+        in.nextLine();
+       
+        System.out.println("Enter SSN (no dashes): ");
+        int ssn = in.nextInt();
+        in.nextLine();
+        student.setSSN(ssn);
+        
+        System.out.println("Enter Home Address: ");
+        String homeAddress = in.nextLine();
+        student.setAddress(homeAddress);
+        
+        System.out.println("Enter Email Address: ");
+        student.email = in.nextLine();
+        
+        System.out.println("Enter GPA: ");
+        double gpa = in.nextDouble();
+        in.nextLine();
+        student.setGPA(gpa);
+        
+        System.out.println("-------------------------------------");
+        System.out.println("EMERGENCY CONTACT INFORMATION");
+        
+        System.out.println("Enter First and Last Name: ");
+        String emergencyName = in.nextLine();
+        student.setEmergencyName(emergencyName);
+        
+        System.out.println("Enter Email Address: ");
+        String emergencyEmail = in.nextLine();
+        student.setEmergencyEmail(emergencyEmail);
+        
+        System.out.println("Enter Phone Number: ");
+        String emergencyPhone = in.nextLine();
+        student.setEmergencyPhone(emergencyPhone);
+        
+        // add student to array of students
+        allStudents[studentCount++] = student;
+        
+    }
+    
+    
+    public static void createCourse()
+    {
+        Course course = new Course();
+        in.nextLine();
+        
+        System.out.println("\nEnter Course Prefix : ");
+        course.coursePrefix = in.nextLine();
+        
+        System.out.println("Enter Course #: ");
+        course.courseNum = in.nextInt();
+        in.nextLine();
+       
+        System.out.println("Enter the Days Taught: ");
+        course.daysTaught = in.nextLine();
+        
+        System.out.println("Enter Start Time: ");
+        course.startTime = in.nextLine();
+        
+        System.out.println("Enter End Time: ");
+        course.endTime = in.nextLine();
+        
+        System.out.println("Enter Credit Amount: ");
+        course.credits = in.nextInt();
+        in.nextLine();
+        
+        System.out.println("Enter Semester: ");
+        String period = in.next();
+        String year = in.next();
+        course.assignSemester(period, year);
+        
+        course.semester.listCourses(course);
+        
+        
+        System.out.println("Enter Course ID #: ");
+        course.courseID = in.nextInt();
+        in.nextLine();
+        
+        // add course to course array
+        courses[courseCount] = course;
+        System.out.println(courseCount);
+        
+        System.out.println("Course Added: " + course.coursePrefix + " " + course.courseNum + " " +
+                course.daysTaught + " " + course.startTime + " " + course.endTime + " " + course.credits +
+                " " + course.semester.period + course.semester.year + " " + course.courseID);
+        
+        // add course to appropriate semester
+        
+        
+        courseCount++;
+  
+        
+        
+        /*
+        stopping point: for some reason when you run it and get to enroll
+        student part, and it makes u choose a desired course, no courses print
+        at all --> could be an issue with how the course is being added to the array
+        or how the enrollStudent() is dealing with reading through the arrays or something
+        */
+        
+        
+    }
+    
+    public static Semester[] createSemester() {
+        
+        if (semesters == null)
+            semesters = new Semester[10];
+        
+        Semester semester = new Semester();
+        in.nextLine();
+        
+        System.out.println("\nPlease Enter Semester Period (Fall, Spring, etc): ");
+        semester.period = in.nextLine();
+        
+        System.out.println("Please Enter the Year (YYYY): ");
+        semester.year = in.nextLine();
+       
+        // create boolean variable to check for semester existence
+        boolean semExists = false;
+        
+        if (semCount > 0) {
+            for (int i = 0; i < semCount; i++)
+            {
+                if (semester.year.equalsIgnoreCase(semesters[i].year) && 
+                        semester.period.equalsIgnoreCase(semesters[i].period)) 
+                    {
+                        semExists = true;
+                        System.out.println("Semester has already been entered. No repeats allowed.");
+                        break;
+                    }
+            }
+        }
+        // accounts for when no semesters exist
+        if (!semExists) // if semExists is false...execute this
+        {
+            // add semester to array
+            semesters[semCount] = semester;
+            System.out.println("Created semester: " + semester.period + semester.year);
+            semCount++;
+            
+        }
+        
+        return semesters;
+    }
+    
+    
+    public static Semester[] enrollStudent() {
+        
+        // display all students
+        System.out.println("Please select a Student (#): ");
+        
+        for (int i = 0; i < allStudents.length; i++)
+        {
+            if (allStudents[i] != null) {
+                System.out.println(i + ": " + allStudents[i].fullName);
+            }
+        }
+        
+        // select student
+        int selection = in.nextInt();
+        in.nextLine();
+        // identify selected Student
+        Student selectStudent = allStudents[selection];
+        
+        // list all courses
+        System.out.println("Please select desired Course (#): ");
+        for (int j = 0; j < courseCount; j++)
+        {
+            System.out.println(j + ": " + courses[j].coursePrefix + " " + courses[j].courseNum +
+                " " + "(" + courses[j].courseID + ")");
+        }
+        int selectCourse = in.nextInt();
+        in.nextLine();
+        // initialize Course variable to hold selction
+        Course chosenCourse = courses[selectCourse];
+        
+        System.out.println("Please select a Semester (#): ");
+        for (int i = 0; i < courseCount; i++)
+        {
+           if (courses[i].semester.period.equalsIgnoreCase(chosenCourse.semester.period) &&
+                   courses[i].semester.year.equalsIgnoreCase(chosenCourse.semester.year)) 
+           {
+               System.out.println(i + ": " + chosenCourse.semester.period + " " + chosenCourse.semester.year);
+           }
+        }
+        int chosenSem = in.nextInt();
+        in.nextLine();
+        // identify selected semester
+        Semester selectSem = semesters[chosenSem];
+        
+        
+        if (selectStudent != null && enrollCount < selectStudent.courses.length) 
+        {
+            selectStudent.courses[enrollCount] = chosenCourse;
+            System.out.println(selectStudent.courses[enrollCount].courseID);
+            enrollCount++;
+            System.out.println("Student has been successfully enrolled!");
+            
+        }
+        else 
+            System.out.println("You have reached enrollment limit. You may not "
+                    + "enroll in any more courses.");
+        
+        // this section is repetitive but good code for EDITING function 
+//        chosenCourse.courseNum = courses[selectCourse].courseNum;
+//        chosenCourse.coursePrefix = courses[selectCourse].coursePrefix;
+//        chosenCourse.courseID = courses[selectCourse].courseID;
+//        chosenCourse.credits = courses[selectCourse].credits;
+//        chosenCourse.daysTaught = courses[selectCourse].daysTaught;
+//        chosenCourse.startTime = courses[selectCourse].startTime;
+//        chosenCourse.endTime = courses[selectCourse].endTime;
+//        chosenCourse.semester = courses[selectCourse].semester;
+
+        // add chosenCourse to appropriate semester
+        return semesters;
+    }
+    
+    public static Semester[] studentSchedule() {
+        
+        // display all students
+        if (allStudents != null)
+        {
+            for (int i = 0; i < studentCount; i++) 
+            {
+                System.out.println(i + ": " + allStudents[i].studentID);
+            }
+        }
+
+        // get user's choice
+        System.out.println("Please select a Student (#): ");
+        int selection = in.nextInt();
+        in.nextLine();
+        
+        // identify selected Student
+        Student selectedStudent = allStudents[selection];
+        
+        // identify desired semester
+        if (semesters != null)
+        {
+            for (int i = 0; i < semesters.length; i++)
+            {
+                System.out.println(i + ": " + semesters[i].period + " " + semesters[i].year);
+            }
+        }
+        
+        System.out.println("What Semester (#)?");
+        int semSelect = in.nextInt();
+        in.nextLine();
+        // identify semester selection
+        Semester selectedSem = semesters[semSelect];
+        
+        // create control boolean variable for finding semester
+        boolean foundCourses = false;
+        
+        // check if courses in selected semester and protect against Null errors
+        if (selectedStudent != null && selectedStudent.courses != null) {
+            for (Course element : selectedStudent.courses)
+            {
+                // check if selected semester matches
+                if (element != null && element.semester != null && 
+                        element.semester.period.equalsIgnoreCase(selectedSem.period) && 
+                        element.semester.year.equalsIgnoreCase(selectedSem.year))
+                {
+                    foundCourses = true;
+                    System.out.println("Course Title: " + element.coursePrefix + " " + element.courseNum);
+                    System.out.println("Days/Times Taught: " + element.daysTaught + ", " + element.startTime +
+                            " - " + element.endTime);   
+                }
+            
+        }
+        // if student not enrolled in any courses for specified semester
+        if (!foundCourses) 
+        {
+            System.out.println(selectedStudent.studentID + " is currently enrolled in 0 courses for "
+                    + selectedSem);
+        }
+       
+        
+    }
+        return semesters;
+}
+    
+    public static void editStudent() {
+        
+        
+    }
+    
     
 }
+
+
+
+
