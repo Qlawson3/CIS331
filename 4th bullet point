@@ -1,0 +1,170 @@
+//For university app
+
+package PROJECT;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class UniversityApp {
+    public static Scanner in = new Scanner(System.in);
+    public static List<Course> courses = new ArrayList<>();
+    public static Student[] students = new Student[30]; 
+    public static int studentCount = 0;
+
+    public static void main(String[] args) {
+        
+        Semester exampleSemester = new Semester("Fall", 2024, 10);
+        courses.add(new Course("CIS", 101, "MWF", "10:00", "11:00", 3, exampleSemester));
+
+        int menuChoice;
+        do {
+            System.out.println("\nUNIVERSITY MAIN MENU");
+            System.out.println("1: Create");
+            System.out.println("2: Edit");
+            System.out.println("3: Enroll a Student");
+            System.out.println("4: Assign Course to Faculty");
+            System.out.println("5: Print Reports");
+            System.out.println("6: Exit Application");
+            System.out.print("Choice (1-6): ");
+            menuChoice = in.nextInt();
+            in.nextLine(); // Consume the newline
+
+            switch (menuChoice) {
+                case 1:
+                    // Implement create functionality
+                    break;
+                case 2:
+                    // Implement edit functionality
+                    break;
+                case 3:
+                    // Implement enroll student functionality
+                    break;
+                case 4:
+                    // Implement assign course to faculty functionality
+                    break;
+                case 5:
+                    printStudentsForCourseInSemester();
+                    break;
+            }
+        } while (menuChoice != 6);
+
+        in.close(); // Close the scanner
+    }
+
+    public static void printStudentsForCourseInSemester() {
+        System.out.println("Enter course prefix (ex. CIS): ");
+        String coursePrefix = in.nextLine();
+        System.out.println("Enter course number: ");
+        int courseNum = in.nextInt();
+        in.nextLine(); // Correctly consume the newline
+        System.out.println("Enter semester (ex. Fall): ");
+        String semester = in.nextLine();
+        System.out.println("Enter year (ex. 2024): ");
+        int year = in.nextInt();
+        in.nextLine(); // Correctly consume the newline
+
+        boolean courseFound = false;
+
+        for (Course course : courses) {
+            if (course.coursePrefix.equals(coursePrefix) && 
+                course.courseNum == courseNum && 
+                course.semester.period.equalsIgnoreCase(semester) && 
+                course.semester.year == year) {
+                courseFound = true;
+                System.out.println("Students enrolled in " + coursePrefix + " " + courseNum + " for " + semester + " " + year + ":");
+                for (Student student : course.assignedStudents) {
+                    if (student != null) {
+                        System.out.println(student.fullName + " - " + student.studentID);
+                    }
+                }
+                break; 
+            }
+        }
+
+        if (!courseFound) {
+            System.out.println("No matching course found for the specified semester and year.");
+        }
+    }
+
+}
+
+
+//course class edits
+
+
+package PROJECT;
+
+
+
+public class Course {
+    
+    // Data Fields
+    public String coursePrefix;
+    public int courseNum;
+    public String daysTaught;
+    public String startTime;
+    public String endTime;
+    public int credits;
+    public Semester semester;
+    public Student[] assignedStudents;
+    private int enrollLimit; 
+    private int currentEnrollment = 0;
+    
+    
+    // Constructors 
+    
+    public Course() {
+        
+        this.coursePrefix = "n/a";
+        this.courseNum = 0;
+        this.daysTaught = "n/a";
+        this.startTime = "n/a";
+        this.endTime = "n/a";
+        this.credits = 0;
+        this.semester = null;
+        this.assignedStudents = new Student[30];
+        this.enrollLimit = 30;
+    }
+    
+    public Course(String coursePrefix, int courseNum, String daysTaught, String startTime,
+            String endTime, int credits, Semester semester) {
+        
+        this.coursePrefix = coursePrefix;
+        this.courseNum = courseNum;
+        this.daysTaught = daysTaught;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.credits = credits;
+        this.semester = semester;
+        this.assignedStudents = new Student[30];
+        this.enrollLimit = 30;
+        
+    }
+    
+    // Member Methods
+    
+    public void assignSemester(Semester semester) {
+        this.semester = semester;
+    }
+    
+    public boolean enrollStudent(Student student) {
+        if (currentEnrollment < enrollLimit) {
+            assignedStudents[currentEnrollment] = student; 
+            currentEnrollment++;
+            return true;
+        } else {
+            System.out.println("Enrollment limit reached for" + coursePrefix +courseNum);
+            return false;
+        } 
+        
+        
+    }
+    
+    public int countStudents() {
+        return currentEnrollment;
+            
+    }
+    
+}
+
