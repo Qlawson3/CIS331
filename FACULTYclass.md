@@ -15,11 +15,10 @@ public class Faculty {
     public String phoneNum;
     public Department dept;
     public String position;
-    public Course[] assignedCourses;
-    public int numAssignedTo;
-    
-    public List<Course> allCourses;
-    public List<Semester> allSemester;
+    //OHN: move below code into app association should be stored in app
+    //Reference schedule objects
+    public List<String> allCoursesSemester = new ArrayList<String>();
+    public List<Semester> allSemester = new ArrayList<Semester>();
     // Constructors
     
     public Faculty() {
@@ -32,8 +31,7 @@ public class Faculty {
         this.phoneNum = "n/a";
         this.dept = null;
         this.position = "n/a";
-        this.assignedCourses = new Course[8];
-        this.numAssignedTo = 0;
+
         
     }
     
@@ -48,62 +46,21 @@ public class Faculty {
         this.phoneNum = phoneNum;
         this.dept = dept;
         this.position = position;
-        this.assignedCourses = new Course[8];
-        this.numAssignedTo = 0;
+
     }
     
-    // Member Methods
-    
-    public Department getDepartment() {
-        return dept;
-    }
-    
-    public void assignCourse(Course course) {
-        
-        if (numAssignedTo < assignedCourses.length)
-        {
-            assignedCourses[numAssignedTo++] = course;
-        }
-        
-    }
-    
-    //add faculty to a course list
-    public void addCourse(Course course){
-        allCourses.add(course);
-    }
-    
-    public void addSemester(Semester semester){
-        allSemester.add(semester);
-    }
-    
-    //print all Courses in a given semester associated with a faculty member
-    public String getAllInSemester(Semester semester){
-        String result = "";
-        for (Course course : allCourses){
-            if(course.getSemesters().equals(semester)){
-                result += course.getName() + " " + semester.toString() + "\n";
-            }
-            
-        }
-        
-        return result;
-    }
-    
-//    public int facultyID;
-//    public String fullName;
-//    public String email;
-//    public String building;
-//    public int officeNum;
-//    public String phoneNum;
-//    public Department dept;
-//    public String position;
-//    public Course[] assignedCourses;
-//    public int numAssignedTo;
     public int getfacultyID(){
       return this.facultyID;
   }
     public String getFullName(){
       return this.fullName;
   }
+    // Member Methods
+    
+    public Department getDepartment() {
+        return dept;
+    }
+
+
     
 }
