@@ -12,9 +12,16 @@ public class Course {
     public String startTime;
     public String endTime;
     public int credits;
-    public Semester[] semesters;
+    public Semester semester;
+    // define same semester array from semesters class
+    Semester[] allSemesters;
+    // get the semester count so course can update it properly
+    int semCount;
     
-    private String[] courseSemester;
+    public static int courseCount = 0;
+    private static Course[] allCourses = new Course[8];
+    
+    
     // Constructors 
     
     public Course() {
@@ -25,12 +32,13 @@ public class Course {
         this.startTime = "n/a";
         this.endTime = "n/a";
         this.credits = 0;
-        semesters = new Semester[4];
-        this.name = "";
+        this.semester = null;
+        allSemesters = Semester.getSemester();
+        semCount = Semester.getSemCount();
     }
     
     public Course(String coursePrefix, int courseNum, String daysTaught, String startTime,
-            String endTime, int credits, Semester[] semester, String name) {
+            String endTime, int credits, Semester semester) {
         
         this.coursePrefix = coursePrefix;
         this.courseNum = courseNum;
@@ -38,8 +46,10 @@ public class Course {
         this.startTime = startTime;
         this.endTime = endTime;
         this.credits = credits;
-        semesters = new Semester[4];
-        this.name = name;
+        this.semester = semester;
+        allSemesters = Semester.getSemester();
+        semCount = Semester.getSemCount();
+       
     }
 
   
@@ -66,9 +76,9 @@ public class Course {
       return name;
   }
   
-  public Semester[] getSemesters(){
-      return this.semesters;
-  }
+//  public Semester[] getSemesters(){
+//      return this.semesters;
+//  }
   // All Setters
   public void setCredits(int credits){
       this.credits = credits;
@@ -91,17 +101,39 @@ public class Course {
   public void setName(String name){
       this.name = name;
   }
-
-  public void assignSemester(Semester semester){
-      int count = 0;
-      this.semesters[count++] = semester;
+  
+  public int getCourseCount() {
+      return courseCount;
   }
+  
+  public void setCourseCount(int courseCount) {
+      Course.courseCount = courseCount;
+  }
+ 
+  public void assignSemester(Semester semester){
+      
+      this.semester = semester;
+  }
+  
   //Print semesters in given course
   public String semesterInCourse(){
       String result = "";
-      for(Semester semester : this.semesters){
-       result += semester.toString() +" " + getName();
+      for(Semester semester : this.allSemesters){
+       result += semester.toString() + " " + getName();
       }
       return result;
+  }
+  
+  public void addCourse(Course course) 
+  {
+      allCourses[courseCount++] = course;
+  }
+  
+  public static Course[] getCourses() {
+      return allCourses;
+  }
+  
+  public static void setCourses(Course[] allCourses) {
+      Course.allCourses = allCourses;
   }
 }
