@@ -14,19 +14,23 @@ public class UniversityApp {
     
     public static Scanner in = new Scanner(System.in);
     
-    // initialize Course array to make accessible class wide
-    public static Course[] courses = new Course[500];
-    // count number of courses created
-    public static int courseCount = 0;
+//    // initialize Course array to make accessible class wide
+//    public static Course[] courses = new Course[500];
+//    // count number of courses created
+//    public static int courseCount = 0;
     
+   
     
-    
-    // initialize semester array
-    public static Semester[] semesters = new Semester[10];
-    public static int semCount = 0;
+
     
     public static void main(String[] args) {
        
+        // retrieve course array
+        Course[] allCourses = Course.getCourses();
+        
+        // retrieve semester array
+        Semester[] allSemesters = Semester.getSemester();
+        int semCount = Semester.getSemCount();
         
         // CREATE MENU
         int menuChoice = -1;
@@ -81,10 +85,10 @@ public class UniversityApp {
                                 // createFaculty();
                                 break;
                             case 3:
-                                createCourse();
+                                createCourse(allSemesters, semCount, allCourses);
                                 break;
                             case 4:
-                                createSemester();
+                                semCount = createSemester(allSemesters, semCount);
                                 break;
                         }
 
@@ -130,7 +134,7 @@ public class UniversityApp {
                 
                 }
                 case 3:
-                    enrollStudent();
+                    enrollStudent(Course.getCourses());
                     break;
                 case 4:
                     // assignCourse();
@@ -161,7 +165,7 @@ public class UniversityApp {
                                     // coursePerFaculty();
                                     break;
                                 case 3:
-                                    studentSchedule();
+                                    studentSchedule(allSemesters);
                                     break;
                                 case 4:
                                     // courseRoster();
@@ -231,7 +235,7 @@ public class UniversityApp {
     }
     
     
-    public static void createCourse()
+    public static void createCourse(Semester[] allSemesters, int semCount, Course[] allCourses)
     {
         Course course = new Course();
         in.nextLine();
@@ -258,45 +262,43 @@ public class UniversityApp {
         
         System.out.println("Enter Semester: ");
         String period = in.next();
-        String year = in.next();
-        course.assignSemester(period, year);
-        
-        course.semester.listCourses(course);
-        
-        
-        System.out.println("Enter Course ID #: ");
-        course.courseID = in.nextInt();
+        int year = in.nextInt();
         in.nextLine();
         
+        // assign course to semester
+        Semester semester = new Semester();
+        semester.period = period;
+        semester.year = year;
+        
+        // assigns this specific course a semester
+        course.semester = semester;
+        
+        System.out.println(semester.period + semester.year);
+        
+        // assign course specific semester
+        if (course.semester != null) 
+        {
+            course.assignSemester(semester);
+        }
+        
         // add course to course array
-        courses[courseCount] = course;
-        System.out.println(courseCount);
-        
-        System.out.println("Course Added: " + course.coursePrefix + " " + course.courseNum + " " +
-                course.daysTaught + " " + course.startTime + " " + course.endTime + " " + course.credits +
-                " " + course.semester.period + course.semester.year + " " + course.courseID);
-        
-        // add course to appropriate semester
+        course.addCourse(course);
         
         
-        courseCount++;
-  
+        for (int i = 0; i < allSemesters.length && allSemesters[i] != null; i++) {
+            System.out.println(i + ": " + allSemesters[i].period + allSemesters[i].year);
+        }
         
+       
+//        // add course to course array
+//        courses[courseCount] = course;
+//        System.out.println(courseCount);
         
-        /*
-        stopping point: for some reason when you run it and get to enroll
-        student part, and it makes u choose a desired course, no courses print
-        at all --> could be an issue with how the course is being added to the array
-        or how the enrollStudent() is dealing with reading through the arrays or something
-        */
         
         
     }
     
-    public static Semester[] createSemester() {
-        
-        if (semesters == null)
-            semesters = new Semester[10];
+    public static int createSemester(Semester[] allSemesters, int semCount) {
         
         Semester semester = new Semester();
         in.nextLine();
@@ -305,38 +307,25 @@ public class UniversityApp {
         semester.period = in.nextLine();
         
         System.out.println("Please Enter the Year (YYYY): ");
-        semester.year = in.nextLine();
+        semester.year = in.nextInt();
+        in.nextLine();
        
-        // create boolean variable to check for semester existence
-        boolean semExists = false;
-        
-        if (semCount > 0) {
-            for (int i = 0; i < semCount; i++)
-            {
-                if (semester.year.equalsIgnoreCase(semesters[i].year) && 
-                        semester.period.equalsIgnoreCase(semesters[i].period)) 
-                    {
-                        semExists = true;
-                        System.out.println("Semester has already been entered. No repeats allowed.");
-                        break;
-                    }
-            }
-        }
-        // accounts for when no semesters exist
-        if (!semExists) // if semExists is false...execute this
-        {
             // add semester to array
-            semesters[semCount] = semester;
-            System.out.println("Created semester: " + semester.period + semester.year);
-            semCount++;
+            semester.addSemester(semester);
+//            allSemesters[semCount++] = semester;
+//            Semester.setSemCount(semCount);
+        
+            for (int i = 0; i < allSemesters.length && allSemesters[i] != null; i++) {
+            System.out.println(i + ": " + allSemesters[i].period + allSemesters[i].year);
+              
             
         }
-        
-        return semesters;
+            
+            return semCount;
     }
     
     
-    public static Semester[] enrollStudent() {
+    public static void enrollStudent(Course[] allCourses) {
         
         // display all students
         System.out.println("Please select a Student (#): ");
@@ -356,42 +345,56 @@ public class UniversityApp {
         
         // list all courses
         System.out.println("Please select desired Course (#): ");
-        for (int j = 0; j < courseCount; j++)
+        int number = 0;
+        
+        for (int i = 0; i < allCourses.length; i++)
         {
-            System.out.println(j + ": " + courses[j].coursePrefix + " " + courses[j].courseNum +
-                " " + "(" + courses[j].courseID + ")");
+            Course course = allCourses[i];
+            if (course != null) 
+            {
+                System.out.println(number + ": " + course.coursePrefix + course.courseNum);
+                number++;
+            }
         }
+        
         int selectCourse = in.nextInt();
         in.nextLine();
-        // initialize Course variable to hold selction
-        Course chosenCourse = courses[selectCourse];
         
-        System.out.println("Please select a Semester (#): ");
-        for (int i = 0; i < courseCount; i++)
+        if (selectCourse >= 0 && selectCourse < allCourses.length)
         {
-           if (courses[i].semester.period.equalsIgnoreCase(chosenCourse.semester.period) &&
-                   courses[i].semester.year.equalsIgnoreCase(chosenCourse.semester.year)) 
-           {
-               System.out.println(i + ": " + chosenCourse.semester.period + " " + chosenCourse.semester.year);
-           }
-        }
-        int chosenSem = in.nextInt();
-        in.nextLine();
-        // identify selected semester
-        Semester selectSem = semesters[chosenSem];
-        
-        
-        if (selectStudent != null && enrollCount < selectStudent.courses.length) 
-        {
-            selectStudent.courses[enrollCount] = chosenCourse;
-            System.out.println(selectStudent.courses[enrollCount].courseID);
-            enrollCount++;
-            System.out.println("Student has been successfully enrolled!");
+            Course chosenCourse = allCourses[selectCourse];
+
+            System.out.println("Please select a Semester (#): ");
             
+            for (int i = 0; i < allCourses.length; i++)
+            {
+                if (allCourses[i] != null) 
+                {
+               // if the object at i position in allCourses array matches the chosenCourse object, print its semester
+                    if (allCourses[i].coursePrefix.equalsIgnoreCase(chosenCourse.coursePrefix) &&
+                        allCourses[i].courseNum == (chosenCourse.courseNum))
+                    {   
+                        if (allCourses[i].semester != null) {
+                        System.out.println(i + ": " + allCourses[i].semester.period + " " + 
+                            allCourses[i].semester.year);
+                        }
+                    }
+                }
+            }
+            
+            int semChoice = in.nextInt();
+            in.nextLine();
+
+            // update chosen course to reflect correct semester
+            chosenCourse = allCourses[semChoice];
+
+            // update enrollment count for select student
+            enrollCount = Enrollment.enrollStudent(selectStudent, chosenCourse, enrollCount);
         }
         else 
-            System.out.println("You have reached enrollment limit. You may not "
-                    + "enroll in any more courses.");
+            System.out.println("Invalid course selection");
+        // initialize Course variable to hold selction
+        
         
         // this section is repetitive but good code for EDITING function 
 //        chosenCourse.courseNum = courses[selectCourse].courseNum;
@@ -403,11 +406,10 @@ public class UniversityApp {
 //        chosenCourse.endTime = courses[selectCourse].endTime;
 //        chosenCourse.semester = courses[selectCourse].semester;
 
-        // add chosenCourse to appropriate semester
-        return semesters;
+        
     }
     
-    public static Semester[] studentSchedule() {
+    public static void studentSchedule(Semester[] allSemesters) {
         
         // display all students
         if (allStudents != null)
@@ -417,6 +419,7 @@ public class UniversityApp {
                 System.out.println(i + ": " + allStudents[i].studentID);
             }
         }
+// use string match between name of student, course, and semester
 
         // get user's choice
         System.out.println("Please select a Student (#): ");
@@ -427,11 +430,13 @@ public class UniversityApp {
         Student selectedStudent = allStudents[selection];
         
         // identify desired semester
-        if (semesters != null)
+        if (allSemesters != null)
         {
-            for (int i = 0; i < semesters.length; i++)
+            for (int i = 0; i < allSemesters.length; i++)
             {
-                System.out.println(i + ": " + semesters[i].period + " " + semesters[i].year);
+                if (allSemesters[i] != null) {
+                System.out.println(i + ": " + allSemesters[i].period + " " + allSemesters[i].year);
+            }
             }
         }
         
@@ -439,37 +444,15 @@ public class UniversityApp {
         int semSelect = in.nextInt();
         in.nextLine();
         // identify semester selection
-        Semester selectedSem = semesters[semSelect];
+        Semester selectedSem = allSemesters[semSelect];
         
-        // create control boolean variable for finding semester
-        boolean foundCourses = false;
+        // call enrollment class member method
+        System.out.println(selectedStudent.fullName + "'s " + selectedSem.period + " " + selectedSem.year + " CLASS SCHEDULE");
+        System.out.println("--------------------------------------------");
         
-        // check if courses in selected semester and protect against Null errors
-        if (selectedStudent != null && selectedStudent.courses != null) {
-            for (Course element : selectedStudent.courses)
-            {
-                // check if selected semester matches
-                if (element != null && element.semester != null && 
-                        element.semester.period.equalsIgnoreCase(selectedSem.period) && 
-                        element.semester.year.equalsIgnoreCase(selectedSem.year))
-                {
-                    foundCourses = true;
-                    System.out.println("Course Title: " + element.coursePrefix + " " + element.courseNum);
-                    System.out.println("Days/Times Taught: " + element.daysTaught + ", " + element.startTime +
-                            " - " + element.endTime);   
-                }
-            
-        }
-        // if student not enrolled in any courses for specified semester
-        if (!foundCourses) 
-        {
-            System.out.println(selectedStudent.studentID + " is currently enrolled in 0 courses for "
-                    + selectedSem);
-        }
-       
+        Enrollment.listStudentSchedule(selectedStudent, selectedSem);
         
-    }
-        return semesters;
+        
 }
     
     public static void editStudent() {
