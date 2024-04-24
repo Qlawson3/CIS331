@@ -1,0 +1,687 @@
+
+package Project1;
+
+import java.util.*;
+/**
+ *
+ * @authors Sequoia Lawson, Lia Hill, Valerie Hernandez
+ */
+public class Application {
+
+    public static List<Student> studentArray = new ArrayList<Student>();
+    public static List<Semester> semesterArray = new ArrayList<Semester>();
+    public static List<Course> courseArray = new ArrayList<Course>();
+    public static List<Faculty> facultyArray = new ArrayList<Faculty>();
+    public static List<Schedule> scheduleArray = new ArrayList<Schedule>();
+    public static List<Enrollment> enrollArray = new ArrayList<Enrollment>();
+    public static int studentCount = 0;
+    public static void main(String[] args) {
+//        make semester
+          Scanner in = new Scanner(System.in);
+//          //Testing
+//          Student student1 = new Student();
+//          studentArray.add(student1);
+//          student1.setFullName("Sequoia");
+          
+          //TESTING BULL_1
+          Semester semester2 = new Semester();
+          semesterArray.add(semester2);
+          semester2.setPeriod("Fall");
+          semester2.setYear("2024");
+          
+          Semester semester3 = new Semester("Winter", "2020");
+          semesterArray.add(semester3);
+          
+          Course course2 = new Course();
+          course2.setPrefix("Math");
+          course2.setNum(301);
+          semester2.assignCourses(course2);
+          courseArray.add(course2);
+          
+          //TEST BULL_3
+          Student student1 = new Student();
+          studentArray.add(student1);
+          student1.setFullName("Sequoia");
+//          Faculty faculty1 = new Faculty();
+//          faculty1.setFullName("Pargas");
+//          facultyArray.add(faculty1);
+//          Schedule schedule1 = new Schedule();
+//          scheduleArray.add(schedule1);
+//         
+//          
+//          schedule1.setFaculty(faculty1);
+//          schedule1.setSemester(semester2);
+//          semester2.assignCourses(course2);
+ 
+        //Office Hour Notes: while user wants to continue app run menu
+        //MENU BELOW
+        // CREATE MENU
+        
+         // initialize Student array to make accessible class wide
+        
+        int menuChoice = -1;
+        
+        while (menuChoice != 6)
+        {
+            System.out.println("\nUNIVERSITY MAIN MENU");
+            System.out.println("\n\tPlease Select A Menu Choice");
+            System.out.println("\t-------------------------");
+            System.out.println("\t1: Create");
+            System.out.println("\t2: Edit");
+            System.out.println("\t3: Enroll a Student");
+            System.out.println("\t4: Assign Course to Faculty");
+            System.out.println("\t5: Print Reports");
+            System.out.println("\t6: Exit Application");
+            System.out.println("\t-------------------------");
+            System.out.println();
+            System.out.println("Choice (1-6): ");
+            menuChoice = in.nextInt();
+            
+            System.out.println();
+            
+            switch (menuChoice)
+            {
+                case 1: //CREATE ENTITY
+                {
+
+                    int optionChoice = -1;
+                    while (optionChoice != 5) 
+                    {
+                        System.out.println("\t\tWhat are you creating? ");
+                        System.out.println("\t\t-------------------------");
+                        System.out.println("\t\t1: Student");
+                        System.out.println("\t\t2: Faculty");
+                        System.out.println("\t\t3: Course");
+                        System.out.println("\t\t4: Semester");
+                        System.out.println("\t\t5: Exit");
+                        System.out.println("\t\t-------------------------");
+                        System.out.println();
+                        System.out.println("Choice (1-5): ");
+                        optionChoice = in.nextInt();
+
+            
+                        switch (optionChoice)
+                        {
+                            case 1:
+                                Student student = new Student();
+                                in.nextLine();
+                                System.out.println("\nEnter First and Last Name: ");
+                                student.setFullName(in.nextLine());
+                                
+                                System.out.println("Enter ID #: ");
+                                student.setID(in.nextInt());
+                                in.nextLine();
+
+                                System.out.println("Enter SSN (no dashes): ");
+                                student.setSSN(in.nextInt());
+                                in.nextLine();
+                                
+                                System.out.println("Enter Home Address: ");
+                                student.setAddress(in.nextLine());
+
+                                System.out.println("Enter Email Address: ");
+                                 student.setEmail(in.nextLine());
+
+                                System.out.println("Enter GPA: ");
+                                student.setGPA(in.nextDouble());
+                                //for next double
+                                in.nextLine();
+                                
+                                System.out.println("-------------------------------------");
+                                System.out.println("EMERGENCY CONTACT INFORMATION");
+
+                                System.out.println("Enter First and Last Name: ");
+                                student.setEmergencyName(in.nextLine());
+
+                                System.out.println("Enter Email Address: ");
+                                student.setEmergencyEmail(in.nextLine());
+
+                                System.out.println("Enter Phone Number: ");
+                                student.setEmergencyPhone(in.nextLine());
+                                studentArray.add(student);
+                                break;
+                                
+                            case 2: {
+                                Faculty faculty = new Faculty();
+                                in.nextLine();
+                                System.out.println("Enter Full Name: ");
+                                faculty.setFullName(in.nextLine());
+                                
+                                System.out.println("Enter Email: ");
+                                faculty.setEmail(in.nextLine());
+                                
+                                System.out.println("Enter Building Name: ");
+                                faculty.setBuilding(in.nextLine());
+                                
+                                System.out.println("Enter Office Number: ");
+                                faculty.setOfficeNum(in.nextInt());
+                                
+                                System.out.println("Enter Phone Number: ");
+                                faculty.setPhoneNum(in.nextLine());
+                                
+                                in.nextLine();
+                                System.out.println("Enter Department Name: ");
+                                faculty.setDept(in.nextLine());
+                                
+                                System.out.println("Enter Position: ");
+                                faculty.setPosition(in.nextLine());
+                                facultyArray.add(faculty);
+                                
+                                break;
+                            }
+                            case 3:{
+                                
+                                Course course = new Course();
+                                in.nextLine();
+                                System.out.println("Enter Course Prefix: ");
+                                course.setPrefix(in.nextLine());
+                                
+                                System.out.println("Enter Course Number: ");
+                                course.setNum(in.nextInt());
+                                
+                                in.nextLine();
+                                System.out.println("Enter Days Taught: ");
+                                course.setDaysTaught(in.nextLine());
+                                
+                                System.out.println("Enter Start Time: ");
+                                course.setStartTime(in.nextLine());
+                                
+                                System.out.println("Enter End Time: ");
+                                course.setEndTime(in.nextLine());
+                                
+                                System.out.println("Enter Credits: ");
+                                course.setCredits(in.nextInt());
+                                in.nextLine();
+                                System.out.println("Enter Semester Period: ");
+                                Semester semester = new Semester();
+                                semester.setPeriod(in.nextLine());
+                                System.out.println("Enter Semester Year: ");
+                                semester.setYear(in.nextLine());
+                                //course.assignSemester(semester);
+                                semester.assignCourses(course);
+                                semesterArray.add(semester);
+                                course.addCourse(course);
+                                courseArray.add(course);
+                                break;
+                            }
+                            case 4:
+                                Semester semester = new Semester();
+                                in.nextLine();
+                                System.out.println("Enter Semester Period: ");
+                                semester.setPeriod(in.nextLine());
+                                System.out.println("Enter Semester Year: ");
+                                semester.setYear(in.nextLine());
+                                semesterArray.add(semester);
+                                //semester.addSemester(semester);
+                                
+                                break;
+                        }
+
+                    } 
+                    break;
+
+                }
+                case 2: //edit
+                {
+                   int optionChoice = -1;
+                        while (optionChoice != 5) 
+                        {
+                            System.out.println("\t\tWhat are you editing? ");
+                            System.out.println("\t\t-------------------------");
+                            System.out.println("\t\t1: Student");
+                            System.out.println("\t\t2: Faculty");
+                            System.out.println("\t\t3: Course");
+                            System.out.println("\t\t4: Semester");
+                            System.out.println("\t\t5: Exit");
+                            System.out.println("\t\t-------------------------");
+                            System.out.println();
+                            System.out.println("Choice (1-5): ");
+                            optionChoice = in.nextInt();
+
+                            switch (optionChoice)
+                            {
+                             //in sepearate file will NOT paste correctly from github
+                                    case 1: 
+                                    // editStudent;
+                                    System.out.println("Please select a student (#): ");
+                                    allStudentNames();
+                                    int selectStudent = in.nextInt();
+                                    in.nextLine();
+ 
+                                    studentArray.get(selectStudent);
+                                    
+                                    System.out.println("What would you like to edit?");
+                                    System.out.println("Options: \nName \nStudent ID \nSSN \nHome Addres \nEmail \nGPA"
+                                            + " \nEmergency Contact Name \nEmergency Contact Email \nEmergency Contact Phone Number");
+                                    String editChoice = in.nextLine().toLowerCase();
+                                    
+                                    switch (editChoice)
+                                    {
+                                        case "name":
+                                        {
+                                            System.out.println("Enter updated Name: ");
+                                            studentArray.get(selectStudent).setFullName(in.nextLine());
+                                            System.out.println("Successfully Updated! New Name is: "
+                                                    + "\n" + studentArray.get(selectStudent).getFullName());
+                                            break;
+                                        }
+                                        case "studentid":
+                                        {
+                                            System.out.println("Enter updated Student ID");
+                                            studentArray.get(selectStudent).setID(in.nextInt());
+                                            System.out.println("Successfully Updated! New Student ID is: "
+                                                    + "\n" + studentArray.get(selectStudent).getID());
+                                            break;
+                                        }
+                                        case "ssn":
+                                        {
+                                            System.out.println("Enter updated SSN: ");
+                                            studentArray.get(selectStudent).setSSN(in.nextInt());
+                                            in.nextLine();
+                                            System.out.println("Successfully Updated! New SSN is: "
+                                                    + "\n" + studentArray.get(selectStudent).getSSN());
+                                            break;
+                                        }
+                                        case "home address":
+                                        {
+                                            System.out.println("Enter updated Home Address: ");
+                                            studentArray.get(selectStudent).setAddress(in.nextLine());
+                                            System.out.println("Successfully Updated! New Home Address is: "
+                                                    + "\n" + studentArray.get(selectStudent).getAddress());
+                                            break;
+                                        }
+                                        case "email":
+                                        {
+                                            System.out.println("Enter updated Email: ");
+                                            studentArray.get(selectStudent).setEmail(in.nextLine());
+                                            System.out.println("Successfully Updated! New Email is: "
+                                                    + "\n" + studentArray.get(selectStudent).getEmail());
+                                            break;
+                                        }
+                                        case "gpa":
+                                        {
+                                            System.out.println("Enter updated GPA: ");
+                                            studentArray.get(selectStudent).setGPA(in.nextDouble());
+                                            in.nextLine();
+                                            System.out.println("Successfully Updated! New GPA is: "
+                                                    + "\n" + studentArray.get(selectStudent).getGPA());
+                                            break;
+                                        }
+                                        case "emergency contact name":
+                                        {
+                                            System.out.println("Enter updated Emergency Contact Name: ");
+                                            studentArray.get(selectStudent).setEmergencyName(in.nextLine());
+                                            System.out.println("Successfully Updated! New Emergency Contact Name is: "
+                                                    + "\n" + studentArray.get(selectStudent).getEmergencyName());
+                                            break;
+                                        }
+                                        case "emergency contact email":
+                                        {
+                                            System.out.println("Enter updated Emergency Contact Email: ");
+                                            studentArray.get(selectStudent).setEmergencyEmail(in.nextLine());
+                                            System.out.println("Successfully Updated! New Emergency Contact Phone Email is: "
+                                                    + "\n" + studentArray.get(selectStudent).getEmergencyEmail());
+                                            break;
+                                        }
+                                        case "emergency contact phone number":
+                                        {
+                                            System.out.println("Enter updated Emergency Contact Phone Number: ");
+                                            studentArray.get(selectStudent).setEmergencyPhone(in.nextLine());
+                                            System.out.println("Successfully Updated! New Emergency Contact Phone Number is: "
+                                                    + "\n" + studentArray.get(selectStudent).getEmergencyPhone());
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                    case 2:
+                                    // editFaculty
+                                    System.out.println("Please select a faculty member (#): ");
+                                    allFacultyNames();
+                                    int selectFac = in.nextInt();
+                                    in.nextLine();
+                                    System.out.println("What would you like to update? ");
+                                    System.out.println("Options: \nName \nEmail \nBuilding Name \nOffice Number \nPhone Number "
+                                            + "\nDepartment Name" + " \nPosition");
+                                    String facChoice = in.nextLine().toLowerCase();
+                                    switch (facChoice) {
+                                        case "name": 
+                                        {
+                                            System.out.println("Enter updated Name: ");
+                                            facultyArray.get(selectFac).setFullName(in.nextLine());
+                                            System.out.println("Successfully Updated! New Name is: "
+                                                    + "\n" + facultyArray.get(selectFac).getFullName());
+                                            break;
+                                        }
+                                        case "email":
+                                        {
+                                            System.out.println("Enter updated Email: ");
+                                            facultyArray.get(selectFac).setEmail(in.nextLine());
+                                            System.out.println("Successfully Updated! New Email is: "
+                                            + "\n" + facultyArray.get(selectFac).getEmail());
+                                            break;
+                                        }
+                                        case "building name":
+                                        {
+                                            System.out.println("Enter updated Building Name: ");
+                                            facultyArray.get(selectFac).setBuilding(in.nextLine());
+                                            System.out.println("Successfully Updated! New Building Name is: "
+                                                    + "\n" + facultyArray.get(selectFac).getBuilding());
+                                            break;
+                                        }
+                                        case "office number":
+                                        {
+                                            System.out.println("Enter updated Office Number: ");
+                                            facultyArray.get(selectFac).setOfficeNum(in.nextInt());
+                                            System.out.println("Successfully Updated! New Office Number is: "
+                                                    + "\n" + facultyArray.get(selectFac).getOfficeNum());
+                                            break;
+                                        }
+                                        case "phone number":
+                                        {
+                                            System.out.println("Enter updated Phone Number: ");
+                                            facultyArray.get(selectFac).setPhoneNum(in.nextLine());
+                                            System.out.println("Successfully Updated! New Phone Number is:"
+                                                    + "\n" + facultyArray.get(selectFac).getPhoneNum());
+                                            break;
+                                        }
+                                        case "department name":
+                                        {
+                                            System.out.println("Enter updated Department Name: ");
+                                            facultyArray.get(selectFac).setDept(in.nextLine());
+                                            System.out.println("Successfully Updated! New Department Name is: "
+                                                    + "\n" + facultyArray.get(selectFac).getDept());
+                                            break;
+                                        }
+                                        case "position":
+                                        {
+                                            System.out.println("Enter updated Position: ");
+                                            facultyArray.get(selectFac).setPosition(in.nextLine());
+                                            System.out.println("Successfully Updated! New Position is: "
+                                                    + "\n" + facultyArray.get(selectFac).getPosition());
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                    case 3:
+                                    // editCourse
+                                    System.out.println("Please select a Course (#): ");
+                                    allCourses();
+                                    int selectCourse = in.nextInt();
+                                    in.nextLine();
+                                    
+                                    System.out.println("What would you like to update? ");
+                                    System.out.println("Options: \nCourse Prefix \nCourse Number \nDays Taught \nStart Time \nEnd Time "
+                                            + "\nCredits");
+                                    String choiceCourse = in.nextLine().toLowerCase();
+                                    
+                                    switch (choiceCourse) {
+                                        case "course prefix":
+                                        {
+                                            System.out.println("Enter updated Course Prefix: ");
+                                            courseArray.get(selectCourse).setPrefix(in.nextLine());
+                                            System.out.println("Successfully Updated! New Course Prefix is: "
+                                                    + "\n" + courseArray.get(selectCourse).getPrefix());
+                                            break;
+                                        }
+                                        case "course number":
+                                        {
+                                            System.out.println("Enter updated Course Number: ");
+                                            courseArray.get(selectCourse).setNum(in.nextInt());
+                                            in.nextLine();
+                                            System.out.println("Successfully Updated! New Course Number is: "
+                                                    + "\n" + courseArray.get(selectCourse).getNum());
+                                            break;
+                                        }
+                                        case "days taught":
+                                        {
+                                            System.out.println("Enter updated Days Taught: ");
+                                            courseArray.get(selectCourse).setDaysTaught(in.nextLine());
+                                            System.out.println("Successfully Updated! New Days Taught is: "
+                                                    + "\n" + courseArray.get(selectCourse).getDaysTaught());
+                                            break;
+                                        }
+                                        case "start time":
+                                        {
+                                            System.out.println("Enter updated Start Time");
+                                            courseArray.get(selectCourse).setStartTime(in.nextLine());
+                                            System.out.println("Successfully Updated! New Start Time is: "
+                                                    + "\n" + courseArray.get(selectCourse).getStartTime());
+                                            break;
+                                        }
+                                        case "end time":
+                                        {
+                                            System.out.println("Enter updated End Time: ");
+                                            courseArray.get(selectCourse).setEndTime(in.nextLine());
+                                            System.out.println("Successfully Updated! New End Time is: "
+                                                    + "\n" + courseArray.get(selectCourse).getEndTime());
+                                            break;
+                                        }
+                                        case "credits":
+                                        {
+                                            System.out.println("Enter updated Credits: ");
+                                            courseArray.get(selectCourse).setCredits(in.nextInt());
+                                            in.nextLine();
+                                            System.out.println("Successfully Updated! New Credits is: "
+                                                    + "\n" + courseArray.get(selectCourse).getCredits());
+                                            break;
+                                        }                
+                                    }
+                                    break;
+                                    case 4:
+                                    // editSemester
+                                    System.out.println("Please select a Semester (#): ");
+                                    allSemesters();
+                                    int selectSem = in.nextInt();
+                                    in.nextLine();
+                                    
+                                    System.out.println("What would you like to update? ");
+                                    System.out.println("Options: \nPeriod \nYear");
+                                    String choiceSem = in.nextLine().toLowerCase();
+                                    
+                                    switch (choiceSem) {
+                                        case "period":
+                                        {
+                                            System.out.println("Enter updated Period: ");
+                                            semesterArray.get(selectSem).setPeriod(in.nextLine());
+                                            System.out.println("Successfully Updated! New Course Prefix is: "
+                                                    + "\n" + semesterArray.get(selectSem).getPeriod());
+                                            break;
+                                        }
+                                        case "year":
+                                        {
+                                            System.out.println("Enter updated Year: ");
+                                            semesterArray.get(selectSem).setYear(in.nextLine());
+                                            System.out.println("Successfully Updated! New Course Number is: "
+                                                    + "\n" + semesterArray.get(selectSem).getYear());
+                                            break;
+                                        }                       
+                                    }
+                            }
+                        } 
+                        break;
+                        
+                }
+                case 3:{ //enroll a student
+                    System.out.println("Please choose a student (#)");
+                    allStudentNames();  
+                    int choiceStu = in.nextInt(); //to choose student
+                                                     
+                    System.out.println("Please choose a semester (#)");
+                    allSemesters();
+                    int choiceSem = in.nextInt(); //to choose semester
+                    
+                    System.out.println("Please choose a Course (#)");
+                    allCourses();  
+                    int choiceCourse1 = in.nextInt(); //to choose course 
+                    
+                    System.out.println("Please Make (and remember!) an EnrollmentID (#)");
+                    int setEnroll = in.nextInt(); //to choose course 
+                    Enrollment enroll = new Enrollment(studentArray.get(choiceStu),
+                        semesterArray.get(choiceSem), courseArray.get(choiceCourse1));
+                    enroll.setEnrollID(setEnroll);
+                    enrollArray.add(enroll);
+                    System.out.println("Created new Enrollment form: " + enroll.getEnrollID());
+//                    System.out.println();
+//                    System.out.println("Please choose a course (#)");
+//                    allCourses();
+//                    int choiceCrs = in.nextInt();
+                    enroll.courseEnrollment(courseArray.get(choiceCourse1));
+//                    System.out.println("Assigned course to Enrollment form: " + enroll.getEnrollID());
+
+                    break;
+                }
+                    case 4:{
+                    // assignment of a Faculty to a Course in a particular Semester
+                    System.out.println("Please choose a course (#)");
+                    allCourses();
+                    int choiceCrs = in.nextInt(); //to choose student
+                    System.out.println("Please choose a semester (#)");
+                    allSemesters();
+                    int choiceSem = in.nextInt(); //to choose semester
+                    System.out.println("Please choose a faculty (#)");
+                    allFacultyNames();
+                    int choiceFlt = in.nextInt(); //to choose faculty
+                    //assign course to semester
+                    Schedule schedule = new Schedule();
+                    schedule.assignSemester(facultyArray.get(choiceFlt), semesterArray.get(choiceSem));
+                    schedule.addCourse(courseArray.get(choiceCrs));
+                    scheduleArray.add(schedule);
+                    System.out.println("Created Schedule with ID: " + schedule.getScheduleID() + " for faculty: "
+                    + facultyArray.get(choiceFlt).getFullName());
+                    semesterArray.get(choiceSem).assignCourses(courseArray.get(choiceCrs));
+                    break;
+                    }
+                     case 5: 
+                {
+                    int optionChoice = -1;
+                        while (optionChoice != 5) 
+                        {
+                            System.out.println("\t\tWhat kind of report? ");
+                            System.out.println("\t\t-------------------------");
+                            System.out.println("\t\t1: Courses Taught per Semester");
+                            System.out.println("\t\t2: Courses Taught by Specific Faculty");
+                            System.out.println("\t\t3: Student Schedule by Semester");
+                            System.out.println("\t\t4: Course Roster per Semester");
+                            System.out.println("\t\t5: Exit");
+                            System.out.println("\t\t-------------------------");
+                            System.out.println();
+                            System.out.println("Choice (1-5): ");
+                            optionChoice = in.nextInt();
+
+                            switch (optionChoice)
+                            {
+                                case 1: 
+                                    // all courses in a semester
+                                    System.out.println("Please choose a semester (#)");
+                                    allSemesters();
+                                    int choiceSem = in.nextInt(); //to choose semester
+                                    System.out.println(semesterArray.get(choiceSem).listAssignedCourses()); //test
+                                    break;
+                                case 2:
+                                    // courses taught by faculty in a semester
+                                    System.out.println("Please choose a schedule (#)");
+                                    allSchedules();
+                                    int choiceSch = in.nextInt(); //to choose semester
+                                    
+                                    System.out.println("Please choose a semester (#)");
+                                    allSemesters();
+                                    int choiceSem2 = in.nextInt(); //to choose semester
+                                    
+                                    System.out.println("Please choose a faculty (#)");
+                                    allFacultyNames();
+                                    int choiceFlt2 = in.nextInt(); //to choose faculty
+                                    System.out.println(scheduleArray.get(choiceSch).getAllInSemester(semesterArray.get(choiceSem2), 
+                                            facultyArray.get(choiceFlt2)));
+                                    break;
+                                case 3:
+                                    System.out.println("Please choose a student (#)");
+                                    allStudentNames();
+                                    int choiceStu = in.nextInt(); //to choose student
+                                    System.out.println("Please choose a semester (#)");
+                                    allSemesters();
+                                    int choiceSem3 = in.nextInt(); //to choose semester
+                                    
+                                    System.out.println("Please choose an enrollment ID (#)");
+                                    allEnroll();
+                                    int choiceEnroll = in.nextInt(); //to choose enrollment form
+                                    System.out.println(enrollArray.get(choiceEnroll).listStudentSchedule(studentArray.get(choiceStu), 
+                                            semesterArray.get(choiceSem3)));
+                                    break;
+                                case 4:
+                                    // in seperate file, will NOT paste correctly from github
+                                    //pick course
+                                    System.out.println("Please choose a course (#)");
+                                    allCourses();
+                                    int choiceCourse = in.nextInt();
+                                    //pick semester
+                                    System.out.println("Please choose a semester (#)");
+                                    allSemesters();
+                                    int choiceSem4 = in.nextInt();
+                                    
+                                    //using a given semester and course give me every student associated with a course
+                                    for (Enrollment form : enrollArray){
+                                        if (form.getSemester() == semesterArray.get(choiceSem4) && 
+                                                form.getCourse().equals(courseArray.get(choiceCourse))){
+                                            for (Course course : courseArray) {
+                                            for (int i = 0; i < course.assignedStudents.size(); i++){
+                                                System.out.println(course.assignedStudents.get(i).getFullName() + "\n");
+                                            }
+                                        
+                                    }
+                                        }
+                                    }
+                                    
+                                    break;
+                        }
+
+                    }
+                        break;
+                }
+        }
+            
+        
+    }
+    }
+    
+    //print all student names
+    public static void allStudentNames(){  
+        for (int i = 0; i < studentArray.size(); i++){
+            System.out.println(i + ": "+ studentArray.get(i).getFullName() + "\n");
+        }
+    }
+    //print all faculty names
+    public static void allFacultyNames(){  
+        for (int i = 0; i < facultyArray.size(); i++){
+            System.out.println(i + ": "+ facultyArray.get(i).getFullName() + "\n");
+        }
+    }
+    //print all semesters
+    public static void allSemesters(){  
+        for (int i = 0; i < semesterArray.size(); i++){
+            System.out.println(i + ": "+ semesterArray.get(i).getPeriod() 
+                    + " " + semesterArray.get(i).getYear() + "\n");
+        }
+    }
+    
+    //print all courses
+    public static void allCourses(){  
+        for (int i = 0; i < courseArray.size(); i++){
+            System.out.println(i + ": "+ courseArray.get(i).getPrefix()
+                    + " " + courseArray.get(i).getNum() + "\n");
+        }
+    }
+    
+    //print all schedules
+    public static void allSchedules(){  
+        for (int i = 0; i < scheduleArray.size(); i++){
+            System.out.println(i + ": "+ scheduleArray.get(i).getScheduleID());
+        }
+    }
+    
+    //print all enrollment forms
+    public static void allEnroll(){  
+        for (int i = 0; i < enrollArray.size(); i++){
+            System.out.println(i + ": "+ enrollArray.get(i).getEnrollID());
+        }
+    }
+}
