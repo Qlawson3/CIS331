@@ -36,7 +36,7 @@ public class Department {
         // initiliaze counter
         int counter = 0;
         for (Faculty member: facultyArray) {
-            if (member.getDepartment().equals(dept))
+            if (member.getDept().equals(dept))
             {
                 counter++;
             }
