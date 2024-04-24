@@ -7,7 +7,7 @@ import java.util.*;
 public class Schedule {
     
     // Data Fields
-    public int scheduleID;
+    public int scheduleID = 0;
     private Course course;
     private Faculty faculty;
     private Semester semester;
@@ -22,12 +22,16 @@ public class Schedule {
     public Schedule() {
         this.faculty = null;
         this.semester = null;
+        this.scheduleID++;
     }
 
     
     // Getters 
     public Faculty getFaculty(){
       return this.faculty;
+  }
+    public int getScheduleID(){
+      return this.scheduleID;
   }
     public Semester getSemester(){
       return this.semester;
@@ -65,11 +69,11 @@ public class Schedule {
         for (int i = 0; i < allCourses.size(); i++){ // for every element in the personal course list
         Schedule schedule = allSchedules.get(s);
         if (schedule.getSemester().equals(semester)) { // check if the semester matches 
-            result += allCourses.get(i).getName() + " " + allCourses.get(i).getPrefix() 
+            result += allCourses.get(i).getPrefix() + " " + allCourses.get(i).getNum() 
                     + " " + allSchedules.get(s).getSemester().getPeriod() + " "
                     + allSchedules.get(s).getSemester().getYear() + "| \n"; //Return the courses name and given semester
             }
-            }
+        }
         }
         return "Faculty member " + faculty.getFullName() + " is associated with: " + result;
     }
