@@ -53,9 +53,21 @@ public Student(String fullName, int studentID, int ssn, String homeAddress, Stri
 }
 
 // Getters and Setters
+public int getID(){
+    return this.studentID;
+}
+
+public String getEmail(){
+    return this.email;
+}
+
 
 public int getSSN() {
     return this.ssn;
+}
+
+public String getFullName() {
+    return this.fullName;
 }
 
 public void setSSN(int ssn) {
@@ -77,7 +89,15 @@ public double getGPA() {
 public void setGPA(double gpa) {
     this.gpa = gpa;
 }
-
+public void setID(int studentID) {
+    this.studentID = studentID;
+}
+public void setEmail(String email) {
+    this.email = email;
+}
+public void setFullName(String fullName) {
+    this.fullName = fullName;
+}
 public String getEmergencyName() {
     return this.emergencyName;
 }
