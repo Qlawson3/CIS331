@@ -29,6 +29,7 @@ public class Semester {
         this.year = year;
         this.coursesTaught = new Course[30];
         this.semesters = new Semester[30];
+       
     }
     
     //Getters
@@ -40,6 +41,9 @@ public class Semester {
     }
     public Semester[] getSemester(){
       return this.semesters;
+    }
+    public Semester getASemester(Semester semester, int index){   
+      return semester.semesters[index];
     }
     //Setters
     public void setYear(String year){
@@ -68,7 +72,7 @@ public class Semester {
       String result = "";
       for(Course c : coursesTaught){
           if(c != null){
-          result += c.getName() + " " + c.getPrefix() + "\n";
+          result += c.getPrefix() + " " + c.getNum() + "\n";
           } else{
               result += "";
           }
@@ -76,10 +80,12 @@ public class Semester {
       return result;
     } 
     //list all semesters
-    public String toString(){
+    public String toString(Semester semester){
        String str = "";
-       for(Semester semester : semesters){
-           str += semester.getPeriod() + semester.getYear() + "\n";
+       int c = 0;
+       for(Semester s : semester.semesters){
+           str += c +". " + s.getPeriod() + s.getYear() + "\n";
+           c++;
        }
        return str; 
     }
