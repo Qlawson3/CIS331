@@ -1,6 +1,8 @@
 
 package Project1;
 
+import java.util.ArrayList;
+
 
 public class Course {
     
@@ -12,11 +14,12 @@ public class Course {
     public String startTime;
     public String endTime;
     public int credits;
-    public Semester[] semesters = new Semester[4];
+    public Semester[] semesters = new Semester[100];
+    
     //faculty
     
     //ID
-    
+    ArrayList<Student> assignedStudents;
     private Course[] allCourses = new Course[30];
     // Constructors 
     
@@ -29,6 +32,7 @@ public class Course {
         this.endTime = "n/a";
         this.credits = 0;
         this.name = "";
+        assignedStudents = new ArrayList<>();
 
     }
     
@@ -42,6 +46,7 @@ public class Course {
         this.endTime = endTime;
         this.credits = credits;
         semesters = new Semester[4];
+        assignedStudents = new ArrayList<>();
         this.name = name;
         
     }
@@ -102,7 +107,7 @@ public class Course {
   }
   
   public void addCourse(Course course){
-      int count = 0;
+      int count = 0; //May reset to zero
       allCourses[count++] = course;
   }
   
@@ -121,5 +126,9 @@ public class Course {
        result += semester.toString() +" " + getName();
       }
       return result;
+  }
+  
+  public void addStudent(Student student){
+      assignedStudents.add(student);
   }
 }
