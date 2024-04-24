@@ -9,7 +9,7 @@ public class Enrollment {
 // Course Enrollment Data Fields
 public List<Course> courses = new ArrayList<Course>();
 public int numEnrolledIn = 0;
-
+public int enrollID = 0;
 private Student student;
 private Course course;
 private Semester semester;
@@ -18,32 +18,34 @@ private Semester semester;
 
 public Enrollment() {
     this.student = null;
-    //this.course = null;
     this.semester = null;
+    course.addStudent(this.student);
+    this.course = null;
 }
 
-public Enrollment(Student student, Semester semester) {
+public Enrollment(Student student, Semester semester, Course course) {
     this.student = student;
-    //this.course = course;
+    this.course = course;
+    course.addStudent(student);
     this.semester = semester;
 }
 
 // Getters and Setters
-
+public void setEnrollID(int enrollID){
+    this.enrollID = enrollID;
+}
 public Student getStudent() {
     return this.student;
 }
-
+public int getEnrollID() {
+    return this.enrollID;
+}
 public void setStudent(Student student) {
     this.student = student;
 }
 
 public Course getCourse() {
     return this.course;
-}
-
-public void setCourse(Course course) {
-    this.course = course;
 }
 
 public Semester getSemester() {
@@ -67,6 +69,25 @@ public void courseEnrollment(Course course) {
     }
 
 }
+//Your system must show all students enrolled in a single Course in a certain
+//Semester.
+//public void allStudentsInCourse(Course course, Semester semester){
+//    for (Course course : courses) {
+//        System.out.println("Students enrolled in " + course.getPrefix() + " " + course.getNum() + " for " 
+//                + semester.getPeriod() + " " + semester.getYear() + ":");
+//        //one student only enrolled in 1 semester anyway
+//        
+//        //if this.getCourse = course > then print name if this.
+//        for (Student student : assignedStudents) {
+//            if (student != null){
+//            System.out.println(student.fullName + " - " + student.studentID);  
+//            }
+//        }
+//
+//        
+//    }
+//}
+
 ////What does this class do
 //public int enrollStudent(Student student, Course course, int enrollCount) {
 //    
