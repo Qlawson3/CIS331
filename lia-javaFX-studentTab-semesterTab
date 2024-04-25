@@ -248,32 +248,23 @@ public class App extends Application {
                        txtPeriod.setDisable(false);
                        txtYear.setDisable(false);
                     }
+            else if(selectedOption.equals("Create Semester"))
+            {
+                cmboEditSem.setDisable(true);
+                cmboEditSem.setVisible(false);
+                txtPeriod.setDisable(false);
+                txtYear.setDisable(false);
+            }
             else
             {
                 cmboEditSem.setDisable(true);
                 cmboEditSem.setVisible(false);
-                cmboEditSem.getSelectionModel().clearSelection();
                 txtPeriod.setDisable(true);
                 txtYear.setDisable(true);
             }
         });
         
-        // Semester Tab - create
-      
-        // if disabled...
-        semDropDown.setOnAction(e -> {
-            String selectedOption = (String)semDropDown.getValue();
-            if (selectedOption.equals("Create Semester"))
-                    {
-                       txtPeriod.setDisable(false);
-                       txtYear.setDisable(false); 
-                    }
-            else
-            {
-                txtPeriod.setDisable(true);
-                txtYear.setDisable(true);
-            }
-        });
+        
         
         
         
@@ -351,7 +342,7 @@ public class App extends Application {
         btnSaveStud.setOnAction(e -> {
             // Gather TextField Information
             String fullName = txtStudName.getText();
-            int StudID = Integer.valueOf(txtStudID.getText());
+            int studID = Integer.valueOf(txtStudID.getText());
             int ssn = Integer.valueOf(txtSSN.getText());
             String homeAddress = txtHomeAddress.getText();
             String email = txtEmail.getText();
@@ -360,7 +351,31 @@ public class App extends Application {
             String emergEmail = txtEmergEmail.getText();
             String emergPhone = txtEmergPhone.getText();
             
+            Student student = new Student(fullName, studID, ssn, homeAddress, email, gpa,
+            emergName, emergEmail, emergPhone);
+            
+            students.add(student);
+            
+            // clear inputs to get ready for next user input
+            txtStudName.clear();
+            txtStudID.clear();
+            txtSSN.clear();
+            txtHomeAddress.clear();
+            txtEmail.clear();
+            txtGPA.clear();
+            txtEmergName.clear();
+            txtEmergEmail.clear();
+            txtEmergPhone.clear();
+            
+            for(Student s : students) {
+                cmboEditStud.getItems().add(s.getFullName());
+            }
+            
+            
+            
         });
+        
+       
         
         btnSaveSem.setOnAction(e -> {
             // Gather TextField Information
