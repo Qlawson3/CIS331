@@ -53,9 +53,15 @@ public class App extends Application {
         ComboBox cmboEditStud;
         CheckBox chkEditStud;
         
+        // for Creating Student;
+        CheckBox chkCreateStud;
+        
         // for Editing Semester
         ComboBox cmboEditSem;
         CheckBox chkEditSem;
+        
+        // for Creating Semester
+        CheckBox chkCreateSem;
 
     @Override
     public void start(Stage stage) {
@@ -95,8 +101,11 @@ public class App extends Application {
         txtPeriod = new TextField();
         txtYear = new TextField();
         
-        chkEditStud = new CheckBox("Edit Existing Student?");
-        chkEditSem = new CheckBox("Edit Existing Semester?");
+        chkEditStud = new CheckBox("Edit Student");
+        chkEditSem = new CheckBox("Edit Semester");
+        
+        chkCreateStud = new CheckBox("Create Student");
+        chkCreateSem = new CheckBox("Create Semester");
        
         // for Tabs
         VBox overallVPane = new VBox();
@@ -137,43 +146,143 @@ public class App extends Application {
         
         // arrange the comboBox and checkBox on one horizontal line
         
-        // Student Tab
+        // Student Tab - edit
         HBox hStudPane = new HBox();
         hStudPane.getChildren().addAll(chkEditStud, cmboEditStud);
-        // add to studen tab 
-        gStudPane.add(hStudPane, 2, 0);
+        // add to student tab 
+        gStudPane.add(hStudPane, 2, 1);
         
-        // if disabled...
+        // establish everything disabled
         cmboEditStud.setDisable(true);
+        
+        txtStudName.setDisable(true);
+        txtStudID.setDisable(true);
+        txtSSN.setDisable(true);
+        txtHomeAddress.setDisable(true);
+        txtEmail.setDisable(true);
+        txtGPA.setDisable(true);
+        txtEmergName.setDisable(true);
+        txtEmergEmail.setDisable(true);
+        txtEmergPhone.setDisable(true);
+        
+        // set on action to enable
         chkEditStud.setOnAction(e -> {
             if (chkEditStud.isSelected())
                     {
                        cmboEditStud.setDisable(false); 
+                       txtStudName.setDisable(false);
+                       txtStudID.setDisable(false);
+                       txtSSN.setDisable(false);
+                       txtHomeAddress.setDisable(false);
+                       txtEmail.setDisable(false);
+                       txtGPA.setDisable(false);
+                       txtEmergName.setDisable(false);
+                       txtEmergEmail.setDisable(false);
+                       txtEmergPhone.setDisable(false);
                     }
             else
             {
                 cmboEditStud.setDisable(true);
+                txtStudName.setDisable(true);
+                txtStudID.setDisable(true);
+                txtSSN.setDisable(true);
+                txtHomeAddress.setDisable(true);
+                txtEmail.setDisable(true);
+                txtGPA.setDisable(true);
+                txtEmergName.setDisable(true);
+                txtEmergEmail.setDisable(true);
+                txtEmergPhone.setDisable(true);
+                
             }
         });
         
-        // Semester Tab
+        // Student Tab - create
+        HBox hStudPane2 = new HBox();
+        hStudPane2.getChildren().addAll(chkCreateStud);
+        // add to student tab
+        gStudPane.add(hStudPane2, 2, 0);
+        
+        // if disabled...
+        chkCreateStud.setOnAction(e -> {
+            if (chkCreateStud.isSelected())
+                    {
+                        txtStudName.setDisable(false);
+                        txtStudID.setDisable(false);
+                        txtSSN.setDisable(false);
+                        txtHomeAddress.setDisable(false);
+                        txtEmail.setDisable(false);
+                        txtGPA.setDisable(false);
+                        txtEmergName.setDisable(false);
+                        txtEmergEmail.setDisable(false);
+                        txtEmergPhone.setDisable(false);
+                    }
+            else
+            {
+                txtStudName.setDisable(true);
+                txtStudID.setDisable(true);
+                txtSSN.setDisable(true);
+                txtHomeAddress.setDisable(true);
+                txtEmail.setDisable(true);
+                txtGPA.setDisable(true);
+                txtEmergName.setDisable(true);
+                txtEmergEmail.setDisable(true);
+                txtEmergPhone.setDisable(true);
+                
+            }
+        });
+        
+        
+        
+        
+        
+        // Semester Tab - edit
         HBox hSemPane = new HBox();
         hSemPane.getChildren().addAll(chkEditSem, cmboEditSem);
         // add to semester tab 
-        gSemPane.add(hSemPane, 2, 0);
+        gSemPane.add(hSemPane, 2, 1);
+        
+        // set everything as disabled
         cmboEditSem.setDisable(true);
+        txtPeriod.setDisable(true);
+        txtYear.setDisable(true);
         
         // if disabled...
         chkEditSem.setOnAction(e -> {
             if (chkEditSem.isSelected())
                     {
                        cmboEditSem.setDisable(false); 
+                       txtPeriod.setDisable(false);
+                       txtYear.setDisable(false);
                     }
             else
             {
                 cmboEditSem.setDisable(true);
+                txtPeriod.setDisable(true);
+                txtYear.setDisable(true);
             }
         });
+        
+        // Semester Tab - create
+        HBox hSemPane2 = new HBox();
+        hSemPane2.getChildren().addAll(chkCreateSem);
+        // add to semester tab 
+        gSemPane.add(hSemPane2, 2, 0);
+        
+        
+        // if disabled...
+        chkCreateSem.setOnAction(e -> {
+            if (chkCreateSem.isSelected())
+                    {
+                       txtPeriod.setDisable(false);
+                       txtYear.setDisable(false); 
+                    }
+            else
+            {
+                txtPeriod.setDisable(true);
+                txtYear.setDisable(true);
+            }
+        });
+        
         
         
         // add menu to overall pane
