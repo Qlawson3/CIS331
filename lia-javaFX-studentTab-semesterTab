@@ -186,33 +186,50 @@ public class App extends Application {
                 cmboEditStud.setDisable(false);
                 cmboEditStud.setVisible(true);
                 
-                txtStudName.setDisable(false);
-                txtStudID.setDisable(false);
-                txtSSN.setDisable(false);
-                txtHomeAddress.setDisable(false);
-                txtEmail.setDisable(false);
-                txtGPA.setDisable(false);
-                txtEmergName.setDisable(false);
-                txtEmergEmail.setDisable(false);
-                txtEmergPhone.setDisable(false);
+                enableStudentFields();
+                
+                // clear previous items
+                cmboEditStud.getItems().clear();
+                
+                // repopulate the dropdown
+                for(Student s : students) {
+                    cmboEditStud.getItems().add(s.getFullName());
+                }
+
+                    
+                cmboEditStud.setOnAction(event -> {
+
+                        String selectStud = (String)cmboEditStud.getValue();
+
+                       for(Student s : students) {
+                        if(selectStud.equals(s.getFullName()))
+                        {
+                            txtStudName.setText(s.getFullName());
+                            txtStudID.setText(String.valueOf(s.getID()));
+                            txtSSN.setText(String.valueOf(s.getSSN()));
+                            txtEmail.setText(s.getEmail());
+                            txtHomeAddress.setText(s.getAddress());
+                            txtGPA.setText(String.valueOf(s.getGPA()));
+                            txtEmergName.setText(s.getEmergencyName());
+                            txtEmergEmail.setText(s.getEmergencyEmail());
+                            txtEmergPhone.setText(s.getEmergencyPhone());
+                        }
+                       }
+                        
+                    });
+                
+                clearStudentFields();
+                
             }
             else if(selectedOption.equals("Create Student")) 
             {
-                txtStudName.setDisable(false);
-                txtStudID.setDisable(false);
-                txtSSN.setDisable(false);
-                txtHomeAddress.setDisable(false);
-                txtEmail.setDisable(false);
-                txtGPA.setDisable(false);
-                txtEmergName.setDisable(false);
-                txtEmergEmail.setDisable(false);
-                txtEmergPhone.setDisable(false);
-            }
-            else 
-            {
                 cmboEditStud.setDisable(true);
-                 cmboEditStud.setVisible(false); 
-                 txtStudName.setDisable(true);
+                cmboEditStud.setVisible(false);
+                enableStudentFields();
+            }
+            else if (!selectedOption.equals("Edit Student"))
+            {
+                txtStudName.setDisable(true);
                 txtStudID.setDisable(true);
                 txtSSN.setDisable(true);
                 txtHomeAddress.setDisable(true);
@@ -222,6 +239,9 @@ public class App extends Application {
                 txtEmergEmail.setDisable(true);
                 txtEmergPhone.setDisable(true);
             }
+            
+            clearStudentFields();
+            
         });
         
         
@@ -341,6 +361,8 @@ public class App extends Application {
         
         btnSaveStud.setOnAction(e -> {
             // Gather TextField Information
+            String selectedOption = (String)studDropDown.getValue();
+            
             String fullName = txtStudName.getText();
             int studID = Integer.valueOf(txtStudID.getText());
             int ssn = Integer.valueOf(txtSSN.getText());
@@ -351,12 +373,77 @@ public class App extends Application {
             String emergEmail = txtEmergEmail.getText();
             String emergPhone = txtEmergPhone.getText();
             
-            Student student = new Student(fullName, studID, ssn, homeAddress, email, gpa,
-            emergName, emergEmail, emergPhone);
+            if(selectedOption.equals("Create Student"))
+            {
+                // make student object
+                Student student = new Student(fullName, studID, ssn, homeAddress, email, gpa,
+                    emergName, emergEmail, emergPhone);
+
+                // add student object to arrayList
+                students.add(student);
+
+                cmboEditStud.getItems().add(student.getFullName());
+            }
+            // for editing
+            else if(selectedOption.equals("Edit Student")) 
+            {
+                String selectStud = cmboEditStud.getSelectionModel().getSelectedItem().toString();
+                
+                // find corresponding student object in the list
+                for(Student s : students) {
+                    if(s != null && s.getFullName().equals(selectStud)) {
+                        // update student information
+                        s.setFullName(fullName);
+                        s.setID(studID);
+                        s.setSSN(ssn);
+                        s.setEmail(email);
+                        s.setAddress(homeAddress);
+                        s.setGPA(gpa);
+                        s.setEmergencyName(emergName);
+                        s.setEmergencyEmail(emergEmail);
+                        s.setEmergencyPhone(emergPhone);
+                        break;
+                    }
+                }
+            }
+            cmboEditStud.setValue(null);
+            clearStudentFields();
+            updateEditStudent();
             
-            students.add(student);
+        });
+        
+        
+       
+        
+        btnSaveSem.setOnAction(e -> {
+            // Gather TextField Information
+            String period = txtPeriod.getText();
+            String year = txtYear.getText();
+            
+            // add semester object to arrayList
+            Semester semester = new Semester(period, year);
+            semesters.add(semester);
+            
+            cmboEditSem.getItems().clear();
             
             // clear inputs to get ready for next user input
+            txtPeriod.clear();
+            txtYear.clear();
+            
+            for(Semester s : semesters) {
+                cmboEditSem.getItems().add(s.getPeriod() + " " + s.getYear());
+            }
+        });
+                
+        
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
+    
+    public void clearStudentFields() {
+        // clear inputs to get ready for next user input
             txtStudName.clear();
             txtStudID.clear();
             txtSSN.clear();
@@ -366,28 +453,33 @@ public class App extends Application {
             txtEmergName.clear();
             txtEmergEmail.clear();
             txtEmergPhone.clear();
-            
-            for(Student s : students) {
-                cmboEditStud.getItems().add(s.getFullName());
-            }
-            
-            
-            
-        });
-        
-       
-        
-        btnSaveSem.setOnAction(e -> {
-            // Gather TextField Information
-            String period = txtPeriod.getText();
-            String year = txtYear.getText();
-        });
-                
-        
     }
-
-    public static void main(String[] args) {
-        launch();
+    
+    public void enableStudentFields() {
+        
+        txtStudName.setDisable(false);
+        txtStudID.setDisable(false);
+        txtSSN.setDisable(false);
+        txtHomeAddress.setDisable(false);
+        txtEmail.setDisable(false);
+        txtGPA.setDisable(false);
+        txtEmergName.setDisable(false);
+        txtEmergEmail.setDisable(false);
+        txtEmergPhone.setDisable(false);
+    }
+    
+    public void updateEditStudent() {
+        
+        cmboEditStud.getItems().clear();
+        for (Student s : students) {
+            cmboEditStud.getItems().add(s.getFullName());
+        }
+        
     }
 
 }
+
+/* where i left off:
+got the edit to work
+stop messing with it and move on to enroll 
+*/
