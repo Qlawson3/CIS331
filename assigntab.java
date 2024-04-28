@@ -166,7 +166,7 @@ public class App extends Application {
                   + currSemester.getYear() + " Course: " + currCourse.getPrefix() + currCourse.getNum()); //for testing
           schedule1.assignSemester(currFaculty, currSemester);
           schedule1.addCourse(currCourse);
-          
+          currSemester.assignCourses(currCourse);
           });
     }
 
