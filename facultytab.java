@@ -111,6 +111,13 @@ public class App extends Application {
               isEditing = false;
               dropdownMembers.setVisible(false);
               editLbl.setVisible(false);
+              txtFullName.setPromptText("");;
+              txtEmail.setPromptText("");
+              txtBuilding.setPromptText("");
+              txtOffice.setPromptText("");
+              txtPhone.setPromptText("");
+              txtDept.setPromptText("");
+              txtPosition.setPromptText("");
           }
           });
           
