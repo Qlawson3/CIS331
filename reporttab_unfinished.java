@@ -226,42 +226,33 @@ public class App extends Application {
           
           //Generate button
           generate.setOnAction(e -> {
-              System.out.println(currSem.getPeriod() + " " + currCourse.getPrefix());
+              //System.out.println(currSem.getPeriod() + " " + currCourse.getPrefix());
               switch(choice){
                   case 1:
                     //code in here
-                    if(currSem != null){
+                                    
                     output.setText(currSem.listAssignedCourses()); //test
-                    
-                    
-                    } else{
-                        output.setText("");
-                    } 
-
                     break;
                   case 4:
-                      
-                    for (Enrollment form : enrollArray){
-                        if (form.getSemester() == currSem && 
-                        form.getCourse().equals(currCourse)){
-                            for (Course course : courseArray) {
-                                for (int i = 0; i < course.assignedStudents.size(); i++){
-                                    output.setText(course.assignedStudents.get(i).getFullName() + "\n");
+                    String result = "";
+                    for (Course course : currSem.coursesTaught) {
+                        if (course != null && course.equals(currCourse)){
+                        for (int i = 0; i < course.assignedStudents.size(); i++){
+                           result += course.assignedStudents.get(i).getFullName() + "\n";
+
                         }
+                        
+                        output.setText(result);
+            break;
                     
-                    break;
-                    }
                 }
             }
+                    
                          
               }
           
               
-            choice = 0;
-            currSem = null;
-            currCourse = null;
-            dropdownSemester.setValue(null);
-            dropdownCourse.setValue(null);
+          
           });
           
           
