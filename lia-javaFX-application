@@ -38,11 +38,15 @@ public class App extends Application {
         Label lblEmergEmail;
         Label lblEmergPhone;
         
+        TextArea txtaStudent;
+        
         // for Semester
         TextField txtPeriod;
         TextField txtYear;
         Label lblPeriod;
         Label lblYear;
+        
+        TextArea txtaSem;
         
         // for Course
         Label lblCoursePrefix;
@@ -61,6 +65,28 @@ public class App extends Application {
         TextField txtCreditHours;
 //      Label lblCourseInst;
 //      TextField txtCourseInst;
+        TextArea txtaCourse;
+        
+        // for Faculty
+        TextField txtFacID;
+        TextField txtFacName;
+        TextField txtFEmail;
+        TextField txtBuilding;
+        TextField txtOffice;
+        TextField txtFacPhone;
+        TextField txtDept;
+        TextField txtPosition;
+        
+        Label lblFacID;
+        Label lblFacName;
+        Label lblFEmail;
+        Label lblBuilding;
+        Label lblOffice;
+        Label lblFacPhone;
+        Label lblDept;
+        Label lblPosition;
+        
+        TextArea txtaFaculty;
         
         // for Enroll
         Label lblEnrollID;
@@ -70,16 +96,20 @@ public class App extends Application {
         
         TextField txtEnrollID;
         
+        TextArea txtaEnroll;
+        
         // titles of window kind of
         Label lblEntryStud;
         Label lblEntrySem;
         Label lblEntryCourse;
         Label lblEntryEnroll;
+        Label lblEntryFaculty;
         
         // drop down for create or edit
         ChoiceBox studDropDown;
         ChoiceBox semDropDown;
         ChoiceBox crsDropDown;
+        ChoiceBox facDropDown;
         
         
         // buttons to save 
@@ -87,21 +117,24 @@ public class App extends Application {
         Button btnSaveSem;
         Button btnSaveCourse;
         Button btnEnroll;
+        Button btnSaveFac;
         
         // for Editing
         ComboBox cmboEditStud;
         ComboBox cmboEditSem;
         ComboBox cmboEditCourse;
+        ComboBox cmboEditFac;
         
         // comboBoxes for enroll
         ComboBox cmboEnrollStud;
         ComboBox cmboEnrollSem;
         ComboBox cmboEnrollCrs;
         
+        
         // lists to store object creations
         ArrayList<Student> students = new ArrayList<>();
         ArrayList<Course> courses = new ArrayList<>();
-        ArrayList<Faculty> faculty = new ArrayList<>();
+        ArrayList<Faculty> facultyList = new ArrayList<>();
         ArrayList<Semester> semesters = new ArrayList<>();
         ArrayList<Enrollment> enrollments = new ArrayList<>();
         
@@ -119,6 +152,7 @@ public class App extends Application {
         btnSaveSem = new Button("Save ->");
         btnSaveCourse = new Button("Save ->");
         btnEnroll = new Button("Enroll ->");
+        btnSaveFac = new Button("Save ->");
         
         cmboEditStud = new ComboBox();
         cmboEditSem = new ComboBox();
@@ -126,6 +160,7 @@ public class App extends Application {
         cmboEnrollStud = new ComboBox();
         cmboEnrollSem = new ComboBox();
         cmboEnrollCrs = new ComboBox();
+        cmboEditFac = new ComboBox();
         
         studDropDown = new ChoiceBox();
         studDropDown.getItems().add("Create Student");
@@ -138,6 +173,10 @@ public class App extends Application {
         crsDropDown = new ChoiceBox();
         crsDropDown.getItems().add("Create Course");
         crsDropDown.getItems().add("Edit Course");
+        
+        facDropDown = new ChoiceBox();
+        facDropDown.getItems().add("Create Faculty");
+        facDropDown.getItems().add("Edit Faculty");
         
         lblStudName = new Label("First and Last Name");
         lblStudID = new Label("Student ID");
@@ -159,11 +198,15 @@ public class App extends Application {
         txtEmergEmail = new TextField();
         txtEmergPhone = new TextField();
         
+        txtaStudent = new TextArea();
+        
         lblPeriod = new Label("Period (Fall, Spring, etc)");
         lblYear = new Label("Year (YYYY)");
         
         txtPeriod = new TextField();
         txtYear = new TextField();
+        
+        txtaSem = new TextArea();
         
         lblCoursePrefix = new Label("Course Prefix");
         lblCourseNum = new Label("Course Number");
@@ -183,6 +226,29 @@ public class App extends Application {
         txtCreditHours = new TextField();
         //txtCourseInst = new TextField();
         
+        txtaCourse = new TextArea();
+        
+        lblFacID = new Label("Faculty ID");
+        lblFacName = new Label("First and Last Name");
+        lblFEmail = new Label("Email");
+        lblBuilding = new Label("Building Name");
+        lblOffice= new Label("Office Number");
+        lblFacPhone = new Label("Phone Number");
+        lblDept = new Label("Department Name");
+        lblPosition = new Label("Position");
+        
+        txtFacID = new TextField();
+        txtFacName = new TextField();
+        txtFEmail = new TextField();
+        txtBuilding = new TextField();
+        txtOffice = new TextField();
+        txtFacPhone = new TextField();
+        txtDept = new TextField();
+        txtPosition = new TextField();
+        
+        txtaFaculty = new TextArea();
+        
+        
         lblEnrollID = new Label("Enter an Enrollment ID");
         lblSelectStud = new Label("Select a Student");
         lblSelectSem = new Label("Select a Semester");
@@ -190,24 +256,24 @@ public class App extends Application {
         
         txtEnrollID = new TextField();
         
+        txtaEnroll = new TextArea();
+        
         lblEntryStud = new Label("Manage Students");
         lblEntrySem = new Label("Manage Semesters");
         lblEntryCourse = new Label("Manage Courses");
         lblEntryEnroll = new Label("Enroll a Student");
+        lblEntryFaculty = new Label("Manage Faculty");
         
-//        chkEditStud = new CheckBox("Edit Student   ");
-//        chkEditSem = new CheckBox("Edit Semester   ");
-//        
-//        chkCreateStud = new CheckBox("Create Student");
-//        chkCreateSem = new CheckBox("Create Semester");
        
         // for Tabs
         VBox overallVPane = new VBox();
         TabPane tPane = new TabPane();
         Tab tbStudent = new Tab("Student");
+        Tab tbFaculty = new Tab("Faculty");
         Tab tbSemester = new Tab("Semester");
         Tab tbCourse = new Tab("Course");
         Tab tbEnroll = new Tab("Enroll a Student");
+        
         
         // add Menu elements
         MenuBar mbarMenu = new MenuBar();
@@ -216,9 +282,11 @@ public class App extends Application {
         
         // create Pane for tabs
         GridPane gStudPane = new GridPane();
+        GridPane gFacultyPane = new GridPane();
         GridPane gSemPane = new GridPane();
         GridPane gCoursePane = new GridPane();
         GridPane gEnrollPane = new GridPane();
+        
         
         // prompt getting of inforrmation
         txtStudName.setPromptText("First and Last Name");
@@ -242,20 +310,33 @@ public class App extends Application {
         txtEndTime.setPromptText("End Time");
         txtCreditHours.setPromptText("Credit Hours");
        // txtCourseInst.setPromptText("Course Instructor: ");
+       
+       txtFacID.setPromptText("Faculty ID");
+       txtFacName.setPromptText("First and Last Name");
+       txtFEmail.setPromptText("Email Address");
+       txtBuilding.setPromptText("Building Name");
+       txtOffice.setPromptText("Office Number");
+       txtFacPhone.setPromptText("Phone Number");
+       txtDept.setPromptText("Department");
+       txtPosition.setPromptText("Position");
+       
         
         // have text go to next line if necessary
         lblEntryStud.setWrapText(true);
         lblEntrySem.setWrapText(true);
         lblEntryCourse.setWrapText(true);
         lblEntryEnroll.setWrapText(true);
+        lblEntryFaculty.setWrapText(true);
         
         txtEnrollID.setPromptText("Enrollment ID");
         
         // add the titles to the appropriate tab 
         gStudPane.add(lblEntryStud, 0, 0);
+        gFacultyPane.add(lblEntryFaculty, 0, 0);
         gSemPane.add(lblEntrySem, 0, 0);
         gCoursePane.add(lblEntryCourse, 0, 0);
         gEnrollPane.add(lblEntryEnroll, 0, 0);
+        
         
         // arrange the comboBox and checkBox on one horizontal line
         
@@ -344,6 +425,84 @@ public class App extends Application {
             
         });
         
+        // Faculty Tab
+        HBox hFacPane = new HBox();
+        hFacPane.getChildren().addAll(facDropDown, cmboEditFac);
+        // add to faculty tab
+        gFacultyPane.add(hFacPane, 2, 1);
+        
+        // set everything as disabled
+        cmboEditFac.setDisable(true);
+        cmboEditFac.setVisible(false);
+        
+        txtFacID.setDisable(true);
+        txtFacName.setDisable(true);
+        txtFEmail.setDisable(true);
+        txtBuilding.setDisable(true);
+        txtOffice.setDisable(true);
+        txtFacPhone.setDisable(true);
+        txtDept.setDisable(true);
+        txtPosition.setDisable(true);
+        
+        facDropDown.setOnAction(e -> {
+            String selectedOption = (String)facDropDown.getValue();
+            if(selectedOption.equals("Edit Faculty"))
+            {
+                cmboEditFac.setDisable(false);
+                cmboEditFac.setVisible(true);
+                enableFacultyFields();
+                
+                // clear previous items
+                cmboEditSem.getItems().clear();
+                
+                // repopulate
+                for(Faculty f : facultyList)
+                {
+                    cmboEditSem.getItems().add(f.getFullName());
+                }
+                
+                cmboEditFac.setOnAction(event -> {
+                    String selectFac = (String)cmboEditFac.getValue();
+                    
+                    for (Faculty f : facultyList)
+                    {
+                        if(f.getFullName().equals(selectFac))
+                        {
+                            txtFacID.setText(String.valueOf(f.getfacultyID()));
+                            txtFacName.setText(f.getFullName());
+                            txtFEmail.setText(f.getEmail());
+                            txtBuilding.setText(f.getBuilding());
+                            txtOffice.setText(String.valueOf(f.getOfficeNum()));
+                            txtFacPhone.setText(f.getPhoneNum());
+                            txtDept.setText(f.getDept());
+                            txtPosition.setText(f.getPosition());
+                        }
+                    }
+                });
+                
+                clearFacultyFields();
+            }
+            else if(selectedOption.equals("Create Faculty"))
+            {
+                cmboEditFac.setDisable(true);
+                cmboEditFac.setVisible(false);
+                enableFacultyFields();
+            }
+            else if (!selectedOption.equals("Edit Student"))
+            {
+                txtFacID.setDisable(true);
+                txtFacName.setDisable(true);
+                txtFEmail.setDisable(true);
+                txtBuilding.setDisable(true);
+                txtOffice.setDisable(true);
+                txtFacPhone.setDisable(true);
+                txtDept.setDisable(true);
+                txtPosition.setDisable(true);
+            }
+            
+            clearFacultyFields();
+        });
+        
         
         // Semester Tab 
         HBox hSemPane = new HBox();
@@ -358,7 +517,7 @@ public class App extends Application {
         txtPeriod.setDisable(true);
         txtYear.setDisable(true);
         
-        // if disabled...
+        
         semDropDown.setOnAction(e -> {
             String selectedOption = (String)semDropDown.getValue();
             if (selectedOption.equals("Edit Semester"))
@@ -372,7 +531,7 @@ public class App extends Application {
                        
                        // repopulate dropdown
                        for (Semester s : semesters) {
-                           cmboEditSem.getItems().add(s.getPeriod() + " " + s.getYear());
+                           cmboEditSem.getItems().add(s.getPeriod() + s.getYear());
                        }
                        
                        cmboEditSem.setOnAction(event -> {
@@ -380,7 +539,7 @@ public class App extends Application {
                            
                            for (Semester s : semesters)
                            {
-                               if(selectSem.equals(s.getPeriod() + " " + s.getYear()))
+                               if(selectSem.equals(s.getPeriod() + s.getYear()))
                                {
                                    txtPeriod.setText(s.getPeriod());
                                    txtYear.setText(s.getYear());
@@ -437,7 +596,7 @@ public class App extends Application {
                 // repopulate
                 for(Course c : courses)
                 {
-                    cmboEditCourse.getItems().add(c.getPrefix() + " " + c.getNum());
+                    cmboEditCourse.getItems().add(c.getPrefix() + c.getNum());
                 }
                 
                 cmboEditCourse.setOnAction(event -> {
@@ -445,7 +604,7 @@ public class App extends Application {
                     
                     for (Course c : courses)
                     {
-                        if(selectedOption.trim().equals(c.getPrefix() + " " + c.getNum()))
+                        if(selectedOption.trim().equals(c.getPrefix() + c.getNum()))
                         {
                             txtCoursePrefix.setText(c.getPrefix());
                             txtCourseNum.setText(String.valueOf(c.getNum()));
@@ -523,11 +682,32 @@ public class App extends Application {
         gStudPane.add(txtEmergEmail, 1, 8);
         gStudPane.add(lblEmergPhone, 0, 9);
         gStudPane.add(txtEmergPhone, 1, 9);
+        gStudPane.add(txtaStudent, 1, 11, 6, 3);
+        
+        gFacultyPane.add(txtFacID, 0, 1);
+        gFacultyPane.add(lblFacID, 1, 1);
+        gFacultyPane.add(txtFacName, 0, 2);
+        gFacultyPane.add(lblFacName, 1, 2);
+        gFacultyPane.add(txtFEmail, 0, 3);
+        gFacultyPane.add(lblFEmail, 1, 3);
+        gFacultyPane.add(txtBuilding, 0, 4);
+        gFacultyPane.add(lblBuilding, 1, 4);
+        gFacultyPane.add(txtOffice, 0, 5);
+        gFacultyPane.add(lblOffice, 1, 5);
+        gFacultyPane.add(txtFacPhone, 0, 6);
+        gFacultyPane.add(lblFacPhone, 1, 6);
+        gFacultyPane.add(txtDept, 0, 7);
+        gFacultyPane.add(lblDept, 1, 7);
+        gFacultyPane.add(txtPosition, 0, 8);
+        gFacultyPane.add(lblPosition, 1, 8);
+        gFacultyPane.add(txtaFaculty, 1, 10, 6, 3);
+        
         
         gSemPane.add(lblPeriod, 0, 1);
         gSemPane.add(txtPeriod, 1, 1);
         gSemPane.add(lblYear, 0, 2);
         gSemPane.add(txtYear, 1, 2);
+        gSemPane.add(txtaSem, 1, 4, 2, 3);
         
         gCoursePane.add(lblCoursePrefix, 0, 1);
         gCoursePane.add(txtCoursePrefix, 1, 1);
@@ -545,12 +725,14 @@ public class App extends Application {
         gCoursePane.add(txtCreditHours, 1, 7);
         // gCoursePane.add(lblCourseInst, 0, 8);
         // gCoursePane.add(txtCourseInst, 1, 8);
+        gCoursePane.add(txtaCourse, 1, 10, 4, 3);
         
         gEnrollPane.add(lblEnrollID, 0, 1);
         gEnrollPane.add(txtEnrollID, 1, 1);
         gEnrollPane.add(lblSelectStud, 0, 2);
         gEnrollPane.add(lblSelectSem, 0, 5);
         gEnrollPane.add(lblSelectCrs, 0, 8);
+        gEnrollPane.add(txtaEnroll, 1, 10, 4, 1);
         
         // add quit option to app menu 
         mApp.getItems().add(miQuit);
@@ -559,6 +741,9 @@ public class App extends Application {
         // set save button to its own anchorPane/layout container
         AnchorPane aStudPane = new AnchorPane();
         aStudPane.getChildren().add(btnSaveStud);
+        
+        AnchorPane aFacPane = new AnchorPane();
+        aFacPane.getChildren().add(btnSaveFac);
         
         AnchorPane aSemPane = new AnchorPane();
         aSemPane.getChildren().add(btnSaveSem);
@@ -569,20 +754,27 @@ public class App extends Application {
         AnchorPane aEnrollPane = new AnchorPane();
         aEnrollPane.getChildren().add(btnEnroll);
         
+       
+        
         // add to grids
         gStudPane.add(aStudPane, 1, 10);
+        gFacultyPane.add(aFacPane, 1, 9);
         gSemPane.add(aSemPane, 1, 3);
         gCoursePane.add(aCrsPane, 1, 9);
         gEnrollPane.add(aEnrollPane, 1, 9);
         
         // position the window and where it will pop up
         gStudPane.setAlignment(Pos.CENTER);
+        gFacultyPane.setAlignment(Pos.CENTER);
         gSemPane.setAlignment(Pos.CENTER);
         gCoursePane.setAlignment(Pos.CENTER);
         gEnrollPane.setAlignment(Pos.CENTER);
         
         gStudPane.setHgap(15);
         gStudPane.setVgap(15);
+        
+        gFacultyPane.setHgap(15);
+        gFacultyPane.setVgap(15);
         
         gSemPane.setHgap(15);
         gSemPane.setVgap(15);
@@ -595,26 +787,52 @@ public class App extends Application {
         
         // add built gridPane to tab
         tbStudent.setContent(gStudPane);
+        tbFaculty.setContent(gFacultyPane);
         tbSemester.setContent(gSemPane);
         tbCourse.setContent(gCoursePane);
         tbEnroll.setContent(gEnrollPane);
         
         // padding??? idk
         gStudPane.setPadding(new Insets(20, 0, 0, 0));
+        gFacultyPane.setPadding(new Insets(20, 0, 0, 0));
         gSemPane.setPadding(new Insets(20, 0 , 0 ,0));
         gCoursePane.setPadding(new Insets(20, 0, 0, 0));
         gEnrollPane.setPadding(new Insets(20, 0, 0, 0));
         
         // add both tabs to tab pane
-        tPane.getTabs().addAll(tbStudent, tbSemester, tbCourse, tbEnroll);
+        tPane.getTabs().addAll(tbStudent, tbFaculty, tbSemester, tbCourse, tbEnroll);
         
         // add tab pane to VBox (overall pane)
         overallVPane.getChildren().add(tPane);
         
+        
+        // format textAreas
+        txtaStudent.setMaxWidth(400);
+        txtaStudent.setMinWidth(400);
+        
+        txtaFaculty.setMaxWidth(400);
+        txtaFaculty.setMinWidth(400);
+        
+        txtaSem.setMaxWidth(400);
+        txtaSem.setMinWidth(400);
+        
+        txtaCourse.setMaxWidth(400);
+        txtaCourse.setMinWidth(400);
+        
+        txtaEnroll.setMaxWidth(400);
+        txtaEnroll.setMinWidth(400);
+        
+        // so that format specifiers work in textAreas
+        txtaStudent.setStyle("-fx-font-family: monospace");
+        txtaFaculty.setStyle("-fx-font-family: monospace");
+        txtaSem.setStyle("-fx-font-family: monospace");
+        txtaCourse.setStyle("-fx-font-family: monospace");
+        txtaEnroll.setStyle("-fx-font-family: monospace");
+        
         // set everything up on the main window!
-        Scene primaryScene = new Scene(overallVPane, 700, 600);
+        Scene primaryScene = new Scene(overallVPane, 700, 750);
         stage.setScene(primaryScene);
-        stage.setTitle("Unversity Management");
+        stage.setTitle("University Management");
         stage.show();
         
         btnSaveStud.setOnAction(e -> {
@@ -647,7 +865,7 @@ public class App extends Application {
             // for editing
             else if(selectedOption.equals("Edit Student")) 
             {
-                String selectStud = cmboEditStud.getSelectionModel().getSelectedItem().toString();
+                String selectStud = (String)cmboEditStud.getValue();
                 
                 // find corresponding student object in the list
                 for(Student s : students) {
@@ -667,14 +885,66 @@ public class App extends Application {
                     }
                 }
             }
-            cmboEditStud.setValue(null);
+            // cmboEditStud.setValue(null);
             clearStudentFields();
             updateStudent();
-            
+            // refresh the textArea with the new/updated student
+            refreshStudent();
         });
         
         
-       
+       btnSaveFac.setOnAction(e -> {
+           // gather textField information
+           String selectedOption = (String)facDropDown.getValue();
+           
+           int facID = Integer.valueOf(txtFacID.getText());
+           String facName = txtFacName.getText();
+           String FEmail = txtFEmail.getText();
+           String building = txtBuilding.getText();
+           int officeNum = Integer.valueOf(txtOffice.getText());
+           String phoneNum = txtFacPhone.getText();
+           String dept = txtDept.getText();
+           String position = txtPosition.getText();
+           
+           if(selectedOption.equals("Create Faculty"))
+           {
+               Faculty faculty = new Faculty(facID, facName, FEmail, building,
+                       officeNum, phoneNum, dept, position);
+               // add to faculty array list
+               facultyList.add(faculty);
+               // add to edit faculty comboBox
+               cmboEditFac.getItems().add(faculty.getFullName());
+               // add to faculty drop down...
+               // ....
+           }
+           // for editing
+           else if(selectedOption.equals("Edit Faculty"))
+           {
+               String selectFac = (String)cmboEditFac.getValue();
+               
+               // find corresponding faculty in list
+               for(Faculty f : facultyList)
+               {
+                   if(f != null && f.getFullName().equals(selectFac))
+                   {
+                      // update faculty info
+                       f.setID(facID);
+                       f.setFullName(facName);
+                       f.setEmail(FEmail);
+                       f.setBuilding(building);
+                       f.setOfficeNum(officeNum);
+                       f.setPhoneNum(phoneNum);
+                       f.setDept(dept);
+                       f.setPosition(position);
+                       break;
+                   }
+               }
+           }
+           clearFacultyFields();
+           updateFaculty();
+           refreshFaculty();
+           
+       });
         
         btnSaveSem.setOnAction(e -> {
             // gather textField information
@@ -690,9 +960,9 @@ public class App extends Application {
                 // add to semester array
                 semesters.add(semester);
                 // add to edit semester comboBox
-                cmboEditSem.getItems().add(semester.getPeriod() + " " + semester.getYear());
+                cmboEditSem.getItems().add(semester.getPeriod() + semester.getYear());
                 // add to enroll semester comboBox
-                cmboEnrollSem.getItems().add(semester.getPeriod() + " " + semester.getYear());
+                cmboEnrollSem.getItems().add(semester.getPeriod() + semester.getYear());
             }
             else if(selectedOption.equals("Edit Semester"))
             {
@@ -702,7 +972,7 @@ public class App extends Application {
                 for(Semester s : semesters)
                 {
                     if(s != null && selectSem != null && 
-                            selectSem.equals(s.getPeriod() + " " + s.getYear()))
+                            selectSem.equals(s.getPeriod() + s.getYear()))
                     {
                         s.setPeriod(period);
                         s.setYear(year);
@@ -710,9 +980,11 @@ public class App extends Application {
                     }
                 }
             }
-            cmboEditSem.setValue(null);
+            // cmboEditSem.setValue(null);
             clearSemesterFields();
             updateSemester();
+            // refresh text area
+            refreshSemester();
         });
         
         btnSaveCourse.setOnAction(e -> {
@@ -736,9 +1008,9 @@ public class App extends Application {
                 courses.add(course);
                 
                 // add to edit course comboBox
-                cmboEditCourse.getItems().add(course.getPrefix() + " " + course.getNum());
+                cmboEditCourse.getItems().add(course.getPrefix() + course.getNum());
                 // add to enroll course comboBox
-                cmboEnrollCrs.getItems().add(course.getPrefix() + " " + course.getNum());
+                cmboEnrollCrs.getItems().add(course.getPrefix() + course.getNum());
             }
             else if(selectedOption.equals("Edit Course"))
             {
@@ -748,7 +1020,7 @@ public class App extends Application {
                 for (Course c : courses)
                 {
                     if(c != null && selectCourse != null &&
-                            selectCourse.equals(c.getPrefix() + " " + c.getNum()))
+                            selectCourse.equals(c.getPrefix() + c.getNum()))
                     {
                         c.setPrefix(coursePrefix);
                         c.setNum(courseNum);
@@ -761,66 +1033,82 @@ public class App extends Application {
                     }
                 }
             }
-            cmboEditCourse.setValue(null);
+            // cmboEditCourse.setValue(null);
             clearCourseFields();
             updateCourse();
+            // refresh text area
+            refreshCourse();
         });
         
         btnEnroll.setOnAction(e -> {
-            Student selectStud = (Student)cmboEnrollStud.getValue();
-            Semester selectSem = (Semester)cmboEnrollSem.getValue();
-            Course selectCrs = (Course)cmboEnrollCrs.getValue();
+            Object studObj = cmboEnrollStud.getValue();
+            Object semObj = cmboEnrollSem.getValue();
+            Object crsObj = cmboEnrollCrs.getValue();
             
-            // create objects to find
-            Student stud = null;
-            Semester sem = null;
-            Course crs = null;
-            
-            // make the selectStud a student object
-            for(Student s : students)
+            if(studObj != null && semObj != null && crsObj != null &&
+                    studObj instanceof Student && semObj instanceof Semester && crsObj instanceof Course)
             {
-                if(selectStud.getFullName().equals(s.getFullName()) &&
-                        (selectStud.getID() == s.getID()))
+                Student selectStud = (Student)studObj;
+                Semester selectSem = (Semester)semObj;
+                Course selectCrs = (Course)crsObj;
+                
+                // create objects to find
+                Student stud = null;
+                Semester sem = null;
+                Course crs = null;
+
+                // make the selectStud a student object
+                for(Student s : students)
                 {
-                    // create the student object if they match
-                    stud = new Student(s.getFullName(), s.getID(), s.getSSN(), 
-                    s.getAddress(), s.getEmail(), s.getGPA(), s.getEmergencyName(),
-                    s.getEmergencyEmail(), s.getEmergencyPhone());
+                    if(selectStud.getFullName().equals(s.getFullName()) &&
+                            (selectStud.getID() == s.getID()))
+                    {
+                        // create the student object if they match
+                        stud = new Student(s.getFullName(), s.getID(), s.getSSN(), 
+                        s.getAddress(), s.getEmail(), s.getGPA(), s.getEmergencyName(),
+                        s.getEmergencyEmail(), s.getEmergencyPhone());
+                    }
                 }
-            }
-            for(Semester sm : semesters)
-            {
-                if(selectSem.getPeriod().equals(sm.getPeriod()) &&
-                        (selectSem.getYear().equals(sm.getYear())))
+                for(Semester sm : semesters)
                 {
-                    // create semester object
-                    sem = new Semester(sm.getPeriod(), sm.getYear());
-                }       
-            }
-            for(Course c : courses)
-            {
-                if(selectCrs.getPrefix().equals(c.getPrefix()) &&
-                        (selectCrs.getNum() == (c.getNum())))
-                {
-                    // create course object if they match
-                    crs = new Course(c.getPrefix(), c.getNum(), c.getDaysTaught(),
-                    c.getStartTime(), c.getEndTime(), c.getCredits(), c.getName());
+                    if(selectSem.getPeriod().equals(sm.getPeriod()) &&
+                            (selectSem.getYear().equals(sm.getYear())))
+                    {
+                        // create semester object
+                        sem = new Semester(sm.getPeriod(), sm.getYear());
+                    }       
                 }
+                for(Course c : courses)
+                {
+                    if(selectCrs.getPrefix().equals(c.getPrefix()) &&
+                            (selectCrs.getNum() == (c.getNum())))
+                    {
+                        // create course object if they match
+                        crs = new Course(c.getPrefix(), c.getNum(), c.getDaysTaught(),
+                        c.getStartTime(), c.getEndTime(), c.getCredits(), c.getName());
+                    }
+                }
+
+                // create enrollment object based off chosen 
+                Enrollment enroll = new Enrollment(stud, sem, crs);
+
+                // catch the enrollment id
+                int enrollID = Integer.valueOf(txtEnrollID.getText());
+                // attach to enrollment object
+                enroll.setEnrollID(enrollID);
+
+                // add to enrollment array
+                enrollments.add(enroll);
+
+                // add student to course roster
+                enroll.courseEnrollment(crs);
+                refreshEnroll();
+                }
+            else 
+            {
+                txtaEnroll.appendText("Error. Please try again later.");
             }
             
-            // create enrollment object based off chosen 
-            Enrollment enroll = new Enrollment(stud, sem, crs);
-            
-            // catch the enrollment id
-            int enrollID = Integer.valueOf(txtEnrollID.getText());
-            // attach to enrollment object
-            enroll.setEnrollID(enrollID);
-            
-            // add to enrollment array
-            enrollments.add(enroll);
-            
-            // add student to course roster
-            enroll.courseEnrollment(crs);
         });
                 
         
@@ -888,12 +1176,41 @@ public class App extends Application {
         // txtCourseInst.clear();
     }
     
+    public void enableFacultyFields() {
+        txtFacID.setDisable(false);
+        txtFacName.setDisable(false);
+        txtFEmail.setDisable(false);
+        txtBuilding.setDisable(false);
+        txtOffice.setDisable(false);
+        txtFacPhone.setDisable(false);
+        txtDept.setDisable(false);
+        txtPosition.setDisable(false);
+    }
+    
+    public void clearFacultyFields() {
+        txtFacID.clear();
+        txtFacName.clear();
+        txtFEmail.clear();
+        txtBuilding.clear();;
+        txtOffice.clear();
+        txtFacPhone.clear();
+        txtDept.clear();
+        txtPosition.clear();
+    }
+    
     public void updateStudent() {
         cmboEditStud.getItems().clear();
         cmboEnrollStud.getItems().clear();
         for (Student s : students) {
             cmboEditStud.getItems().add(s.getFullName());
             cmboEnrollStud.getItems().add(s.getFullName());
+        }
+    }
+    
+    public void updateFaculty() {
+        cmboEditFac.getItems().clear();
+        for(Faculty f : facultyList) {
+            cmboEditFac.getItems().add(f.getFullName());
         }
     }
     
@@ -915,14 +1232,62 @@ public class App extends Application {
         }
     }
     
+    public void refreshStudent() {
+        // clear text area
+        txtaStudent.clear();
+        
+        for(Student s : students) {
+            // add the text of the student to textArea
+            txtaStudent.appendText(s.toString() + "\n");
+        }
+    }
+    
+    public void refreshFaculty() {
+        // clear text area
+        txtaFaculty.clear();
+        
+        for(Faculty f : facultyList) {
+            txtaFaculty.appendText(f.toString() + "\n");
+        }
+    }
+    
+    public void refreshCourse() {
+        // clear text area
+        txtaCourse.clear();
+        
+        for (Course c : courses) {
+            // add the text of the course to textArea
+            txtaCourse.appendText(c.toString() +  "\n");
+        }
+    }
+    
+    public void refreshSemester() {
+        // clear text area
+        txtaSem.clear();
+        
+        for(Semester sm : semesters) {
+            // add the text to the semester textArea
+            txtaSem.appendText(sm.toString() + "\n");
+        }
+    }
+    
+    public void refreshEnroll() {
+        // clear text area
+        txtaEnroll.clear();
+        
+        for(Enrollment e : enrollments) {
+            // add text to enrollment textArea
+            txtaEnroll.appendText(e.toString() + "\n");
+        }
+    }
+    
 
 }
 
 /* where i left off:
-add text areas to display messages or 
-just some kind of indication that what
-the user did was a success
+basically enroll is being a bitch and keep coming up
+with ClassCastException specifically with Student
 
-example: when you are creating something (ex: student)
-have an empty text area below everything and when they create one, it appears inside
+gonna give it a rest for now and move to the second bullet -->
+printing all courses a student is taking in a semester
 */
