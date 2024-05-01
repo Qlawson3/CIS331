@@ -1481,10 +1481,4 @@ public class App extends Application {
 
 }
 
-/* where i left off:
-basically enroll is being a bitch and keep coming up
-with ClassCastException specifically with Student
 
-gonna give it a rest for now and move to the second bullet -->
-printing all courses a student is taking in a semester
-*/
