@@ -9,6 +9,7 @@ import javafx.event.*;
 import javafx.geometry.*;
 import java.util.*;
 
+// Lia Hil, Sequoia Lawson, Valerie Hernandez
 
 
 /**
@@ -141,9 +142,9 @@ public class App extends Application {
         Button assignBtn;
         
         // identify selected objects
-        Course currCourse = new Course();
-        Semester currSemester = new Semester();
-        Faculty currFaculty = new Faculty();
+//        Course currCourse = new Course();
+//        Semester currSemester = new Semester();
+//        Faculty currFaculty = new Faculty();
         
         
         // lists to store object creations
@@ -723,47 +724,48 @@ public class App extends Application {
         gAssignPane.add(hAssignFac, 3, 8);
         
          //DROPDOWN
-          cmboAssignCrs.setOnAction(e -> {
-          //code in here
-          Object selection = cmboAssignCrs.getSelectionModel().getSelectedItem(); //grab selection
-          if (selection != null){
-              for (Course c : courses){
-                if ((c.getPrefix() + " " + c.getNum()).equals(selection.toString())){
-                currCourse = c;    
-                }
-                
-              }
-          }
-          });
-          
-          cmboAssignSem.setOnAction(e -> {
-          //code in here
-          Object selection = cmboAssignSem.getSelectionModel().getSelectedItem(); //grab selection
-          if (selection != null){
-              for (Semester s : semesters){
-                if ((s.getPeriod() + " " + s.getYear()).equals(selection.toString())){
-                currSemester = s;    
-                }
-                    
-                
-              }
-          }
-          });
-          
-          cmboAssignFac.setOnAction(e -> {
-          //code in here
-          Object selection = cmboAssignFac.getSelectionModel().getSelectedItem(); //grab selection
-          if (selection != null){
-              for (Faculty f : facultyList){
-                if ((f.getFullName() + " ID: " + f.getfacultyID()).equals(selection.toString())){
-                currFaculty = f;    
-                }
-                    
-                
-              }
-          }
-          });
-     
+//          cmboAssignCrs.setOnAction(e -> {
+//          //code in here
+//          String selection = (String)cmboAssignCrs.getValue(); //grab selection
+//          
+//          
+//          for (Course c : courses)
+//          {
+//              if (c != null && selection.equals(c.getPrefix() + c.getNum())) 
+//              {
+//                  
+//              }
+//          }
+//          });
+//          
+//          cmboAssignSem.setOnAction(e -> {
+//          //code in here
+//          Object selection = cmboAssignSem.getSelectionModel().getSelectedItem(); //grab selection
+//          if (selection != null){
+//              for (Semester s : semesters){
+//                if ((s.getPeriod() + " " + s.getYear()).equals(selection.toString())){
+//                currSemester = s;    
+//                }
+//                    
+//                
+//              }
+//          }
+//          });
+//          
+//          cmboAssignFac.setOnAction(e -> {
+//          //code in here
+//          Object selection = cmboAssignFac.getSelectionModel().getSelectedItem(); //grab selection
+//          if (selection != null){
+//              for (Faculty f : facultyList){
+//                if ((f.getFullName() + " ID: " + f.getfacultyID()).equals(selection.toString())){
+//                currFaculty = f;    
+//                }
+//                    
+//                
+//              }
+//          }
+//          });
+//     
         
         
         
@@ -1182,9 +1184,6 @@ public class App extends Application {
             
             if(studObj != null && semObj != null && crsObj != null)
             {
-//                Student selectStud = studObj;
-//                Semester selectSem = semObj;
-//                Course selectCrs = crsObj;
                 
                 // create objects to find
                 Student stud = null;
@@ -1246,16 +1245,51 @@ public class App extends Application {
         });
         
         assignBtn.setOnAction(e -> {
-          //code in here
-          Schedule schedule1 = new Schedule();
-          //System.out.println("Faculty: " + currFaculty.getFullName() + " Semester: " + currSemester.getPeriod() 
-                //  + currSemester.getYear() + " Course: " + currCourse.getPrefix() + currCourse.getNum()); //for testing
-          schedule1.assignSemester(currFaculty, currSemester);
-          schedule1.addCourse(currCourse);
-          currSemester.assignCourses(currCourse);
-          schedules.add(schedule1);
+          String facObj = (String)cmboAssignFac.getValue();
+          String crsObj = (String)cmboAssignCrs.getValue();
+          String semObj = (String)cmboAssignSem.getValue();
           
+          // create objects to find
+          Faculty fac = null;
+          Course crs = null;
+          Semester sem = null;
+          
+          for(Faculty f : facultyList)
+          {
+              if(f != null && facObj.equals(f.getFullName()))
+              {
+                  fac = f;
+              }
+          }
+          for(Course c : courses)
+          {
+              if(c != null && crsObj.equals(c.getPrefix() + c.getNum()))
+              {
+                  crs = c;
+              }
+          }
+          for(Semester sm : semesters)
+          {
+              if(sm != null && semObj.equals(sm.getPeriod() + sm.getYear()))
+              {
+                  sem = sm;
+              }
+          }
+          // create schedule object based off found items
+          Schedule schedule = new Schedule(fac, crs, sem);
+          
+          // assign semester to faculty
+          schedule.assignSemester(schedule, sem);
+          // add course to schedule
+          schedule.addCourse(crs);
+          // add course to semester
+          if(sem != null && crs != null) {
+            sem.assignCourses(crs);
+          }
+          // add schedule to schedule array
+          schedules.add(schedule);
           refreshAssign();
+          
           });
                 
     }
