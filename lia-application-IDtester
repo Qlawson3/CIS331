@@ -167,12 +167,21 @@ public class App extends Application {
         TextArea txtaReport;
         
               
-        // IDs???
+        // IDs
         
         public static int studID = 10000;
         public static int facID = 20000;
         public static int enrollID = 30000;
         public static int schedID = 40000;
+        
+        // for editing enroll tab - same student and semester, just add a course
+        ChoiceBox enrollDropDown;
+        // for editing a schedule tab - same faculty and semester, just add a course
+        ChoiceBox schedDropDown;
+        
+        // to list all previously made IDs
+        ComboBox cmboEnrollIDs;
+        ComboBox cmboSchedIDs;
         
 
         
@@ -340,7 +349,7 @@ public class App extends Application {
         txtaFaculty = new TextArea();
         
         
-        lblEnrollID = new Label("Enter an Enrollment ID");
+        lblEnrollID = new Label("Create Enrollment or Edit Existing?");
         lblRanEnrollID = new Label();
         lblSelectStud = new Label("Select a Student");
         lblSelectSem = new Label("Select a Semester");
@@ -377,6 +386,14 @@ public class App extends Application {
         lblReport = new Label("Please Choose a Report");
         
           
+        enrollDropDown = new ChoiceBox();
+        enrollDropDown.getItems().addAll("Create Enrollment", "Add Course to Existing Enrollment");
+        
+        schedDropDown = new ChoiceBox();
+        schedDropDown.getItems().addAll("Create Schedule", "Add Course to Existing Schedule");
+        
+        cmboEnrollIDs = new ComboBox();
+        cmboSchedIDs = new ComboBox();
         
        
         // for Tabs
@@ -768,6 +785,10 @@ public class App extends Application {
         });
         
         // Enroll tab - student
+       HBox hEnroll = new HBox();
+       hEnroll.getChildren().addAll(enrollDropDown, cmboEnrollIDs);
+       gEnrollPane.add(hEnroll, 3, 1);
+      
         HBox hEnrollStudPane = new HBox();
         hEnrollStudPane.getChildren().add(cmboEnrollStud);
         // arrange on main grid pane
@@ -785,12 +806,96 @@ public class App extends Application {
         // arrange on main grid pane
         gEnrollPane.add(hEnrollCrsPane, 3, 8);
         
-        lblRanEnrollID.setText(String.valueOf(getEnrollID()));
+//        cmboEnrollIDs.getItems().add(getEnrollID());
         
+        lblRanEnrollID.setDisable(true);
+        cmboEnrollIDs.setDisable(true);
+        cmboEnrollStud.setDisable(true);
+        cmboEnrollSem.setDisable(true);
+        cmboEnrollCrs.setDisable(true);
+        
+        lblRanEnrollID.setVisible(false);
+        cmboEnrollIDs.setVisible(false);
+        cmboEnrollStud.setVisible(false);
+        cmboEnrollSem.setVisible(false);
+        cmboEnrollCrs.setVisible(false);
+        
+        enrollDropDown.setOnAction(e -> {
+           String selection = (String)enrollDropDown.getValue();
+           if(selection.equals("Add Course to Existing Enrollment"))
+           {
+               // make enrollment ID list available
+               cmboEnrollIDs.setDisable(false);
+               cmboEnrollIDs.setVisible(true);
+               
+               // clear list then repopulate it
+               cmboEnrollIDs.getItems().clear();
+               for(Enrollment enrl : enrollments)
+               {
+                   cmboEnrollIDs.getItems().add(enrl.getID());
+               }
+               
+               cmboEnrollStud.setDisable(true);
+               cmboEnrollSem.setDisable(true);
+               cmboEnrollStud.setVisible(false);
+               cmboEnrollSem.setVisible(false);
+       
+               // make courses available
+               cmboEnrollCrs.setDisable(false);
+               cmboEnrollCrs.setVisible(true);  
+               
+               // clear list then repopulate it
+               cmboEnrollCrs.getItems().clear();
+               for(Course c : courses)
+               {
+                   cmboEnrollCrs.getItems().add(c.getPrefix() + c.getNum());
+               }
+           }
+           else if(selection.equals("Create Enrollment"))
+           {
+               lblRanEnrollID.setText(String.valueOf(getEnrollID()));
+               
+               lblRanEnrollID.setDisable(false);
+               cmboEnrollStud.setDisable(false);
+               cmboEnrollSem.setDisable(false);
+               cmboEnrollCrs.setDisable(false);
+        
+               lblRanEnrollID.setVisible(true);
+               cmboEnrollStud.setVisible(true);
+               cmboEnrollSem.setVisible(true);
+               cmboEnrollCrs.setVisible(true);
+               
+               cmboEnrollIDs.setVisible(false);
+               cmboEnrollIDs.setDisable(true);
+               
+               // refresh student list
+               cmboEnrollStud.getItems().clear();
+               for(Student st : students)
+               {
+                   cmboEnrollStud.getItems().add(st.getFullName());
+               }
+               // refresh semester list
+               cmboEnrollSem.getItems().clear();
+               for(Semester sem : semesters)
+               {
+                   cmboEnrollSem.getItems().add(sem.getPeriod() + sem.getYear());
+               }
+               // refresh course list
+               cmboEnrollCrs.getItems().clear();
+               for(Course c : courses)
+               {
+                   cmboEnrollCrs.getItems().add(c.getPrefix() + c.getNum());
+               }
+           }
+       });
         
         
         
         // Assign tab - course
+        HBox hAssign = new HBox();
+        hAssign.getChildren().addAll(schedDropDown, cmboSchedIDs);
+        gAssignPane.add(hAssign, 3, 1);
+        
         HBox hAssignCrs = new HBox();
         hAssignCrs.getChildren().add(cmboAssignCrs);
         // arrange on main grid pane
@@ -806,7 +911,93 @@ public class App extends Application {
         hAssignFac.getChildren().add(cmboAssignFac);
         gAssignPane.add(hAssignFac, 3, 8);
         
-        lblRanAssignID.setText(String.valueOf(getSchedID()));
+        lblRanAssignID.setDisable(true);
+        lblRanAssignID.setVisible(false);
+        
+        cmboSchedIDs.setDisable(true);
+        cmboSchedIDs.setVisible(false);
+        cmboAssignCrs.setDisable(true);
+        cmboAssignCrs.setVisible(false);
+        cmboAssignSem.setDisable(true);
+        cmboAssignSem.setVisible(false);
+        cmboAssignFac.setDisable(true);
+        cmboAssignFac.setVisible(false);
+        
+        schedDropDown.setOnAction(e -> {
+            String selection = (String)schedDropDown.getValue();
+            if(selection.equals("Add Course to Existing Schedule"))
+            {
+                lblRanAssignID.setDisable(true);
+                lblRanAssignID.setVisible(false);
+                
+                cmboSchedIDs.setDisable(false);
+                cmboSchedIDs.setVisible(true);
+                
+                // refresh schedIDs
+                cmboSchedIDs.getItems().clear();
+                for(Schedule sched : schedules)
+                {
+                    cmboSchedIDs.getItems().add(sched.getScheduleID());
+                }
+                
+                
+                cmboAssignCrs.setDisable(false);
+                cmboAssignCrs.setVisible(true);
+                
+                // refresh courses
+                cmboAssignCrs.getItems().clear();
+                for(Course c : courses) 
+                {
+                    cmboAssignCrs.getItems().add(c.getPrefix() + c.getNum());
+                }
+                
+                cmboAssignSem.setDisable(true);
+                cmboAssignSem.setVisible(false);
+                cmboAssignFac.setDisable(true);
+                cmboAssignFac.setVisible(false);
+            }
+            else if(selection.equals("Create Schedule"))
+            {
+                lblRanAssignID.setText(String.valueOf(getSchedID()));
+                
+                lblRanAssignID.setDisable(false);
+                lblRanAssignID.setVisible(true);
+        
+                cmboSchedIDs.setDisable(true);
+                cmboSchedIDs.setVisible(false);
+                
+                cmboAssignCrs.setDisable(false);
+                cmboAssignCrs.setVisible(true);
+                cmboAssignSem.setDisable(false);
+                cmboAssignSem.setVisible(true);
+                cmboAssignFac.setDisable(false);
+                cmboAssignFac.setVisible(true);
+                
+                // refresh courses
+                cmboAssignCrs.getItems().clear();
+                for(Course c : courses) 
+                {
+                    cmboAssignCrs.getItems().add(c.getPrefix() + c.getNum());
+                }
+                
+                // refresh semesters
+                cmboAssignSem.getItems().clear();
+                for(Semester s : semesters) 
+                {
+                    cmboAssignSem.getItems().add(s.getPeriod() + s.getYear());
+                }
+                
+                // refresh faculty
+                cmboAssignFac.getItems().clear();
+                for(Faculty f : facultyList) 
+                {
+                    cmboAssignFac.getItems().add(f.getFullName());
+                }
+            }
+        });
+        
+        
+        
         
         // Generate Reports tab - initial ask
         HBox hRep = new HBox();
@@ -1371,76 +1562,114 @@ public class App extends Application {
         });
         
         btnEnroll.setOnAction(e -> {
-            String studObj = (String)cmboEnrollStud.getValue();
-            String semObj = (String)cmboEnrollSem.getValue();
-            String crsObj = (String)cmboEnrollCrs.getValue();
             
-            System.out.println(studObj);
-            
-            if(studObj != null && semObj != null && crsObj != null)
+            String select = (String)enrollDropDown.getValue();
+            if(select.equals("Create Enrollment"))
             {
-                
-                // create objects to find
-                Student stud = null;
-                Semester sem = null;
-                Course crs = null;
+            
+                String studObj = (String)cmboEnrollStud.getValue();
+                String semObj = (String)cmboEnrollSem.getValue();
+                String crsObj = (String)cmboEnrollCrs.getValue();
 
-                // make the selectStud a student object
-                for(Student s : students)
+                System.out.println(studObj);
+
+                if(studObj != null && semObj != null && crsObj != null)
                 {
-                    if(studObj.equals(s.getFullName()))
+
+                    // create objects to find
+                    Student stud = null;
+                    Semester sem = null;
+                    Course crs = null;
+
+                    // make the selectStud a student object
+                    for(Student s : students)
                     {
-                        // create the student object if they match
-                        stud = s;
+                        if(studObj.equals(s.getFullName()))
+                        {
+                            // create the student object if they match
+                            stud = s;
+                        }
+                    }
+                    for(Semester sm : semesters)
+                    {
+                        if(semObj.equals(sm.getPeriod() + sm.getYear()))
+                        {
+                            // create semester object
+                            sem = sm;
+                        }       
+                    }
+                    for(Course c : courses)
+                    {
+                        if(crsObj.equals(c.getPrefix() + c.getNum()))
+                        {
+                            // create course object if they match
+                            crs = c;
+                        }
+                    }
+
+                    // System.out.println(stud.getFullName() + sem.getPeriod() + sem.getYear() + crs.getPrefix() +
+                        //    crs.getNum());
+
+                    // create enrollment object based off chosen 
+                    Enrollment enroll = new Enrollment(stud, sem, crs);
+
+
+                    // add to enrollment array
+                    enrollments.add(enroll);
+                    // add to enrollment comboBox
+                    cmboRepEnroll.getItems().add(enroll.getID());
+                    cmboEnrollIDs.getItems().add(enroll.getID());
+                    // incremement enrollmentID
+                    lblRanEnrollID.setText(String.valueOf(App.getEnrollID()));
+
+
+                    // add student to course
+                    if(crs != null)
+                    {
+                        crs.addStudent(stud);
+                    }
+
+                    // adds course
+                    enroll.courseEnrollment(crs);
+                    updateEnroll();
+
+                    refreshEnroll();
+                    // clear id textfield
+    //                txtEnrollID.clear();
+                    }
+            }
+            else if(select.equals("Add Course to Existing Enrollment"))
+            {
+                lblRanEnrollID.setVisible(false);
+                lblRanEnrollID.setDisable(true);
+                
+                int selectID = (int)cmboEnrollIDs.getValue();
+                String selectCrs = (String)cmboEnrollCrs.getValue();
+                
+                // course to find??
+                Course c1 = null;
+                
+                for(Course crs : courses)
+                {
+                    if(crs != null && selectCrs.equals(crs.getPrefix() + crs.getNum()))
+                    {
+                        c1 = crs;
+                        break;
                     }
                 }
-                for(Semester sm : semesters)
+                
+                for(Enrollment enrl : enrollments)
                 {
-                    if(semObj.equals(sm.getPeriod() + sm.getYear()))
+                    if(enrl != null && selectID == enrl.getID())
                     {
-                        // create semester object
-                        sem = sm;
-                    }       
-                }
-                for(Course c : courses)
-                {
-                    if(crsObj.equals(c.getPrefix() + c.getNum()))
-                    {
-                        // create course object if they match
-                        crs = c;
+                        enrl.courseEnrollment(c1);
+                        updateEnroll();
+                        refreshEnroll();
                     }
+                        
                 }
-                
-                // System.out.println(stud.getFullName() + sem.getPeriod() + sem.getYear() + crs.getPrefix() +
-                    //    crs.getNum());
-
-                // create enrollment object based off chosen 
-                Enrollment enroll = new Enrollment(stud, sem, crs);
-                
-
-                // add to enrollment array
-                enrollments.add(enroll);
-                // add to enrollment comboBox
-                cmboRepEnroll.getItems().add(enroll.getEnrollID());
-                // incremement enrollmentID
-                lblRanEnrollID.setText(String.valueOf(enroll.getEnrollID()));
-                
-
-                // add student to course
-                if(crs != null)
-                {
-                    crs.addStudent(stud);
-                }
-                
-                // adds course
-                enroll.courseEnrollment(crs);
-                updateEnroll();
-                
-                refreshEnroll();
-                // clear id textfield
-//                txtEnrollID.clear();
-                }
-            else 
+            }
+            else
             {
                 txtaEnroll.appendText("Error. Please try again later.");
             }
@@ -1493,6 +1722,7 @@ public class App extends Application {
           schedules.add(schedule);
           // add to schedule comboBox
           cmboRepSched.getItems().add(schedule.getScheduleID());
+          cmboSchedIDs.getItems().add(schedule.getScheduleID());
           // update schedule ID
           lblRanAssignID.setText(String.valueOf(schedule.getScheduleID()));
           
@@ -1621,7 +1851,7 @@ public class App extends Application {
                 {
                     for(Enrollment en : enrollments)
                     {
-                        if(en != null && selectEnroll == (en.getEnrollID()))
+                        if(en != null && selectEnroll == (en.getID()))
                         {
                             enroll = en;
                         }
@@ -1849,17 +2079,21 @@ public class App extends Application {
     
     public void updateSchedule() {
         cmboRepSched.getItems().clear();
+        cmboSchedIDs.getItems().clear();
         for(Schedule sch : schedules)
         {
             cmboRepSched.getItems().add(sch.getScheduleID());
+            cmboSchedIDs.getItems().clear();
         }
     }
     
     public void updateEnroll() {
         cmboRepEnroll.getItems().clear();
+        cmboEnrollIDs.getItems().clear();
         for(Enrollment e : enrollments)
         {
-            cmboRepEnroll.getItems().add(e.getEnrollID());
+            cmboRepEnroll.getItems().add(e.getID());
+            cmboEnrollIDs.getItems().add(e.getID());
         }
     }
     
@@ -1926,10 +2160,6 @@ public class App extends Application {
     public static int getStudID() {
         return studID++;
     }
-    
-//    public static int incStudID() {
-//        return studID++;
-//    }
     
     public static int getFacID() {
         return facID++;
