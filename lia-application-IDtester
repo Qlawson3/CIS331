@@ -832,7 +832,7 @@ public class App extends Application {
                cmboEnrollIDs.getItems().clear();
                for(Enrollment enrl : enrollments)
                {
-                   cmboEnrollIDs.getItems().add(enrl.getID());
+                   cmboEnrollIDs.getItems().add(enrl);
                }
                
                cmboEnrollStud.setDisable(true);
@@ -937,7 +937,7 @@ public class App extends Application {
                 cmboSchedIDs.getItems().clear();
                 for(Schedule sched : schedules)
                 {
-                    cmboSchedIDs.getItems().add(sched.getScheduleID());
+                    cmboSchedIDs.getItems().add(sched);
                 }
                 
                 
@@ -1053,7 +1053,24 @@ public class App extends Application {
         cmboRepEnroll.setVisible(false);
         
         reportDropDown.setOnAction(event -> {
+            if(reportDropDown.getValue() != null) {
             String selection = (String)reportDropDown.getValue();
+           
+            // reset all dropdowns???
+            cmboRepSem.setDisable(true);
+            cmboRepSem.setVisible(false);
+            cmboRepCrs.setDisable(true);
+            cmboRepCrs.setVisible(false);
+            cmboRepFac.setDisable(true);
+            cmboRepFac.setVisible(false);
+            cmboRepStud.setDisable(true);
+            cmboRepStud.setVisible(false);
+            cmboRepSched.setDisable(true);
+            cmboRepSched.setVisible(false);
+            cmboRepEnroll.setDisable(true);
+            cmboRepEnroll.setVisible(false);
+            
+            
             if(selection.equals("All Courses in a Semester"))
             {
                 
@@ -1109,6 +1126,9 @@ public class App extends Application {
                     cmboRepSem.setVisible(true);
                 
             }
+            }
+            
+            
         });
         
         
@@ -1617,11 +1637,13 @@ public class App extends Application {
                     // add to enrollment array
                     enrollments.add(enroll);
                     // add to enrollment comboBox
-                    cmboRepEnroll.getItems().add(enroll.getID());
-                    cmboEnrollIDs.getItems().add(enroll.getID());
-                    // incremement enrollmentID
+                    cmboRepEnroll.getItems().add(enroll);
+                    cmboEnrollIDs.getItems().add(enroll);
+                 // incremement enrollmentID
+                    enrollID++;
+                    // set label as newly incremented ID
                     lblRanEnrollID.setText(String.valueOf(App.getEnrollID()));
-
+                    
 
                     // add student to course
                     if(crs != null)
@@ -1643,7 +1665,7 @@ public class App extends Application {
                 lblRanEnrollID.setVisible(false);
                 lblRanEnrollID.setDisable(true);
                 
-                int selectID = (int)cmboEnrollIDs.getValue();
+                Enrollment selectID = (Enrollment)cmboEnrollIDs.getValue();
                 String selectCrs = (String)cmboEnrollCrs.getValue();
                 
                 // course to find??
@@ -1660,7 +1682,7 @@ public class App extends Application {
                 
                 for(Enrollment enrl : enrollments)
                 {
-                    if(enrl != null && selectID == enrl.getID())
+                    if(enrl != null && selectID.getID() == enrl.getID())
                     {
                         enrl.courseEnrollment(c1);
                         updateEnroll();
@@ -1677,63 +1699,110 @@ public class App extends Application {
         });
         
         assignBtn.setOnAction(e -> {
-          String facObj = (String)cmboAssignFac.getValue();
-          String crsObj = (String)cmboAssignCrs.getValue();
-          String semObj = (String)cmboAssignSem.getValue();
-          
-          // create objects to find
-          Faculty fac = null;
-          Course crs = null;
-          Semester sem = null;
-          
-          for(Faculty f : facultyList)
+          String select = (String)schedDropDown.getValue();
+          if (select.equals("Create Schedule"))
           {
-              if(f != null && facObj.equals(f.getFullName()))
+               String facObj = (String)cmboAssignFac.getValue();
+               String crsObj = (String)cmboAssignCrs.getValue();
+               String semObj = (String)cmboAssignSem.getValue();
+               
+               // create objects to find
+              Faculty fac = null;
+              Course crs = null;
+              Semester sem = null;
+
+              for(Faculty f : facultyList)
               {
-                  fac = f;
+                  if(f != null && facObj.equals(f.getFullName()))
+                  {
+                      fac = f;
+                  }
               }
+              for(Course c : courses)
+              {
+                  if(c != null && crsObj.equals(c.getPrefix() + c.getNum()))
+                  {
+                      crs = c;
+                  }
+              }
+              for(Semester sm : semesters)
+              {
+                  if(sm != null && semObj.equals(sm.getPeriod() + sm.getYear()))
+                  {
+                      sem = sm;
+                  }
+              }
+              
+              // create schedule object based off found items
+              Schedule schedule = new Schedule(fac, crs, sem);
+
+              // assign semester to faculty
+              schedule.assignSemester(schedule, sem);
+              // add course to schedule
+              schedule.addCourse(crs);
+              // add course to semester
+              if(sem != null && crs != null) {
+                sem.assignCourses(crs);
+              }
+              // add schedule to schedule array
+              schedules.add(schedule);
+              // add to schedule comboBox
+              cmboRepSched.getItems().add(schedule);
+              cmboSchedIDs.getItems().add(schedule);
+
+              // increment scheduleID
+              schedID++;
+              // update schedule ID label
+              lblRanAssignID.setText(String.valueOf(schedule.getScheduleID()));
+
+              updateSchedule();
+              refreshAssign();
           }
-          for(Course c : courses)
+          else if(select.equals("Add Course to Existing Schedule"))
           {
-              if(c != null && crsObj.equals(c.getPrefix() + c.getNum()))
+              lblRanAssignID.setVisible(false);
+              lblRanAssignID.setDisable(true);
+              
+              Schedule selectSched = (Schedule)cmboSchedIDs.getValue();
+              String selectCrs = (String)cmboAssignCrs.getValue();
+              
+              // course to find
+              Course crs = null;
+              for(Course c : courses)
               {
-                  crs = c;
+                  if(c != null && selectCrs.equals(c.getPrefix() + c.getNum()))
+                  {
+                      crs = c;
+                  }
               }
+              
+              for(Schedule s : schedules)
+              {
+                  if(s != null && selectSched.getScheduleID() == s.getScheduleID())
+                  {
+                      s.addCourse(crs);
+                      // get the semester of the schedule
+                      Semester selectSem = s.getSemester();
+                      // add course to semester
+                      selectSem.assignCourses(crs);
+                      updateSchedule();
+                      refreshAssign();
+                  }
+              }
+              
           }
-          for(Semester sm : semesters)
+          else
           {
-              if(sm != null && semObj.equals(sm.getPeriod() + sm.getYear()))
-              {
-                  sem = sm;
-              }
+              txtaAssign.appendText("Error. Please try again later.");
           }
-          // create schedule object based off found items
-          Schedule schedule = new Schedule(fac, crs, sem);
-          
-          // assign semester to faculty
-          schedule.assignSemester(schedule, sem);
-          // add course to schedule
-          schedule.addCourse(crs);
-          // add course to semester
-          if(sem != null && crs != null) {
-            sem.assignCourses(crs);
-          }
-          // add schedule to schedule array
-          schedules.add(schedule);
-          // add to schedule comboBox
-          cmboRepSched.getItems().add(schedule.getScheduleID());
-          cmboSchedIDs.getItems().add(schedule.getScheduleID());
-          // update schedule ID
-          lblRanAssignID.setText(String.valueOf(schedule.getScheduleID()));
-          
-          updateSchedule();
-          refreshAssign();
           
           });
         
         generateBtn.setOnAction(e -> {
             
+            // get user selection
             String select = (String)reportDropDown.getValue();
+            
             if(select.equals("All Courses in a Semester"))
             {
                 
@@ -1761,13 +1830,13 @@ public class App extends Application {
                 Faculty fac = null;
                 
                 // find schedule
-                int selectSched = (int)cmboRepSched.getValue();
+                Schedule selectSched = (Schedule)cmboRepSched.getValue();
                 
-                if(selectSched != -1)
+                if(selectSched != null)
                 {   
                     for(Schedule sch : schedules)
                     {
-                        if(sch != null && selectSched == sch.getScheduleID())
+                        if(sch != null && selectSched.getScheduleID() == sch.getScheduleID())
                         {
                             sched = sch;
                         }
@@ -1845,13 +1914,13 @@ public class App extends Application {
                 }
 
                 // find enrollment
-                int selectEnroll = (int)cmboRepEnroll.getValue();
+                Enrollment selectEnroll = (Enrollment)cmboRepEnroll.getValue();
 
-                if(selectEnroll != -1)
+                if(selectEnroll != null)
                 {
                     for(Enrollment en : enrollments)
                     {
-                        if(en != null && selectEnroll == (en.getID()))
+                        if(en != null && selectEnroll.getID() == en.getID())
                         {
                             enroll = en;
                         }
@@ -1908,9 +1977,11 @@ public class App extends Application {
                         {
                             if(crs.assignedStudents != null)
                                     {
+                                        // clear any previous text in report text area
+                                        txtaReport.clear();
+                                        
                                         for(int i = 0; i < crs.assignedStudents.size(); i++)
                                         {
-                                            txtaReport.clear();
                                             // print to text area
                                             txtaReport.appendText(crs.assignedStudents.get(i).getFullName() + "\n");
                                         }
@@ -1922,6 +1993,8 @@ public class App extends Application {
           
             }
             // reset comboBoxes after generating one report
+            reportDropDown.setValue(null);
+            
             cmboRepSem.setDisable(true);
             cmboRepSem.setVisible(false);
             cmboRepCrs.setDisable(true);
@@ -1940,6 +2013,8 @@ public class App extends Application {
             cmboRepStud.setValue(null);
             cmboRepSched.setValue(null);
             cmboRepEnroll.setValue(null);
+            
+            
         });
     }
              
@@ -2082,8 +2157,8 @@ public class App extends Application {
         cmboSchedIDs.getItems().clear();
         for(Schedule sch : schedules)
         {
-            cmboRepSched.getItems().add(sch.getScheduleID());
-            cmboSchedIDs.getItems().clear();
+            cmboRepSched.getItems().add(sch);
+            cmboSchedIDs.getItems().add(sch);
         }
     }
     
@@ -2092,8 +2167,8 @@ public class App extends Application {
         cmboEnrollIDs.getItems().clear();
         for(Enrollment e : enrollments)
         {
-            cmboRepEnroll.getItems().add(e.getID());
-            cmboEnrollIDs.getItems().add(e.getID());
+            cmboRepEnroll.getItems().add(e);
+            cmboEnrollIDs.getItems().add(e);
         }
     }
     
@@ -2142,7 +2217,7 @@ public class App extends Application {
         
         for(Enrollment e : enrollments) {
             // add text to enrollment textArea
-            txtaEnroll.appendText(e.toString() + "\n");
+            txtaEnroll.appendText(e.describeEnroll() + "\n");
         }
     }
     
@@ -2153,7 +2228,7 @@ public class App extends Application {
         for(Schedule sch : schedules)
         {
             // add text to assign textArea
-            txtaAssign.appendText(sch.toString() + "\n");
+            txtaAssign.appendText(sch.describeSched() + "\n");
         }
     }
     
@@ -2166,16 +2241,16 @@ public class App extends Application {
     }
     
     public static int getEnrollID() {
-        return enrollID++;
+        return enrollID;
     }
     
     public static int getSchedID() {
-        return schedID++;
+        return schedID;
     }
     
 }
 
 /*
-where i left off: working on the generate tabs, specifically getting the courses per faculty 
-by semester to work --> says fac is null --> playing with the tabs and getting them to show up correctly
+where i left off: everything basically working but the generate students in a course by semester
+isn't updating properly
 */
