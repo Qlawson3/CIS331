@@ -33,7 +33,7 @@ public Enrollment() {
     this.student = null;
     this.semester = null;
     this.enrollID = App.getEnrollID();
-    course.addStudent(this.student);
+    //course.addStudent(this.student);
     this.course = null;
 }
 
