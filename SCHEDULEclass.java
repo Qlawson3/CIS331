@@ -2,9 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.universityapp;
-import java.util.*;
+package com.mycompany.db2;import java.util.*;
 
+import java.sql.*;
+import oracle.jdbc.pool.*;
+import oracle.jdbc.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author liahill
@@ -13,6 +18,11 @@ import java.util.*;
 public class Schedule {
     
     // Data Fields
+    public static OracleDataSource oDS;
+    public static Connection jsqlConn;
+    public static PreparedStatement jsqlStmt;
+    public static ResultSet jsqlResults;
+    
     public int scheduleID;
     private Course course;
     private Faculty faculty;
@@ -82,6 +92,14 @@ public class Schedule {
         for (int i = 0; i < allCourses.size(); i++){ // for every element in the personal course list
         Schedule schedule = allSchedules.get(s);
         if (schedule.getSemester().equals(semester)) { // check if the semester matches 
+            
+            // Build the insert query for the current course
+            String query = "INSERT INTO REPORT2 (CourseID, SemesterID) VALUES (" + allCourses.get(i).getID() + "," 
+                    + allSchedules.get(s).getSemester().getID() + ")";
+            // Execute the query
+            System.out.println(query);
+            runDBQuery(query, 'c');
+            
             result += allCourses.get(i).getPrefix() + " " + allCourses.get(i).getNum() 
                     + " " + allSchedules.get(s).getSemester().getPeriod() + " "
                     + allSchedules.get(s).getSemester().getYear() + "| \n"; //Return the courses name and given semester
@@ -124,6 +142,39 @@ public String describeSched() {
 public String toString() {
     return "Schedule ID: " + this.scheduleID;
 }
+
+public static void runDBQuery(String query, char queryType)
+    {
+        // queryType - Using the C.R.U.D. acronym
+        // 'r' - SELECT
+        // 'c', 'u', or 'd' - UPDATE, INSERT, DELETE
+        
+        try
+        {
+            String URL = "jdbc:oracle:thin:@localhost:1521/XEPDB1";
+            String user = "javauser"; // From setup instructions
+            String pass = "javapass"; // From setup instructions
+
+            oDS = new OracleDataSource();
+            oDS.setURL(URL);
+            
+            jsqlConn = oDS.getConnection(user, pass);
+            jsqlStmt = jsqlConn.prepareStatement(
+                    query, 
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, 
+                    ResultSet.CONCUR_READ_ONLY);
+            
+            if (queryType == 'r')
+                jsqlResults = jsqlStmt.executeQuery();
+            else
+                jsqlStmt.executeUpdate();
+        }
+        catch (SQLException sqlex)
+        {
+            System.out.println(sqlex.toString());
+        }
+    } // End of runDBQuery() method
+
 }
     
 //return String.format(this.faculty.getFullName() + " is assigned to " + this.course.getPrefix() +
