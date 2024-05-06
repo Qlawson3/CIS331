@@ -1,11 +1,14 @@
-package Project1;
+
+package com.mycompany.universityapp;
 
 public class Student {
-
-// Data Fields
+    
+    // Data Fields
+    
+    
 public String fullName;
-public int studentID; 
-private int ssn;
+public int studentID;
+private String ssn;
 private String homeAddress;
 public String email;
 private double gpa;
@@ -23,8 +26,9 @@ private String emergencyPhoneNum;
 
 public Student() {
     this.fullName = "n/a";
-    this.studentID = 0;
-    this.ssn = 0;
+    // get ID from method that produces unique IDs
+    this.studentID = App.getStudID();
+    this.ssn = "n/a";
     this.homeAddress = "n/a";
     this.email = "n/a";
     this.gpa = 0.0;
@@ -36,11 +40,11 @@ public Student() {
     
 }
 
-public Student(String fullName, int studentID, int ssn, String homeAddress, String email, double gpa,
+public Student(String fullName, String ssn, String homeAddress, String email, double gpa,
         String emergencyName, String emergencyEmail, String emergencyPhoneNum) {
     
     this.fullName = fullName;
-    this.studentID = studentID;
+    this.studentID = App.getStudID(); // assign unique ID
     this.ssn = ssn;
     this.homeAddress = homeAddress;
     this.email = email;
@@ -62,7 +66,7 @@ public String getEmail(){
 }
 
 
-public int getSSN() {
+public String getSSN() {
     return this.ssn;
 }
 
@@ -70,7 +74,7 @@ public String getFullName() {
     return this.fullName;
 }
 
-public void setSSN(int ssn) {
+public void setSSN(String ssn) {
     this.ssn = ssn;
 }
 
@@ -135,6 +139,13 @@ public void addEmergencyContact(String name, String email, String phoneNum) {
 @Override
 public String toString() {
     return this.getID() + ": " + this.getFullName();
+}
+
+public String describeStudent() {
+    return String.format("%-15s%-15d%-15s%-25s%-20s%-7.2f%-15s%-25s%-15s", 
+            this.fullName, this.studentID, this.ssn, this.homeAddress,
+            this.email, this.gpa, this.emergencyName, this.emergencyEmail,
+            this.emergencyPhoneNum);
 }
 
 
