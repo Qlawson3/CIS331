@@ -1,4 +1,5 @@
 package com.mycompany.db2;
+
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -8,6 +9,7 @@ import javafx.event.*;
 import javafx.geometry.*;
 import java.util.*;
 
+
 //for database
 import java.sql.*;
 import oracle.jdbc.pool.*;
@@ -15,6 +17,7 @@ import oracle.jdbc.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 // Lia Hil, Sequoia Lawson, Valerie Hernandez
 
 
@@ -24,8 +27,7 @@ import java.util.logging.Logger;
 public class App extends Application {
     
     // Declare Class Level Data Fields
-    
-    //for database
+        //for database
     public static OracleDataSource oDS;
     public static Connection jsqlConn;
     public static PreparedStatement jsqlStmt;
@@ -180,10 +182,12 @@ public class App extends Application {
               
         // IDs
         
-        public static int studID = 10000;
-        public static int facID = 20000;
-        public static int enrollID = 30000;
-        public static int schedID = 40000;
+        public static int studID = 1;
+        public static int facID = 1;
+        public static int courseID = 1;
+        public static int semID = 1;
+        public static int enrollID = 1;
+        public static int schedID = 1;
         
         // for editing enroll tab - same student and semester, just add a course
         ChoiceBox enrollDropDown;
@@ -211,7 +215,6 @@ public class App extends Application {
         ArrayList<Semester> semesters = new ArrayList<>();
         ArrayList<Enrollment> enrollments = new ArrayList<>();
         ArrayList<Schedule> schedules = new ArrayList<>();
-        
         
         //testers
 //        Course c1 = new Course("CIS", 331, "Tues/Thurs", "3:55pm", "5:10pm", 3, "Java");
@@ -526,20 +529,20 @@ public class App extends Application {
                 
                 // repopulate the dropdown
                 for(Student s : students) {
-                    cmboEditStud.getItems().add(s.getFullName());
+                    cmboEditStud.getItems().add(s);
                 }
 
                     
                 cmboEditStud.setOnAction(event -> {
 
-                       String selectStud = (String)cmboEditStud.getValue();
+                       Student selectStud = (Student)cmboEditStud.getValue();
 
                        for(Student s : students) {
-                        if(selectStud.equals(s.getFullName()))
+                        if(selectStud != null && selectStud.getID() == s.getID())
                         {
                             txtStudName.setText(s.getFullName());
                             //txtStudID.setText(String.valueOf(s.getID()));
-                            txtSSN.setText(String.valueOf(s.getSSN()));
+                            txtSSN.setText(s.getSSN());
                             txtEmail.setText(s.getEmail());
                             txtHomeAddress.setText(s.getAddress());
                             txtGPA.setText(String.valueOf(s.getGPA()));
@@ -559,7 +562,7 @@ public class App extends Application {
                 cmboEditStud.setDisable(true);
                 cmboEditStud.setVisible(false);
                 
-                //lblRanStudID.setText(String.valueOf(studID));
+                lblRanStudID.setText(String.valueOf(getStudID()));
                 enableStudentFields();
             }
             else if (!selectedOption.equals("Edit Student"))
@@ -612,17 +615,16 @@ public class App extends Application {
                 // repopulate
                 for(Faculty f : facultyList)
                 {
-                    cmboEditSem.getItems().add(f.getFullName());
+                    cmboEditSem.getItems().add(f);
                 }
                 
                 cmboEditFac.setOnAction(event -> {
-                    String selectFac = (String)cmboEditFac.getValue();
+                    Faculty selectFac = (Faculty)cmboEditFac.getValue();
                     
                     for (Faculty f : facultyList)
                     {
-                        if(f.getFullName().equals(selectFac))
+                        if(selectFac.getID() == f.getID())
                         {
-//                            txtFacID.setText(String.valueOf(f.getfacultyID()));
                             txtFacName.setText(f.getFullName());
                             txtFEmail.setText(f.getEmail());
                             txtBuilding.setText(f.getBuilding());
@@ -641,11 +643,11 @@ public class App extends Application {
                 cmboEditFac.setDisable(true);
                 cmboEditFac.setVisible(false);
                 
+                lblRanFacID.setText(String.valueOf(getFacID()));
                 enableFacultyFields();
             }
             else if (!selectedOption.equals("Edit Student"))
             {
-//                txtFacID.setDisable(true);
                 txtFacName.setDisable(true);
                 txtFEmail.setDisable(true);
                 txtBuilding.setDisable(true);
@@ -686,15 +688,15 @@ public class App extends Application {
                        
                        // repopulate dropdown
                        for (Semester s : semesters) {
-                           cmboEditSem.getItems().add(s.getPeriod() + s.getYear());
+                           cmboEditSem.getItems().add(s);
                        }
                        
                        cmboEditSem.setOnAction(event -> {
-                           String selectSem = (String)cmboEditSem.getValue();
+                           Semester selectSem = (Semester)cmboEditSem.getValue();
                            
                            for (Semester s : semesters)
                            {
-                               if(selectSem.equals(s.getPeriod() + s.getYear()))
+                               if(selectSem.getID() == s.getID())
                                {
                                    txtPeriod.setText(s.getPeriod());
                                    txtYear.setText(s.getYear());
@@ -751,15 +753,15 @@ public class App extends Application {
                 // repopulate
                 for(Course c : courses)
                 {
-                    cmboEditCourse.getItems().add(c.getPrefix() + c.getNum());
+                    cmboEditCourse.getItems().add(c);
                 }
                 
                 cmboEditCourse.setOnAction(event -> {
-                    String selectedOption = (String)cmboEditCourse.getValue();
+                    Course selectedCrs = (Course)cmboEditCourse.getValue();
                     
                     for (Course c : courses)
                     {
-                        if(selectedOption.trim().equals(c.getPrefix() + c.getNum()))
+                        if(selectedCrs.getID() == c.getID())
                         {
                             txtCoursePrefix.setText(c.getPrefix());
                             txtCourseNum.setText(String.valueOf(c.getNum()));
@@ -791,7 +793,6 @@ public class App extends Application {
                 txtStartTime.setDisable(true);
                 txtEndTime.setDisable(true);
                 txtCreditHours.setDisable(true);
-           //   txtCourseInst.setDisable(true);
             }
         });
         
@@ -817,7 +818,6 @@ public class App extends Application {
         // arrange on main grid pane
         gEnrollPane.add(hEnrollCrsPane, 3, 8);
         
-//        cmboEnrollIDs.getItems().add(getEnrollID());
         
         lblRanEnrollID.setDisable(true);
         cmboEnrollIDs.setDisable(true);
@@ -843,7 +843,7 @@ public class App extends Application {
                cmboEnrollIDs.getItems().clear();
                for(Enrollment enrl : enrollments)
                {
-                   cmboEnrollIDs.getItems().add(enrl.getEnrollID());
+                   cmboEnrollIDs.getItems().add(enrl);
                }
                
                cmboEnrollStud.setDisable(true);
@@ -859,12 +859,12 @@ public class App extends Application {
                cmboEnrollCrs.getItems().clear();
                for(Course c : courses)
                {
-                   cmboEnrollCrs.getItems().add(c.getPrefix() + c.getNum());
+                   cmboEnrollCrs.getItems().add(c);
                }
            }
            else if(selection.equals("Create Enrollment"))
            {
-               lblRanEnrollID.setText(String.valueOf(enrollID));
+               lblRanEnrollID.setText(String.valueOf(getEnrollID()));
                
                lblRanEnrollID.setDisable(false);
                cmboEnrollStud.setDisable(false);
@@ -883,19 +883,19 @@ public class App extends Application {
                cmboEnrollStud.getItems().clear();
                for(Student st : students)
                {
-                   cmboEnrollStud.getItems().add(st.getFullName());
+                   cmboEnrollStud.getItems().add(st);
                }
                // refresh semester list
                cmboEnrollSem.getItems().clear();
                for(Semester sem : semesters)
                {
-                   cmboEnrollSem.getItems().add(sem.getPeriod() + sem.getYear());
+                   cmboEnrollSem.getItems().add(sem);
                }
                // refresh course list
                cmboEnrollCrs.getItems().clear();
                for(Course c : courses)
                {
-                   cmboEnrollCrs.getItems().add(c.getPrefix() + c.getNum());
+                   cmboEnrollCrs.getItems().add(c);
                }
            }
        });
@@ -948,7 +948,7 @@ public class App extends Application {
                 cmboSchedIDs.getItems().clear();
                 for(Schedule sched : schedules)
                 {
-                    cmboSchedIDs.getItems().add(sched.getScheduleID());
+                    cmboSchedIDs.getItems().add(sched);
                 }
                 
                 
@@ -959,7 +959,7 @@ public class App extends Application {
                 cmboAssignCrs.getItems().clear();
                 for(Course c : courses) 
                 {
-                    cmboAssignCrs.getItems().add(c.getPrefix() + c.getNum());
+                    cmboAssignCrs.getItems().add(c);
                 }
                 
                 cmboAssignSem.setDisable(true);
@@ -969,7 +969,7 @@ public class App extends Application {
             }
             else if(selection.equals("Create Schedule"))
             {
-                lblRanAssignID.setText(String.valueOf(schedID));
+                lblRanAssignID.setText(String.valueOf(getSchedID()));
                 
                 lblRanAssignID.setDisable(false);
                 lblRanAssignID.setVisible(true);
@@ -988,21 +988,21 @@ public class App extends Application {
                 cmboAssignCrs.getItems().clear();
                 for(Course c : courses) 
                 {
-                    cmboAssignCrs.getItems().add(c.getPrefix() + c.getNum());
+                    cmboAssignCrs.getItems().add(c);
                 }
                 
                 // refresh semesters
                 cmboAssignSem.getItems().clear();
                 for(Semester s : semesters) 
                 {
-                    cmboAssignSem.getItems().add(s.getPeriod() + s.getYear());
+                    cmboAssignSem.getItems().add(s);
                 }
                 
                 // refresh faculty
                 cmboAssignFac.getItems().clear();
                 for(Faculty f : facultyList) 
                 {
-                    cmboAssignFac.getItems().add(f.getFullName());
+                    cmboAssignFac.getItems().add(f);
                 }
             }
         });
@@ -1064,7 +1064,24 @@ public class App extends Application {
         cmboRepEnroll.setVisible(false);
         
         reportDropDown.setOnAction(event -> {
+            if(reportDropDown.getValue() != null) {
             String selection = (String)reportDropDown.getValue();
+           
+            // reset all dropdowns???
+            cmboRepSem.setDisable(true);
+            cmboRepSem.setVisible(false);
+            cmboRepCrs.setDisable(true);
+            cmboRepCrs.setVisible(false);
+            cmboRepFac.setDisable(true);
+            cmboRepFac.setVisible(false);
+            cmboRepStud.setDisable(true);
+            cmboRepStud.setVisible(false);
+            cmboRepSched.setDisable(true);
+            cmboRepSched.setVisible(false);
+            cmboRepEnroll.setDisable(true);
+            cmboRepEnroll.setVisible(false);
+            
+            
             if(selection.equals("All Courses in a Semester"))
             {
                 
@@ -1120,6 +1137,9 @@ public class App extends Application {
                     cmboRepSem.setVisible(true);
                 
             }
+            }
+            
+            
         });
         
         
@@ -1343,12 +1363,6 @@ public class App extends Application {
         txtaAssign.setStyle("-fx-font-family: monospace");
         txtaReport.setStyle("-fx-font-family: monospace");
         
-        //Show all IDs upon application start
-        lblRanStudID.setText(String.valueOf(studID));
-        lblRanFacID.setText(String.valueOf(facID));
-        lblRanEnrollID.setText(String.valueOf(enrollID));
-        
-
         
         
         // set everything up on the main window!
@@ -1373,59 +1387,59 @@ public class App extends Application {
             
             if(selectedOption.equals("Create Student"))
             {
-                //for database
-              String sqlQuery = "INSERT INTO STUDENT (fullName, studID, ssn, homeAddress,"
-                + "email, gpa, emergName, emergEmail, emergPhone) VALUES ( " + "'" 
-                        + fullName + "'," + studID + ", '" + ssn + "', '" + homeAddress + "', '" + email
-                        + "', '" + gpa + "', '" + emergName + "', '" + emergEmail + "', '" + emergPhone + "')";
-                
                 // make student object
-                Student student = new Student(fullName, Integer.valueOf(ssn), homeAddress, email, gpa,
+                Student student = new Student(fullName, ssn, homeAddress, email, gpa,
                     emergName, emergEmail, emergPhone);
-
+                System.out.println(student.getID());
                 // add to edit student comboBox 
-                cmboEditStud.getItems().add(student.getFullName());
+                cmboEditStud.getItems().add(student);
                 // add to enroll student comboBox
-                cmboEnrollStud.getItems().add(student.getFullName());
+                cmboEnrollStud.getItems().add(student);
                 // add to report student comboBox
-                cmboRepStud.getItems().add(student.getFullName());
+                cmboRepStud.getItems().add(student);
                 // add student object to arrayList
                 students.add(student);
-                txtaStudent.setText(student.getFullName());
-                System.out.println(student.getFullName());
-                studID++;
-                lblRanStudID.setText(String.valueOf(studID));
-                System.out.println(studID);
+                
+                // SQL 
+               String sqlQuery = "INSERT INTO STUDENT (StudentID, fullName, ssn, homeAddress,"
+                + "email, gpa, emergName, emergEmail, emergPhone) VALUES ( " + "'" + studID + "', '"
+                        + fullName + "'," + " '" + ssn + "', '" + homeAddress + "', '" + email
+                        + "', '" + gpa + "', '" + emergName + "', '" + emergEmail + "', '" + emergPhone + "')";
+
                 //insert
                 runDBQuery(sqlQuery, 'c');
+                
+                // increment student id
+                studID++;
+                // display
+                lblRanStudID.setText(String.valueOf(App.getStudID()));
             }
             // for editing
             else if(selectedOption.equals("Edit Student")) 
             {
-                String selectStud = (String)cmboEditStud.getValue();
+                String sqlQuery = "UPDATE STUDENT SET fullName = '" + fullName +
+                                ", ssn = '" + ssn + "', homeAddress = '" + homeAddress +
+                                "', email = '" + email + "', gpa = " + gpa + ", emergName = '" + emergName + 
+                                "', emergEmail = '" + emergEmail + "', emergPhone = '" + emergPhone + "' WHERE StudentID = " + studID;
+
+                runDBQuery(sqlQuery, 'u');
+                
+                Student selectStud = (Student)cmboEditStud.getValue();
                 
                 // find corresponding student object in the list
                 for(Student s : students) {
                     if(s != null && selectStud != null &&
-                            s.getFullName().equals(selectStud)) {
-                                                //update in database
-                        String sqlQuery = "UPDATE STUDENT SET fullName = '" +fullName + "', studID = " + studID +
-                                ", ssn = '" + ssn + "', homeAddress = '" + homeAddress +
-                                "', email = '" + email + "', gpa = " + gpa + ", emergName = '" + emergName + 
-                                "', emergEmail = '" + emergEmail + "', emergPhone = '" + emergPhone + "' WHERE studID = " + s.getID();
-                        
+                            s.getID() == selectStud.getID()) {
                         // update student information
                         s.setFullName(fullName);
-//                        s.setID(studID);
-                        s.setSSN(Integer.valueOf(ssn));
+                        s.setID(studID);
+                        s.setSSN(ssn);
                         s.setEmail(email);
                         s.setAddress(homeAddress);
                         s.setGPA(gpa);
                         s.setEmergencyName(emergName);
                         s.setEmergencyEmail(emergEmail);
                         s.setEmergencyPhone(emergPhone);
-                        
-                        runDBQuery(sqlQuery, 'u');
                         break;
                     }
                 }
@@ -1442,8 +1456,6 @@ public class App extends Application {
        btnSaveFac.setOnAction(e -> {
            // gather textField information
            String selectedOption = (String)facDropDown.getValue();
-           
-//           int facID = Integer.valueOf(txtFacID.getText());
            String facName = txtFacName.getText();
            String FEmail = txtFEmail.getText();
            String building = txtBuilding.getText();
@@ -1454,40 +1466,41 @@ public class App extends Application {
            
            if(selectedOption.equals("Create Faculty"))
            {
-                         String sqlQuery = "INSERT INTO FACULTY (facID, facName, FEmail, building,"
-                + "officeNum, phoneNum, dept, position) VALUES ( " + 
-                        + facID + ",'" + facName + "'," + FEmail + "," + building + "," + officeNum
-                        + "," + phoneNum + "," + dept + "," + position + ")";
+               String sqlQuery = "INSERT INTO FACULTY (FacultyID, FullName, Email, Building,"
+                + "OfficeNum, PhoneNum, Dept, Position) VALUES ( " + studID + ", '" + facName + "', '" + FEmail + "', '" + building + "','" + officeNum
+                        + "', '" + phoneNum + "', '" + dept + "', '" + position + "')";
+               runDBQuery(sqlQuery, 'c');
                Faculty faculty = new Faculty(facName, FEmail, building,
                        officeNum, phoneNum, dept, position);
                // add to faculty array list
                facultyList.add(faculty);
                // add to edit faculty comboBox
-               cmboEditFac.getItems().add(faculty.getFullName());
+               cmboEditFac.getItems().add(faculty);
                // add to assign faculty comboBox
-               cmboAssignFac.getItems().add(faculty.getFullName());
+               cmboAssignFac.getItems().add(faculty);
                // add to report faculty comboBox
-               cmboRepFac.getItems().add(faculty.getFullName());
-               txtaFaculty.setText(faculty.getFullName());
-                   //insert
-           runDBQuery(sqlQuery, 'c');
+               cmboRepFac.getItems().add(faculty);
+               
+               // increment faculty id
                facID++;
-               lblRanFacID.setText(String.valueOf(facID));
+               
+               lblRanFacID.setText(String.valueOf(App.getFacID()));
            }
            // for editing
            else if(selectedOption.equals("Edit Faculty"))
            {
-               String selectFac = (String)cmboEditFac.getValue();
+               Faculty selectFac = (Faculty)cmboEditFac.getValue();
                
                // find corresponding faculty in list
                for(Faculty f : facultyList)
                {
-                   if(f != null && f.getFullName().equals(selectFac))
+                   if(f != null && f.getID() == selectFac.getID())
                    {
-                                        String sqlQuery = "UPDATE FACULTY SET facID = " +facID + ", facName = " + facName +
-                                ", FEmail = '" + FEmail + "', building = '" + building +
-                                "', officeNum = '" + officeNum + "', phoneNum = " + phoneNum + ", dept = '" + dept + 
-                                "', position = '" + position + "' WHERE facID = " + facID;
+                       String sqlQuery = "UPDATE FACULTY SET FullName = " + facName +
+                                ", Email = '" + FEmail + "', Building = '" + building +
+                                "', OfficeNum = '" + officeNum + "', PhoneNum = " + phoneNum + ", Dept = '" + dept + 
+                                "', Position = '" + position + "' WHERE FacultyID = " + facID;
+                       runDBQuery(sqlQuery, 'u');
                       // update faculty info
                        f.setID(facID);
                        f.setFullName(facName);
@@ -1497,10 +1510,7 @@ public class App extends Application {
                        f.setPhoneNum(phoneNum);
                        f.setDept(dept);
                        f.setPosition(position);
-                       //insert
-                       runDBQuery(sqlQuery, 'u');
                        break;
-                       
                    }
                }
            }
@@ -1520,41 +1530,47 @@ public class App extends Application {
             if(selectedOption.equals("Create Semester"))
             {
                 Semester semester = new Semester(period, year);
-                           String sqlQuery = "INSERT INTO SEMESTER (semPeriod, semYear) VALUES ( " + "'" 
-                        + semester.getPeriod() + "','" + semester.getYear() + "')";
+                String sqlQuery = "INSERT INTO SEMESTER (SemesterPeriod, SemesterYear) VALUES ( " + "'" 
+             + semester.getPeriod() + "','" + semester.getYear() + "')";
                    //insert
-                   runDBQuery(sqlQuery, 'c');        
+                   runDBQuery(sqlQuery, 'c');   
+                
                 // add to semester array
                 semesters.add(semester);
                 // add to edit semester comboBox
-                cmboEditSem.getItems().add(semester.getPeriod() + semester.getYear());
+                cmboEditSem.getItems().add(semester);
                 // add to enroll semester comboBox
-                cmboEnrollSem.getItems().add(semester.getPeriod() + semester.getYear());
+                cmboEnrollSem.getItems().add(semester);
                 // add to assign semester comboBox
-                cmboAssignSem.getItems().add(semester.getPeriod() + semester.getYear());
+                cmboAssignSem.getItems().add(semester);
                 // addd to report semester comboBox
-                cmboRepSem.getItems().add(semester.getPeriod() + semester.getYear());
-                txtaSem.setText(semester.getPeriod() + semester.getYear());
+                cmboRepSem.getItems().add(semester);
                 
+                // increment semester ID
+                semID++;
             }
             else if(selectedOption.equals("Edit Semester"))
             {
-                String selectSem = cmboEditSem.getSelectionModel().getSelectedItem().toString();
+                Semester selectSem = (Semester)cmboEditSem.getValue();
                 
                 // find corresponding semester object in array
                 for(Semester s : semesters)
                 {
                     if(s != null && selectSem != null && 
-                            selectSem.equals(s.getPeriod() + s.getYear()))
+                            selectSem.getID() == s.getID())
                     {
                         String tempPeriod = s.getPeriod();
                         String tempYear = s.getYear();
+
                         
+                        String sqlQuery = "UPDATE SEMESTER SET SemesterPeriod = '" + s.getPeriod() + "', SemesterYear = '" 
+                                + s.getYear() + "' WHERE SemesterPeriod = '" + tempPeriod + "' AND SemesterYear = '" + tempYear + "'";
+                        runDBQuery(sqlQuery, 'u');
+
                         s.setPeriod(period);
                         s.setYear(year);
-                        String sqlQuery = "UPDATE SEMESTER SET semPeriod = '" + s.getPeriod() + "', semYear = '" 
-                                + s.getYear() + "' WHERE semPeriod = '" + tempPeriod + "' AND semYear = '" + tempYear + "'";
-                        runDBQuery(sqlQuery, 'u');
+                        s.setID(semID);
+                        
                         break;
                     }
                 }
@@ -1580,53 +1596,54 @@ public class App extends Application {
             
             if(selectedOption.equals("Create Course"))
             {
-                      String sqlQuery = "INSERT INTO COURSE (coursePrefix, courseNum, courseName, courseDays,"
-                + "startTime, endTime, creditHours) VALUES ( " + "'" 
+                String sqlQuery = "INSERT INTO COURSE (CoursePrefix, CourseNum, CourseName, DaysTaught,"
+                + "StartTime, EndTime, Credits) VALUES ( " + "'" 
                         + coursePrefix + "'," + courseNum + ",'" + courseName + "', '" + courseDays + "', '" 
                               + startTime + "', '" + endTime + "', " + creditHours + ")";
+                runDBQuery(sqlQuery, 'c');
+                
                 Course course = new Course(coursePrefix, courseNum, courseDays,
                         startTime, endTime, creditHours, courseName);
                 
                 // add to edit course comboBox
-                cmboEditCourse.getItems().add(course.getPrefix() + course.getNum());
+                cmboEditCourse.getItems().add(course);
                 // add to enroll course comboBox
-                cmboEnrollCrs.getItems().add(course.getPrefix() + course.getNum());
+                cmboEnrollCrs.getItems().add(course);
                 // add to assign course combobox
-                cmboAssignCrs.getItems().add(course.getPrefix() + course.getNum());
+                cmboAssignCrs.getItems().add(course);
                 // add to report course comboBox
-                cmboRepCrs.getItems().add(course.getPrefix() + course.getNum());
+                cmboRepCrs.getItems().add(course);
                 // add course to array
                 courses.add(course);
-                txtaCourse.setText(course.getPrefix() + course.getNum());
-                //insert
-                runDBQuery(sqlQuery, 'c');
+                
+                // increment course ID
+                courseID++;
             }
             else if(selectedOption.equals("Edit Course"))
             {
-                String selectCourse = (String)cmboEditCourse.getValue();
+                Course selectCourse = (Course)cmboEditCourse.getValue();
                 
                 // find corresponding course object in list
                 for (Course c : courses)
                 {
                     if(c != null && selectCourse != null &&
-                            selectCourse.equals(c.getPrefix() + c.getNum()))
+                            selectCourse.getID() == c.getID())
                     {
-                       String tempPrefix = c.getPrefix();
-                       int tempNum = c.getNum();
-                       
+                    String sqlQuery = "UPDATE COURSE SET CoursePrefix = '" +coursePrefix + "', CourseNum = '" + courseNum +
+                            "', CourseName = '" + courseName + "', DaysTaught = '" + courseDays +
+                           "', StartTime = '" + startTime + "', EndTime = '" + endTime + "', Credits = '" + creditHours + 
+                            "' WHERE CourseID = '" + courseID;
+                    //insert
+                    runDBQuery(sqlQuery, 'u');
+
                         c.setPrefix(coursePrefix);
+                        c.setID(courseID);
                         c.setNum(courseNum);
                         c.setName(courseName);
                         c.setDaysTaught(courseDays);
                         c.setStartTime(startTime);
                         c.setEndTime(endTime);
                         c.setCredits(creditHours);
-                        String sqlQuery = "UPDATE COURSE SET coursePrefix = '" +coursePrefix + "', courseNum = '" + courseNum +
-                                "', courseName = '" + courseName + "', courseDays = '" + courseDays +
-                               "', startTime = '" + startTime + "', endTime = '" + endTime + "', courseHours = '" + creditHours + 
-                                "' WHERE coursePrefix = '" + tempPrefix + "' AND courseNum = " + tempNum;
-                        //insert
-                        runDBQuery(sqlQuery, 'u');
                         break;
                     }
                 }
@@ -1644,9 +1661,9 @@ public class App extends Application {
             if(select.equals("Create Enrollment"))
             {
             
-                String studObj = (String)cmboEnrollStud.getValue();
-                String semObj = (String)cmboEnrollSem.getValue();
-                String crsObj = (String)cmboEnrollCrs.getValue();
+                Student studObj = (Student)cmboEnrollStud.getValue();
+                Semester semObj = (Semester)cmboEnrollSem.getValue();
+                Course crsObj = (Course)cmboEnrollCrs.getValue();
 
                 System.out.println(studObj);
 
@@ -1661,7 +1678,7 @@ public class App extends Application {
                     // make the selectStud a student object
                     for(Student s : students)
                     {
-                        if(studObj.equals(s.getFullName()))
+                        if(studObj.getID() == s.getID())
                         {
                             // create the student object if they match
                             stud = s;
@@ -1669,7 +1686,7 @@ public class App extends Application {
                     }
                     for(Semester sm : semesters)
                     {
-                        if(semObj.equals(sm.getPeriod() + sm.getYear()))
+                        if(semObj.getID() == sm.getID())
                         {
                             // create semester object
                             sem = sm;
@@ -1677,33 +1694,35 @@ public class App extends Application {
                     }
                     for(Course c : courses)
                     {
-                        if(crsObj.equals(c.getPrefix() + c.getNum()))
+                        if(crsObj.getID() == c.getID())
                         {
                             // create course object if they match
                             crs = c;
                         }
                     }
-                    
+
+                    // System.out.println(stud.getFullName() + sem.getPeriod() + sem.getYear() + crs.getPrefix() +
+                        //    crs.getNum());
 
                     // create enrollment object based off chosen 
                     Enrollment enroll = new Enrollment(stud, sem, crs);
-                    enroll.incEnrolled();
-                String sqlQuery = "INSERT INTO ENROLLMENT (enrollID, student, enrolledIn, semPeriod, semYear) VALUES (" 
-               + enrollID + ",'" + stud.getFullName() + "'," + enroll.numEnrolled()  + ", '" + sem.getPeriod()
-               + "', '" + sem.getYear() + "')";
+                    
+                    String sqlQuery = "INSERT INTO ENROLLMENT (NumEnrolled, StudentID, SemesterID) VALUES (" 
+               + crs.getID() + "," + stud.getID() + "," + sem.getID() + ")";
+                    runDBQuery(sqlQuery, 'c');
 
                     // add to enrollment array
                     enrollments.add(enroll);
-
-                    // incremement enrollmentID
-                    lblRanEnrollID.setText(String.valueOf(enrollID));
-                    System.out.println(enrollID);
-                    txtaEnroll.setText(String.valueOf(enrollID));
-                    enroll.setID(enrollID);
+                    //assign course
+                    sem.assignCourses(crs);
                     // add to enrollment comboBox
-                    cmboRepEnroll.getItems().add(enroll.getEnrollID());
-                    cmboEnrollIDs.getItems().add(enroll.getEnrollID());
-                    //enrollID++;
+                    cmboRepEnroll.getItems().add(enroll);
+                    cmboEnrollIDs.getItems().add(enroll);
+                 // incremement enrollmentID
+                    enrollID++;
+                    // set label as newly incremented ID
+                    lblRanEnrollID.setText(String.valueOf(App.getEnrollID()));
+                    
 
                     // add student to course
                     if(crs != null)
@@ -1716,9 +1735,6 @@ public class App extends Application {
                     updateEnroll();
 
                     refreshEnroll();
-                    //insert
-                    runDBQuery(sqlQuery, 'c');
-
                     // clear id textfield
     //                txtEnrollID.clear();
                     }
@@ -1728,15 +1744,15 @@ public class App extends Application {
                 lblRanEnrollID.setVisible(false);
                 lblRanEnrollID.setDisable(true);
                 
-                int selectID = (int)cmboEnrollIDs.getValue();
-                String selectCrs = (String)cmboEnrollCrs.getValue();
+                Enrollment selectID = (Enrollment)cmboEnrollIDs.getValue();
+                Course selectCrs = (Course)cmboEnrollCrs.getValue();
                 
                 // course to find??
                 Course c1 = null;
                 
                 for(Course crs : courses)
                 {
-                    if(crs != null && selectCrs.equals(crs.getPrefix() + crs.getNum()))
+                    if(crs != null && selectCrs.getID() == crs.getID())
                     {
                         c1 = crs;
                         break;
@@ -1745,16 +1761,20 @@ public class App extends Application {
                 
                 for(Enrollment enrl : enrollments)
                 {
-                    if(enrl != null && selectID == enrl.getEnrollID())
+                    if(enrl != null && selectID.getID() == enrl.getID())
                     {
-                      enrl.incEnrolled();
-                      String sqlQuery = "UPDATE ENROLLMENT SET enrolledIn = " + enrl.numEnrolled()  + " WHERE enrollID = " 
-                      + enrl.getEnrollID();
+                        String sqlQuery = "UPDATE ENROLLMENT SET NumEnrolled = " + enrl.getNumEnrolled()  + " WHERE EnrollmentID = " 
+                      + enrollID;
+                        runDBQuery(sqlQuery, 'u'); 
+                        enrl.getSemester().assignCourses(c1);
                         enrl.courseEnrollment(c1);
                         updateEnroll();
                         refreshEnroll();
-                        //insert
-                        runDBQuery(sqlQuery, 'u');                      
+//                        //insert
+//                        runDBQuery(sqlQuery, 'u'); 
+//                        enrl.courseEnrollment(c1);
+//                        updateEnroll();
+//                        refreshEnroll();
                     }
                         
                 }
@@ -1767,89 +1787,137 @@ public class App extends Application {
         });
         
         assignBtn.setOnAction(e -> {
-          String facObj = (String)cmboAssignFac.getValue();
-          String crsObj = (String)cmboAssignCrs.getValue();
-          String semObj = (String)cmboAssignSem.getValue();
-          
-          // create objects to find
-          Faculty fac = null;
-          Course crs = null;
-          Semester sem = null;
-          
-          for(Faculty f : facultyList)
+          String select = (String)schedDropDown.getValue();
+          if (select.equals("Create Schedule"))
           {
-              if(f != null && facObj.equals(f.getFullName()))
-              {
-                  fac = f;
-              }
-          }
-          for(Course c : courses)
-          {
-              if(c != null && crsObj.equals(c.getPrefix() + c.getNum()))
-              {
-                  crs = c;
-              }
-          }
-          for(Semester sm : semesters)
-          {
-              if(sm != null && semObj.equals(sm.getPeriod() + sm.getYear()))
-              {
-                  sem = sm;
-              }
-          }
-          // create schedule object based off found items
-          Schedule schedule = new Schedule();
-         String sqlQuery = "INSERT INTO SCHEDULE (scheduleID, faculty, semPeriod, semYear) VALUES ( " + 
-                        + schedID + ",'" + fac.getFullName() + "', '" + sem.getPeriod() + "', '" + sem.getYear() + "')";
+               Faculty facObj = (Faculty)cmboAssignFac.getValue();
+               Course crsObj = (Course)cmboAssignCrs.getValue();
+               Semester semObj = (Semester)cmboAssignSem.getValue();
+               
+               // create objects to find
+              Faculty fac = null;
+              Course crs = null;
+              Semester sem = null;
 
-          // assign semester to faculty
-          schedule.assignSemester(fac, sem);
-          // add course to schedule
-          schedule.addCourse(crs);
-          // add course to semester
-          if(sem != null && crs != null) {
-            sem.assignCourses(crs);
+              for(Faculty f : facultyList)
+              {
+                  if(f != null && facObj.getID() == f.getID())
+                  {
+                      fac = f;
+                  }
+              }
+              for(Course c : courses)
+              {
+                  if(c != null && crsObj.getID() == c.getID())
+                  {
+                      crs = c;
+                  }
+              }
+              for(Semester sm : semesters)
+              {
+                  if(sm != null && semObj.getID() == sm.getID())
+                  {
+                      sem = sm;
+                  }
+              }
+              
+              // create schedule object based off found items
+              Schedule schedule = new Schedule(fac, crs, sem);
+              
+         String sqlQuery = "INSERT INTO SCHEDULE (SemesterID, CourseID, FacultyID) VALUES ( " + sem.getID() + "', '" 
+                 + crs.getID() + "', '" + fac.getID() + "')";
+         
+         runDBQuery(sqlQuery, 'c');
+              // assign semester to faculty
+              schedule.assignSemester(schedule, sem);
+              // add course to schedule
+              schedule.addCourse(crs);
+              // add course to semester
+              if(sem != null && crs != null) {
+                sem.assignCourses(crs);
+              }
+              // add schedule to schedule array
+              schedules.add(schedule);
+              // add to schedule comboBox
+              cmboRepSched.getItems().add(schedule);
+              cmboSchedIDs.getItems().add(schedule);
+
+              // increment scheduleID
+              schedID++;
+              // update schedule ID label
+              lblRanAssignID.setText(String.valueOf(schedule.getScheduleID()));
+
+              updateSchedule();
+              refreshAssign();
           }
-          // add schedule to schedule array
-          schedules.add(schedule);
+          else if(select.equals("Add Course to Existing Schedule"))
+          {
+              lblRanAssignID.setVisible(false);
+              lblRanAssignID.setDisable(true);
+              
+              Schedule selectSched = (Schedule)cmboSchedIDs.getValue();
+              Course selectCrs = (Course)cmboAssignCrs.getValue();
+              
+              // course to find
+              Course crs = null;
+              for(Course c : courses)
+              {
+                  if(c != null && selectCrs.getID() == c.getID())
+                  {
+                      crs = c;
+                  }
+              }
+              
+              for(Schedule s : schedules)
+              {
+                  if(s != null && selectSched.getScheduleID() == s.getScheduleID())
+                  {
+                      s.addCourse(crs);
+                      // get the semester of the schedule
+                      Semester selectSem = s.getSemester();
+                      // add course to semester
+                      selectSem.assignCourses(crs);
+                      updateSchedule();
+                      refreshAssign();
+                  }
+              }
+              
+          }
+          else
+          {
+              txtaAssign.appendText("Error. Please try again later.");
+          }
           
-          // update schedule ID
-          lblRanAssignID.setText(String.valueOf(schedID));
-          schedule.setScheduleID(schedID);
-          // add to schedule comboBox
-          cmboRepSched.getItems().add(schedule.getScheduleID());
-          cmboSchedIDs.getItems().add(schedule.getScheduleID());
-          schedID++;
-          
-          
-          updateSchedule();
-          refreshAssign();
-          //insert
-          runDBQuery(sqlQuery, 'c');
           });
         
         generateBtn.setOnAction(e -> {
             
+            // get user selection
             String select = (String)reportDropDown.getValue();
+            
             if(select.equals("All Courses in a Semester"))
             {
-                    String selectSem = (String)cmboRepSem.getValue();
-                    if(selectSem != null)
-                    {
-                        for(Semester sm : semesters)
-                        {
-                            if(sm != null && selectSem.trim().equals(sm.getPeriod() + sm.getYear()))
-                            {
-                                // display in textArea
-                                txtaReport.clear();
-                                txtaReport.appendText(sm.listAssignedCourses());
-                                
-                            }
-                            
-                        }
-                    }
-                } else if(select.equals("All Courses in a Semester by Faculty"))
+                
+                Semester selectSem = (Semester)cmboRepSem.getValue();
+                if(selectSem != null) 
                 {
+                    
+                    for(Semester sm : semesters)
+                    {
+                        System.out.println(selectSem.getID());
+                    System.out.println(sm.getID());
+                        if(sm != null && selectSem.getID() == sm.getID())
+                        {
+                            // display in textArea
+                            txtaReport.clear();
+                            txtaReport.appendText(sm.listAssignedCourses());
+                        }
+                    
+                    }   
+                }
+            }
+            else if(select.equals("All Courses in a Semester by Faculty"))
+            {
                 
                 // make objects to find
                 Schedule sched = null;
@@ -1857,13 +1925,13 @@ public class App extends Application {
                 Faculty fac = null;
                 
                 // find schedule
-                int selectSched = (int)cmboRepSched.getValue();
+                Schedule selectSched = (Schedule)cmboRepSched.getValue();
                 
-                if(selectSched != -1)
+                if(selectSched != null)
                 {   
                     for(Schedule sch : schedules)
                     {
-                        if(sch != null && selectSched == sch.getScheduleID())
+                        if(sch != null && selectSched.getScheduleID() == sch.getScheduleID())
                         {
                             sched = sch;
                         }
@@ -1871,26 +1939,26 @@ public class App extends Application {
                 }
                     
                 // find semester
-                String selectSem = (String)cmboRepSem.getValue();
+                Semester selectSem = (Semester)cmboRepSem.getValue();
                 
                 if(selectSem != null) 
                 {
                     for(Semester s : semesters)
                     {
-                        if(s != null && selectSem.trim().equals(s.getPeriod() + s.getYear()))
+                        if(s != null && selectSem.getID() == s.getID())
                         {
                             sem = s;
                         }
                     }
                 }
                 // find faculty        
-                String selectFac = (String)cmboRepFac.getValue();
+                Faculty selectFac = (Faculty)cmboRepFac.getValue();
                 
                 if(selectFac != null)
                 {
                     for(Faculty f : facultyList)
                     {
-                        if(f != null && selectFac.trim().equals(f.getFullName()))
+                        if(f != null && selectFac.getID() == f.getID())
                         {
                             fac = f;
                         }
@@ -1913,13 +1981,13 @@ public class App extends Application {
                 Enrollment enroll = null;
                 
                 // find student
-                String selectStud = (String)cmboRepStud.getValue();
+                Student selectStud = (Student)cmboRepStud.getValue();
                 
                 if(selectStud != null)
                 {
                     for(Student s : students)
                     {
-                        if(s != null && selectStud.trim().equals(s.getFullName()))
+                        if(s != null && selectStud.getID() == s.getID())
                         {
                             stud = s;
                         }
@@ -1927,13 +1995,13 @@ public class App extends Application {
                 }
 
                 // find semester
-                String selectSem = (String)cmboRepSem.getValue();
+                Semester selectSem = (Semester)cmboRepSem.getValue();
 
                 if(selectSem != null)
                 {
                     for(Semester sm : semesters)
                     {
-                        if(sm != null && selectSem.trim().equals(sm.getPeriod() + sm.getYear()))
+                        if(sm != null && selectSem.getID() == sm.getID())
                         {
                             sem = sm;
                         }
@@ -1941,13 +2009,13 @@ public class App extends Application {
                 }
 
                 // find enrollment
-                int selectEnroll = (int)cmboRepEnroll.getValue();
+                Enrollment selectEnroll = (Enrollment)cmboRepEnroll.getValue();
 
-                if(selectEnroll != -1)
+                if(selectEnroll != null)
                 {
                     for(Enrollment en : enrollments)
                     {
-                        if(en != null && selectEnroll == (en.getEnrollID()))
+                        if(en != null && selectEnroll.getID() == en.getID())
                         {
                             enroll = en;
                         }
@@ -1967,28 +2035,28 @@ public class App extends Application {
                 Course crs = null;
                 Semester sem = null;
                 
-                String selectCrs = (String)cmboRepCrs.getValue();
+                Course selectCrs = (Course)cmboRepCrs.getValue();
                 
                 if(selectCrs != null)
                 {
                     // find course
                     for(Course c : courses)
                     {
-                        if(c != null && selectCrs.trim().equals(c.getPrefix() + c.getNum()))
+                        if(c != null && selectCrs.getID() == c.getID())
                         {
                             crs = c;
                         }
                     }
                 }
                 
-                String selectSem = (String)cmboRepSem.getValue();
+                Semester selectSem = (Semester)cmboRepSem.getValue();
                     
                     if(selectSem != null)
                     {
                         // find semesters
                         for(Semester sm : semesters)
                         {
-                            if(sm != null && selectSem.trim().equals(sm.getPeriod() + sm.getYear()))
+                            if(sm != null && selectSem.getID() == sm.getID())
                             {
                                 sem = sm;
                             }
@@ -2004,16 +2072,22 @@ public class App extends Application {
                         {
                             if(crs.assignedStudents != null)
                                     {
+                                        // clear any previous text in report text area
+                                        txtaReport.clear();
+                                        
                                         for(int i = 0; i < crs.assignedStudents.size(); i++)
                                         {
-                                            String sqlQuery = "INSERT INTO REPORT4 (student) VALUES ( " + "'" 
-                                     + crs.assignedStudents.get(i).getFullName() + "')";
                                             
-                                            runDBQuery(sqlQuery, 'c');
-                                            txtaReport.clear();
+                                            // Build the insert query for the current course
+                                            String query = "INSERT INTO REPORT4 (CourseID, SemesterID, StudentID) VALUES (" + crs.getID() + "," 
+                                                    + enroll.getSemester().getID() + "," + crs.assignedStudents.get(i).getID() +  ")";
+                                            // Execute the query
+                                            System.out.println(query);
+                                            runDBQuery(query, 'c');
                                             // print to text area
                                             txtaReport.appendText(crs.assignedStudents.get(i).getFullName() + "\n");
                                         }
+                                        break; //delete if this is not it
                                     }
                             }
                         }
@@ -2022,6 +2096,8 @@ public class App extends Application {
           
             }
             // reset comboBoxes after generating one report
+            reportDropDown.setValue(null);
+            
             cmboRepSem.setDisable(true);
             cmboRepSem.setVisible(false);
             cmboRepCrs.setDisable(true);
@@ -2040,13 +2116,14 @@ public class App extends Application {
             cmboRepStud.setValue(null);
             cmboRepSched.setValue(null);
             cmboRepEnroll.setValue(null);
+            
+            
         });
     }
              
     
 
     public static void main(String[] args) {
-        
         launch();
     }
     
@@ -2123,7 +2200,7 @@ public class App extends Application {
 //        txtFacID.clear();
         txtFacName.clear();
         txtFEmail.clear();
-        txtBuilding.clear();
+        txtBuilding.clear();;
         txtOffice.clear();
         txtFacPhone.clear();
         txtDept.clear();
@@ -2135,9 +2212,9 @@ public class App extends Application {
         cmboEnrollStud.getItems().clear();
         cmboRepStud.getItems().clear();
         for (Student s : students) {
-            cmboEditStud.getItems().add(s.getFullName());
-            cmboEnrollStud.getItems().add(s.getFullName());
-            cmboRepStud.getItems().add(s.getFullName());
+            cmboEditStud.getItems().add(s);
+            cmboEnrollStud.getItems().add(s);
+            cmboRepStud.getItems().add(s);
         }
     }
     
@@ -2146,9 +2223,9 @@ public class App extends Application {
         cmboAssignFac.getItems().clear();
         cmboRepFac.getItems().clear();
         for(Faculty f : facultyList) {
-            cmboEditFac.getItems().add(f.getFullName());
-            cmboAssignFac.getItems().add(f.getFullName());
-            cmboRepFac.getItems().add(f.getFullName());
+            cmboEditFac.getItems().add(f);
+            cmboAssignFac.getItems().add(f);
+            cmboRepFac.getItems().add(f);
         }
     }
     
@@ -2158,10 +2235,10 @@ public class App extends Application {
         cmboAssignSem.getItems().clear();
         cmboRepSem.getItems().clear();
         for(Semester s : semesters) {
-            cmboEditSem.getItems().add(s.getPeriod() + s.getYear());
-            cmboEnrollSem.getItems().add(s.getPeriod() + s.getYear());
-            cmboAssignSem.getItems().add(s.getPeriod() + s.getYear());
-            cmboRepSem.getItems().add(s.getPeriod() + s.getYear());
+            cmboEditSem.getItems().add(s);
+            cmboEnrollSem.getItems().add(s);
+            cmboAssignSem.getItems().add(s);
+            cmboRepSem.getItems().add(s);
         }
     }
     
@@ -2171,10 +2248,10 @@ public class App extends Application {
         cmboAssignCrs.getItems().clear();
         cmboRepCrs.getItems().clear();
         for(Course c : courses) {
-            cmboEditCourse.getItems().add(c.getPrefix() + c.getNum());
-            cmboEnrollCrs.getItems().add(c.getPrefix() + c.getNum());
-            cmboAssignCrs.getItems().add(c.getPrefix() + c.getNum());
-            cmboRepCrs.getItems().add(c.getPrefix() + c.getNum());
+            cmboEditCourse.getItems().add(c);
+            cmboEnrollCrs.getItems().add(c);
+            cmboAssignCrs.getItems().add(c);
+            cmboRepCrs.getItems().add(c);
         }
     }
     
@@ -2183,8 +2260,8 @@ public class App extends Application {
         cmboSchedIDs.getItems().clear();
         for(Schedule sch : schedules)
         {
-            cmboRepSched.getItems().add(sch.getScheduleID());
-            cmboSchedIDs.getItems().clear();
+            cmboRepSched.getItems().add(sch);
+            cmboSchedIDs.getItems().add(sch);
         }
     }
     
@@ -2193,8 +2270,8 @@ public class App extends Application {
         cmboEnrollIDs.getItems().clear();
         for(Enrollment e : enrollments)
         {
-            cmboRepEnroll.getItems().add(e.getEnrollID());
-            cmboEnrollIDs.getItems().add(e.getEnrollID());
+            cmboRepEnroll.getItems().add(e);
+            cmboEnrollIDs.getItems().add(e);
         }
     }
     
@@ -2204,7 +2281,7 @@ public class App extends Application {
         
         for(Student s : students) {
             // add the text of the student to textArea
-            txtaStudent.appendText(s.getFullName() + "\n");
+            txtaStudent.appendText(s.describeStudent() + "\n");
         }
     }
     
@@ -2213,7 +2290,7 @@ public class App extends Application {
         txtaFaculty.clear();
         
         for(Faculty f : facultyList) {
-            txtaFaculty.appendText(f.getFullName() + "\n");
+            txtaFaculty.appendText(f.describeFaculty() + "\n");
         }
     }
     
@@ -2223,7 +2300,7 @@ public class App extends Application {
         
         for (Course c : courses) {
             // add the text of the course to textArea
-            txtaCourse.appendText(c.getPrefix() + c.getNum() +  "\n");
+            txtaCourse.appendText(c.describeCourse() +  "\n");
         }
     }
     
@@ -2233,9 +2310,8 @@ public class App extends Application {
         
         for(Semester sm : semesters) {
             // add the text to the semester textArea
-            txtaSem.appendText(sm.getPeriod() + sm.getYear() + "\n");
+            txtaSem.appendText(sm.describeSemester() + "\n");
         }
-        
     }
     
     public void refreshEnroll() {
@@ -2244,9 +2320,8 @@ public class App extends Application {
         
         for(Enrollment e : enrollments) {
             // add text to enrollment textArea
-            txtaEnroll.setText(enrollID + "\n");
+            txtaEnroll.appendText(e.describeEnroll() + "\n");
         }
-        enrollID++;
     }
     
     public void refreshAssign() {
@@ -2256,8 +2331,32 @@ public class App extends Application {
         for(Schedule sch : schedules)
         {
             // add text to assign textArea
-            txtaAssign.appendText(schedID + "\n");
+            txtaAssign.appendText(sch.describeSched() + "\n");
         }
+    }
+    
+    public static int getStudID() {
+        return studID;
+    }
+    
+    public static int getCrsID() {
+        return courseID;
+    }
+    
+    public static int getSemID() {
+        return semID;
+    }
+    
+    public static int getFacID() {
+        return facID;
+    }
+    
+    public static int getEnrollID() {
+        return enrollID;
+    }
+    
+    public static int getSchedID() {
+        return schedID;
     }
     
     public static void runDBQuery(String query, char queryType)
@@ -2291,10 +2390,11 @@ public class App extends Application {
             System.out.println(sqlex.toString());
         }
     } // End of runDBQuery() method
+
     
 }
 
 /*
-where i left off: working on the generate tabs, specifically getting the courses per faculty 
-by semester to work --> says fac is null --> playing with the tabs and getting them to show up correctly
+where i left off: everything basically working but the generate students in a course by semester
+isn't updating properly
 */
