@@ -1,28 +1,42 @@
-
-package Project1;
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.universityapp;
 import java.util.*;
 
+/**
+ *
+ * @author liahill
+ */
 
 public class Schedule {
     
     // Data Fields
-    public int scheduleID = 0;
+    public int scheduleID;
     private Course course;
     private Faculty faculty;
     private Semester semester;
    
-    public List<Course> allCourses = new ArrayList<Course>();
-    public List<Schedule> allSchedules = new ArrayList<Schedule>();
-    public List<Semester> allSemester = new ArrayList<Semester>();
+    public List<Course> allCourses = new ArrayList<>();
+    public List<Schedule> allSchedules = new ArrayList<>();
+    public List<Semester> allSemesters = new ArrayList<>();
     //enrollment to hold multiple students
     //create association bet
     // Constructors
     
     public Schedule() {
         this.faculty = null;
+        this.course = null;
         this.semester = null;
-        this.scheduleID++;
+        this.scheduleID = App.getSchedID();
+    }
+    
+    public Schedule(Faculty faculty, Course course, Semester semester) {
+        this.faculty = faculty;
+        this.course = course;
+        this.semester = semester;
+        this.scheduleID = App.getSchedID();
     }
 
     
@@ -44,10 +58,9 @@ public class Schedule {
       return this.semester = semester;
   }
     // Member Methods
-    public void assignSemester(Faculty faculty, Semester semester){
-        Schedule schedule = new Schedule();
-        schedule.setFaculty(faculty);
-        schedule.setSemester(semester);
+    public void assignSemester(Schedule schedule, Semester semester){
+        schedule.faculty = faculty;
+        schedule.semester = semester;
         allSchedules.add(schedule);
     }
     
@@ -95,5 +108,23 @@ public class Schedule {
 //      return result;
 //    }
 
-    
+
+public String describeSched() {
+    String describe = "";
+    for(int i = 0; i < this.allCourses.size(); i++)
+    {
+        describe += this.allCourses.get(i).getPrefix() + this.allCourses.get(i).getNum() +
+                " for " + this.semester.getPeriod() + " " + this.semester.getYear() + "\n";
+    }
+    return this.scheduleID + ": " + this.faculty.getFullName() + " is assigned to " +
+            describe;
 }
+
+@Override
+public String toString() {
+    return "Schedule ID: " + this.scheduleID;
+}
+}
+    
+//return String.format(this.faculty.getFullName() + " is assigned to " + this.course.getPrefix() +
+//            this.course.getNum() + " for " + this.semester.getPeriod() + " " + this.semester.getYear());
