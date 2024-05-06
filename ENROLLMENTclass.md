@@ -1,15 +1,19 @@
-package Project1;
+
+package com.mycompany.universityapp;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Enrollment {
 
+
 // Data Fields
 // Course Enrollment Data Fields
 public List<Course> courses = new ArrayList<Course>();
 public int numEnrolledIn = 0;
-public int enrollID = 0;
+
+public int enrollID;
+
 private Student student;
 private Course course;
 private Semester semester;
@@ -19,25 +23,24 @@ private Semester semester;
 public Enrollment() {
     this.student = null;
     this.semester = null;
+    this.enrollID = App.getEnrollID();
     course.addStudent(this.student);
     this.course = null;
 }
 
 public Enrollment(Student student, Semester semester, Course course) {
+    this.enrollID = App.getEnrollID();
     this.student = student;
     this.course = course;
-    course.addStudent(student);
     this.semester = semester;
 }
 
 // Getters and Setters
-public void setEnrollID(int enrollID){
-    this.enrollID = enrollID;
-}
+
 public Student getStudent() {
     return this.student;
 }
-public int getEnrollID() {
+public int getID() {
     return this.enrollID;
 }
 public void setStudent(Student student) {
@@ -63,11 +66,13 @@ public void courseEnrollment(Course course) {
     if(numEnrolledIn <= 30){
         courses.add(course);
         numEnrolledIn++;
-        System.out.println("Added");
-    } else{
-        System.out.println("Courses full.");
-    }
+        
+    //    System.out.println("Added");
+ //  } else{
+    //    System.out.println("Courses full.");
+  //  }
 
+}
 }
 //Your system must show all students enrolled in a single Course in a certain
 //Semester.
@@ -139,4 +144,27 @@ public String listStudentSchedule(Student student, Semester semester) {
     }
     return result;
 }
+
+public String describeEnroll() {
+    String describe = "";
+    for(int i = 0; i < this.courses.size(); i++)
+    {
+        describe += this.courses.get(i).getPrefix() + " " + this.courses.get(i).getNum() + " " +
+                this.semester.getPeriod() + this.semester.getYear() + "\n";
+    }
+   
+    return this.enrollID + ": " + this.student.fullName + " is enrolled in " +
+            describe;
+           
 }
+
+@Override
+public String toString() {
+    return "Enroll ID: " + this.enrollID;
+}
+}
+
+//
+//return this.enrollID + ": " + this.student.fullName + " enrolled in " +
+//            this.course.coursePrefix + " " + this.course.courseNum + " for " + this.semester.period
+//            + this.semester.year;
