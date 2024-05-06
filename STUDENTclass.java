@@ -132,5 +132,10 @@ public void addEmergencyContact(String name, String email, String phoneNum) {
     this.emergencyPhoneNum = phoneNum;
 }
 
+@Override
+public String toString() {
+    return this.getID() + ": " + this.getFullName();
+}
+
 
 }
