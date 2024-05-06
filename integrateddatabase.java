@@ -216,6 +216,7 @@ public class App extends Application {
         ArrayList<Enrollment> enrollments = new ArrayList<>();
         ArrayList<Schedule> schedules = new ArrayList<>();
         
+        
         //testers
 //        Course c1 = new Course("CIS", 331, "Tues/Thurs", "3:55pm", "5:10pm", 3, "Java");
 //        Semester s1 = new Semester("Fall", "2024");
@@ -226,10 +227,14 @@ public class App extends Application {
         
      
 
-    @Override
+    @Override //may have to delete throws sql exception and studentfromdb
     public void start(Stage stage) {
         
+        
+        
         // Instantiate the above data fields within the start() method
+        
+        
         
         btnSaveStud = new Button("Save ->");
         btnSaveSem = new Button("Save ->");
@@ -501,6 +506,7 @@ public class App extends Application {
         // establish everything disabled
         cmboEditStud.setDisable(true);
         cmboEditStud.setVisible(false);
+        
         
         txtStudName.setDisable(true);
 //        txtStudID.setDisable(true);
@@ -1371,6 +1377,17 @@ public class App extends Application {
         stage.setTitle("University Management");
         stage.show();
         
+        //instantiate all from database
+        try{
+            studentFromDB();
+            facultyFromDB();
+            semesterFromDB();
+            courseFromDB();
+            enrollFromDB();
+            schedFromDB();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
         btnSaveStud.setOnAction(e -> {
             // Gather TextField Information
             String selectedOption = (String)studDropDown.getValue();
@@ -1602,8 +1619,8 @@ public class App extends Application {
                               + startTime + "', '" + endTime + "', " + creditHours + ")";
                 runDBQuery(sqlQuery, 'c');
                 
-                Course course = new Course(coursePrefix, courseNum, courseDays,
-                        startTime, endTime, creditHours, courseName);
+                Course course = new Course(coursePrefix, courseNum, courseName, courseDays,
+                        startTime, endTime, creditHours);
                 
                 // add to edit course comboBox
                 cmboEditCourse.getItems().add(course);
@@ -2390,7 +2407,224 @@ public class App extends Application {
             System.out.println(sqlex.toString());
         }
     } // End of runDBQuery() method
-
+    
+    public void studentFromDB() throws SQLException{
+        Student student = null;
+        try {
+           
+        // Build the insert query for the current course
+            String query = "SELECT StudentID, FullName, Ssn, HomeAddress, Email, Gpa, EmergName, EmergEmail, EmergPhone" 
+                    + " FROM Student";
+            // Execute the query
+            System.out.println(query);
+            runDBQuery(query, 'r');
+            while (jsqlResults != null && jsqlResults.next()) {
+            String fullName = jsqlResults.getString("FullName");
+                String ssn = jsqlResults.getString("Ssn");
+                String homeAddress = jsqlResults.getString("HomeAddress");
+                String email = jsqlResults.getString("Email");
+                double gpa = jsqlResults.getDouble("Gpa");
+                String emergencyName = jsqlResults.getString("EmergName");
+                String emergencyEmail = jsqlResults.getString("EmergEmail");
+                String emergencyPhoneNum = jsqlResults.getString("EmergPhone");
+                student = new Student(fullName, ssn, homeAddress, email, gpa,
+                                      emergencyName, emergencyEmail, emergencyPhoneNum);
+        student.setID(jsqlResults.getInt("StudentID"));
+        students.add(student);
+        //keep incrementing ID
+        studID = jsqlResults.getInt("StudentID") + 1;
+            } }finally {
+            // Close connections and statements
+            if (jsqlResults != null) jsqlResults.close();
+            if (jsqlStmt != null) jsqlStmt.close();
+            if (jsqlConn != null) jsqlConn.close();
+        }
+        
+    } //end of studentFromDB
+    
+    
+    public void facultyFromDB() throws SQLException{
+        Faculty faculty = null;
+        try {
+           
+        // Build the insert query for the current course
+            String query = "SELECT FacultyID, FullName, Email, Building, OfficeNum, PhoneNum, Dept, Position" 
+                    + " FROM Faculty";
+            // Execute the query
+            System.out.println(query);
+            runDBQuery(query, 'r');
+            while (jsqlResults != null && jsqlResults.next()) {
+            String fullName = jsqlResults.getString("FullName");
+                String email = jsqlResults.getString("Email");
+                String building = jsqlResults.getString("Building");
+                int officeNum = jsqlResults.getInt("OfficeNum");
+                String phoneNum = jsqlResults.getString("PhoneNum");
+                String dept = jsqlResults.getString("Dept");
+                String position = jsqlResults.getString("Position");
+                faculty = new Faculty(fullName, email, building, officeNum, phoneNum,
+                                      dept, position);
+        faculty.setID(jsqlResults.getInt("FacultyID"));
+        facultyList.add(faculty);
+        //keep incrementing ID
+        facID = jsqlResults.getInt("FacultyID") + 1;
+            } }finally {
+            // Close connections and statements
+            if (jsqlResults != null) jsqlResults.close();
+            if (jsqlStmt != null) jsqlStmt.close();
+            if (jsqlConn != null) jsqlConn.close();
+        }
+        
+    } //end of facultyFromDB
+    
+    public void semesterFromDB() throws SQLException{
+        Semester sem = null;
+        try {
+           
+        // Build the insert query for the current course
+            String query = "SELECT SemesterID, SemesterPeriod, SemesterYear" 
+                    + " FROM Semester";
+            // Execute the query
+            System.out.println(query);
+            runDBQuery(query, 'r');
+            while (jsqlResults != null && jsqlResults.next()) {
+            int SemesterID = jsqlResults.getInt("SemesterID");
+                String period = jsqlResults.getString("SemesterPeriod");
+                String year = jsqlResults.getString("SemesterYear");
+                sem = new Semester(period, year);
+        sem.setID(jsqlResults.getInt("SemesterID"));
+        semesters.add(sem);
+        //keep incrementing ID
+        semID = jsqlResults.getInt("SemesterID") + 1;
+            } }finally {
+            // Close connections and statements
+            if (jsqlResults != null) jsqlResults.close();
+            if (jsqlStmt != null) jsqlStmt.close();
+            if (jsqlConn != null) jsqlConn.close();
+        }
+        
+    } //end of semesterFromDB
+    
+    public void courseFromDB() throws SQLException{
+        Course course = null;
+        try {
+           
+        // Build the insert query for the current course
+            String query = "SELECT CourseID, CoursePrefix, CourseNum, CourseName, DaysTaught, StartTime, EndTime, Credits" 
+                    + " FROM Course";
+            // Execute the query
+            System.out.println(query);
+            runDBQuery(query, 'r');
+            while (jsqlResults != null && jsqlResults.next()) {
+            int CourseID = jsqlResults.getInt("CourseID");
+                String prefix = jsqlResults.getString("CoursePrefix");
+                int num = jsqlResults.getInt("CourseNum");
+                String name = jsqlResults.getString("CourseName");
+                String days = jsqlResults.getString("DaysTaught");
+                String start = jsqlResults.getString("StartTime");
+                String end = jsqlResults.getString("EndTime");
+                int credits = jsqlResults.getInt("Credits");
+                course = new Course(prefix, num, name, days, start,
+                                      end, credits);
+        course.setID(jsqlResults.getInt("CourseID"));
+        courses.add(course);
+        //keep incrementing ID
+        courseID = CourseID + 1;
+            } }finally {
+            // Close connections and statements
+            if (jsqlResults != null) jsqlResults.close();
+            if (jsqlStmt != null) jsqlStmt.close();
+            if (jsqlConn != null) jsqlConn.close();
+        }
+        
+    } //end of courseFromDB
+    
+    public void enrollFromDB() throws SQLException{
+        Enrollment enroll = null;
+        try {
+           
+        // Build the insert query for the current course
+            String query = "SELECT EnrollmentID, NumEnrolled, StudentID, SemesterID" 
+                    + " FROM Enrollment";
+            // Execute the query
+            System.out.println(query);
+            runDBQuery(query, 'r');
+            while (jsqlResults != null && jsqlResults.next()) {
+            int EnrollmentID = jsqlResults.getInt("EnrollmentID");
+                int num = jsqlResults.getInt("NumEnrolled");
+                int StudentID = jsqlResults.getInt("StudentID");
+                int SemesterID = jsqlResults.getInt("SemesterID");
+                enroll = new Enrollment();
+                enroll.setID(jsqlResults.getInt("EnrollmentID"));
+                for(Student s : students){
+                    if(s.getID() == StudentID){
+                        enroll.setStudent(s);
+                    }
+                }
+                for (Semester sem : semesters){
+                    if (sem.getID() == SemesterID){
+                        enroll.setSemester(sem);
+                    }
+                }
+                
+        
+        enrollments.add(enroll);
+        //keep incrementing ID
+        enrollID = EnrollmentID + 1;
+            } }finally {
+            // Close connections and statements
+            if (jsqlResults != null) jsqlResults.close();
+            if (jsqlStmt != null) jsqlStmt.close();
+            if (jsqlConn != null) jsqlConn.close();
+        }
+        
+    } //end of enrollFromDB
+    
+    public void schedFromDB() throws SQLException{
+        Schedule sched = null;
+        try {
+           
+        // Build the insert query for the current course
+            String query = "SELECT ScheduleID, SemesterID, CourseID, FacultyID" 
+                    + " FROM Schedule";
+            // Execute the query
+            System.out.println(query);
+            runDBQuery(query, 'r');
+            while (jsqlResults != null && jsqlResults.next()) {
+                int SemesterID = jsqlResults.getInt("SemesterID");
+                int CourseID = jsqlResults.getInt("CourseID");
+                int FacultyID = jsqlResults.getInt("FacultyID");
+                sched = new Schedule();
+                sched.setID(jsqlResults.getInt("ScheduleID"));
+                for(Faculty f : facultyList){
+                    if(f.getID() == FacultyID){
+                        sched.setFaculty(f);
+                    }
+                }
+                
+                for(Course c : courses){
+                    if(c.getID() == CourseID){
+                        sched.addCourse(c);
+                    }
+                }
+                
+                for (Semester sem : semesters){
+                    if (sem.getID() == SemesterID){
+                        sched.setSemester(sem);
+                    }
+                }
+                
+        
+        schedules.add(sched);
+        //keep incrementing ID
+        schedID = jsqlResults.getInt("ScheduleID") + 1;
+            } }finally {
+            // Close connections and statements
+            if (jsqlResults != null) jsqlResults.close();
+            if (jsqlStmt != null) jsqlStmt.close();
+            if (jsqlConn != null) jsqlConn.close();
+        }
+        
+    } //end of schedFromDB
     
 }
 
