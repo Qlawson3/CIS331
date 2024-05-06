@@ -1,13 +1,16 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.universityapp;
 
-package Project1;
-
-import java.util.ArrayList;
-
+import java.util.*;
 
 public class Course {
     
     // Data Fields
     public String coursePrefix;
+    public int courseID;
     public String name;
     public int courseNum;
     public String daysTaught;
@@ -26,6 +29,7 @@ public class Course {
     public Course() {
         
         this.coursePrefix = "n/a";
+        this.courseID = App.getCrsID();
         this.courseNum = 0;
         this.daysTaught = "n/a";
         this.startTime = "n/a";
@@ -40,6 +44,7 @@ public class Course {
             String endTime, int credits, String name) {
         
         this.coursePrefix = coursePrefix;
+        this.courseID = App.getCrsID();
         this.courseNum = courseNum;
         this.daysTaught = daysTaught;
         this.startTime = startTime;
@@ -55,6 +60,12 @@ public class Course {
  // All Getters
   public int getCredits(){
       return credits;
+  }
+  public int getID() {
+      return this.courseID;
+  }
+  public void setID (int ID) {
+      this.courseID = ID;
   }
   public String getPrefix(){
       return coursePrefix;
@@ -129,6 +140,20 @@ public class Course {
   }
   
   public void addStudent(Student student){
-      assignedStudents.add(student);
+      if (this.assignedStudents.size() < 30)
+      {
+        this.assignedStudents.add(student);
+      }
+      
+  }
+  
+@Override
+public String toString() {
+   return this.getID() + ": " + this.getPrefix() + this.getNum();
+}
+  public String describeCourse() {
+      return String.format("%-15d%-5s%-5d%-20s%-20s%-10s%-10s%-5d", 
+              this.getID(), this.coursePrefix, this. courseNum, this.name, this.daysTaught,
+              this.startTime, this.endTime, this.credits);
   }
 }
