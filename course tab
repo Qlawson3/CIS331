@@ -1,510 +1,159 @@
-package com.mycompany.myjavafxproject;
-
-import javafx.application.Application;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.stage.*;
-import javafx.geometry.*;
-
-
-/**
- * JavaFX App
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-public class App extends Application {
+package com.mycompany.universityapp;
+
+import java.util.*;
+
+public class Course {
     
-    // Declare Class Level Data Fields
+    // Data Fields
+    public String coursePrefix;
+    public int courseID;
+    public String name;
+    public int courseNum;
+    public String daysTaught;
+    public String startTime;
+    public String endTime;
+    public int credits;
+    public Semester[] semesters = new Semester[100];
+    
+    //faculty
+    
+    //ID
+    ArrayList<Student> assignedStudents;
+    private Course[] allCourses = new Course[30];
+    // Constructors 
+    
+    public Course() {
         
-        // for Student
-        TextField txtStudName;
-        TextField txtStudID;
-        TextField txtSSN;
-        TextField txtHomeAddress;
-        TextField txtEmail;
-        TextField txtGPA;
-        TextField txtEmergName;
-        TextField txtEmergEmail;
-        TextField txtEmergPhone;
-        Label lblStudName;
-        Label lblStudID;
-        Label lblSSN;
-        Label lblHomeAddress;
-        Label lblEmail;
-        Label lblGPA;
-        Label lblEmergName;
-        Label lblEmergEmail;
-        Label lblEmergPhone;
-        
-        Label lblEntryStud;
-        Label lblEntrySem;
-        
-        Button btnSaveStud;
-        
-        // for Semester
-        TextField txtPeriod;
-        TextField txtYear;
-        Label lblPeriod;
-        Label lblYear;
-        
-        Button btnSaveSem;
-        // for Course
-        Label lblCoursePrefix;
-        TextField txtCoursePrefix;
-        Label lblCourseNum;
-        TextField txtCourseNum;
-        Label lblCourseName;
-        TextField txtCourseName;
-        Label lblCourseDays;
-        TextField txtCourseDays;
-        Label lblStartTime;
-        TextField txtStartTime;
-        Label lblEndTime;
-        TextField txtEndTime;
-        Label lblCreditHours;
-        TextField txtCreditHours;
-        Label lblCourseInst;
-        TextField txtCourseInst;
-        
-        Label lblEntryCourse;
-        
-        Button btnSaveCourse;
-        
-        
-        // for Editing Student
-        ComboBox cmboEditStud;
-        CheckBox chkEditStud;
-        
-        // for Creating Student;
-        CheckBox chkCreateStud;
-        
-        // for Editing Semester
-        ComboBox cmboEditSem;
-        CheckBox chkEditSem;
-        
-        // for Creating Semester
-        CheckBox chkCreateSem;
-        
-        // for course dropdown
-        ComboBox cmboEditCourse;
-        ChoiceBox crsDropDown;
+        this.coursePrefix = "n/a";
+        this.courseID = App.getCrsID();
+        this.courseNum = 0;
+        this.daysTaught = "n/a";
+        this.startTime = "n/a";
+        this.endTime = "n/a";
+        this.credits = 0;
+        this.name = "";
+        assignedStudents = new ArrayList<>();
 
-    @Override
-    public void start(Stage stage) {
+    }
+    
+    public Course(String coursePrefix, int courseNum, String daysTaught, String startTime,
+            String endTime, int credits, String name) {
         
-        // Instantiate the above data fields within the start() method
-        
-        btnSaveStud = new Button("Save ->");
-        btnSaveSem = new Button("Save ->");
-        btnSaveCourse = new Button("Save ->");
-        
-        cmboEditStud = new ComboBox();
-        cmboEditSem = new ComboBox();
-        cmboEditCourse = new ComboBox();
-        
-        lblStudName = new Label("First and Last Name");
-        lblStudID = new Label("Student ID");
-        lblSSN = new Label("Social Security Number");
-        lblHomeAddress = new Label("Home Address");
-        lblEmail = new Label("Email Address");
-        lblGPA = new Label("GPA");
-        lblEmergName = new Label("Emergency Contact Name");
-        lblEmergEmail = new Label("Emergency Contact Email Address");
-        lblEmergPhone = new Label("Emergency Contact Phone");
-        lblEntryStud = new Label("Manage Students");
-        lblEntrySem = new Label("Manage Semesters");
-        lblEntryCourse = new Label("Manage Courses");
-        
-        //Course
-        lblCoursePrefix = new Label("Course Prefix");
-        lblCourseNum = new Label("Course Number");
-        lblCourseName = new Label("Course Name");
-        lblCourseDays = new Label("Course Days");
-        lblStartTime = new Label("Start Time");
-        lblEndTime = new Label("End Time");
-        lblCreditHours = new Label("Credit Hours");
-        lblCourseInst = new Label("Course Instructor");
-        //course
-        txtCoursePrefix = new TextField();
-        txtCourseNum = new TextField();
-        txtCourseName = new TextField();
-        txtCourseDays = new TextField();
-        txtStartTime = new TextField();
-        txtEndTime = new TextField();
-        txtCreditHours = new TextField();
-        txtCourseInst = new TextField();
-        
-        txtStudName = new TextField();
-        txtStudID = new TextField();
-        txtSSN = new TextField();
-        txtHomeAddress = new TextField();
-        txtEmail = new TextField();
-        txtGPA = new TextField();
-        txtEmergName = new TextField();
-        txtEmergEmail = new TextField();
-        txtEmergPhone = new TextField();
-        
-        lblPeriod = new Label("Period (Fall, Spring, etc)");
-        lblYear = new Label("Year (YYYY)");
-        txtPeriod = new TextField();
-        txtYear = new TextField();
-   
-        crsDropDown = new ChoiceBox();
-        crsDropDown.getItems().add("Create Course");
-        crsDropDown.getItems().add("Edit Course");
-
-       
-        // for Tabs
-        VBox overallVPane = new VBox();
-        TabPane tPane = new TabPane();
-        Tab tbStudent = new Tab("Student");
-        Tab tbSemester = new Tab("Semester");
-        Tab tbCourse = new Tab("Course");
-        
-        // add Menu elements
-        MenuBar mbarMenu = new MenuBar();
-        Menu mApp = new Menu("App");
-        MenuItem miQuit = new MenuItem("Quit App");
-        
-        // create Pane for tabs
-        GridPane gStudPane = new GridPane();
-        GridPane gSemPane = new GridPane();
-        GridPane gCoursePane = new GridPane();
-        
-        // prompt getting of inforrmation
-        txtStudName.setPromptText("First and Last Name");
-        txtStudID.setPromptText("Student ID");
-        txtSSN.setPromptText("Social Security Number");
-        txtHomeAddress.setPromptText("Home Address");
-        txtEmail.setPromptText("Email Address");
-        txtGPA.setPromptText("GPA");
-        txtEmergName.setPromptText("Emergency Contact Name");
-        txtEmergEmail.setPromptText("Emergency Contact Email Address");
-        txtEmergPhone.setPromptText("Emergency Contact Phone Number");
-        
-        txtPeriod.setPromptText("Period (Fall, Spring, etc)");
-        txtYear.setPromptText("Year (YYYY)");
-        
-        txtCoursePrefix.setPromptText("Course Prefix: ");
-        txtCourseNum.setPromptText("Course Number: ");
-        txtCourseName.setPromptText("Course Name: ");
-        txtCourseDays.setPromptText("Course Days: ");
-        txtStartTime.setPromptText("Start Time: ");
-        txtEndTime.setPromptText("End Time: ");
-        txtCreditHours.setPromptText("Credit Hours: ");
-        txtCourseInst.setPromptText("Course Instructor: ");
-        
-        
-        // have text go to next line if necessary
-        lblEntryStud.setWrapText(true);
-        lblEntrySem.setWrapText(true);
-        lblEntryCourse.setWrapText(true);
-        
-        
-        // add the titles to the appropriate tab 
-        gStudPane.add(lblEntryStud, 0, 0);
-        gSemPane.add(lblEntrySem, 0, 0);
-        gCoursePane.add(lblEntryCourse, 0, 0);
-        
-        // arrange the comboBox and checkBox on one horizontal line
-        
-        // Student Tab - edit
-        HBox hStudPane = new HBox();
-        hStudPane.getChildren().addAll(chkEditStud, cmboEditStud);
-        // add to student tab 
-        gStudPane.add(hStudPane, 2, 1);
-        
-        // establish everything disabled
-        cmboEditStud.setDisable(true);
-        
-        txtStudName.setDisable(true);
-        txtStudID.setDisable(true);
-        txtSSN.setDisable(true);
-        txtHomeAddress.setDisable(true);
-        txtEmail.setDisable(true);
-        txtGPA.setDisable(true);
-        txtEmergName.setDisable(true);
-        txtEmergEmail.setDisable(true);
-        txtEmergPhone.setDisable(true);
-        
-        // set on action to enable
-        chkEditStud.setOnAction(e -> {
-            if (chkEditStud.isSelected())
-                    {
-                       cmboEditStud.setDisable(false); 
-                       txtStudName.setDisable(false);
-                       txtStudID.setDisable(false);
-                       txtSSN.setDisable(false);
-                       txtHomeAddress.setDisable(false);
-                       txtEmail.setDisable(false);
-                       txtGPA.setDisable(false);
-                       txtEmergName.setDisable(false);
-                       txtEmergEmail.setDisable(false);
-                       txtEmergPhone.setDisable(false);
-                    }
-            else
-            {
-                cmboEditStud.setDisable(true);
-                txtStudName.setDisable(true);
-                txtStudID.setDisable(true);
-                txtSSN.setDisable(true);
-                txtHomeAddress.setDisable(true);
-                txtEmail.setDisable(true);
-                txtGPA.setDisable(true);
-                txtEmergName.setDisable(true);
-                txtEmergEmail.setDisable(true);
-                txtEmergPhone.setDisable(true);
-                
-            }
-        });
-        
-        // Student Tab - create
-        HBox hStudPane2 = new HBox();
-        hStudPane2.getChildren().addAll(chkCreateStud);
-        // add to student tab
-        gStudPane.add(hStudPane2, 2, 0);
-        
-        // if disabled...
-        chkCreateStud.setOnAction(e -> {
-            if (chkCreateStud.isSelected())
-                    {
-                        txtStudName.setDisable(false);
-                        txtStudID.setDisable(false);
-                        txtSSN.setDisable(false);
-                        txtHomeAddress.setDisable(false);
-                        txtEmail.setDisable(false);
-                        txtGPA.setDisable(false);
-                        txtEmergName.setDisable(false);
-                        txtEmergEmail.setDisable(false);
-                        txtEmergPhone.setDisable(false);
-                    }
-            else
-            {
-                txtStudName.setDisable(true);
-                txtStudID.setDisable(true);
-                txtSSN.setDisable(true);
-                txtHomeAddress.setDisable(true);
-                txtEmail.setDisable(true);
-                txtGPA.setDisable(true);
-                txtEmergName.setDisable(true);
-                txtEmergEmail.setDisable(true);
-                txtEmergPhone.setDisable(true);
-                
-            }
-        });
-        
-        
-        
-        
-        
-        // Semester Tab - edit
-        HBox hSemPane = new HBox();
-        hSemPane.getChildren().addAll(chkEditSem, cmboEditSem);
-        // add to semester tab 
-        gSemPane.add(hSemPane, 2, 1);
-        
-        // set everything as disabled
-        cmboEditSem.setDisable(true);
-        txtPeriod.setDisable(true);
-        txtYear.setDisable(true);
-        
-        // if disabled...
-        chkEditSem.setOnAction(e -> {
-            if (chkEditSem.isSelected())
-                    {
-                       cmboEditSem.setDisable(false); 
-                       txtPeriod.setDisable(false);
-                       txtYear.setDisable(false);
-                    }
-            else
-            {
-                cmboEditSem.setDisable(true);
-                txtPeriod.setDisable(true);
-                txtYear.setDisable(true);
-            }
-        });
-        
-        // Semester Tab - create
-        HBox hSemPane2 = new HBox();
-        hSemPane2.getChildren().addAll(chkCreateSem);
-        // add to semester tab 
-        gSemPane.add(hSemPane2, 2, 0);
-        
-        
-        // if disabled...
-        chkCreateSem.setOnAction(e -> {
-            if (chkCreateSem.isSelected())
-                    {
-                       txtPeriod.setDisable(false);
-                       txtYear.setDisable(false); 
-                    }
-            else
-            {
-                txtPeriod.setDisable(true);
-                txtYear.setDisable(true);
-            }
-        });
-        
-        HBox hCoursePane = new HBox();
-        hCoursePane.getChildren().addAll(crsDropDown, cmboEditCourse);
-        // add course tab
-        gCoursePane.add(hCoursePane, 2, 1);
-        
-        cmboEditCourse.setDisable(true);
-        cmboEditCourse.setVisible(false);
-        
-        txtCoursePrefix.setDisable(true);
-        txtCourseNum.setDisable(true);
-        txtCourseName.setDisable(true);
-        txtStartTime.setDisable(true);
-        txtEndTime.setDisable(true);
-        txtCreditHours.setDisable(true);
-        txtCourseInst.setDisable(true);
-        
-        crsDropDown.setOnAction(e -> {
-            String selectedOption = (String)crsDropDown.getValue();
-            if(selectedOption.equals("Edit Course"))
-            {
-                cmboEditCourse.setDisable(false);
-            cmboEditCourse.setVisible(true);
-
-            txtCoursePrefix.setDisable(false);
-            txtCourseNum.setDisable(false);
-            txtCourseName.setDisable(false);
-            txtStartTime.setDisable(false);
-            txtEndTime.setDisable(false);
-            txtCreditHours.setDisable(false);
-            txtCourseInst.setDisable(false);
-            }
-            else if(selectedOption.equals("Create Course"))
-            {
-                 cmboEditCourse.setDisable(true);
-            cmboEditCourse.setVisible(false);
-             txtCoursePrefix.setDisable(false);
-                txtCourseNum.setDisable(false);
-                txtCourseName.setDisable(false);
-                txtStartTime.setDisable(false);
-                txtEndTime.setDisable(false);
-                txtCreditHours.setDisable(false);
-                txtCourseInst.setDisable(false);
-            }
-            else
-            {
-                cmboEditCourse.setDisable(true);
-        cmboEditCourse.setVisible(false);
-        
-        txtCoursePrefix.setDisable(true);
-        txtCourseNum.setDisable(true);
-        txtCourseName.setDisable(true);
-        txtStartTime.setDisable(true);
-        txtEndTime.setDisable(true);
-        txtCreditHours.setDisable(true);
-        txtCourseInst.setDisable(true);
-            }
-        });
-        
-        
-        
-        // add menu to overall pane
-        overallVPane.getChildren().add(mbarMenu);
-        
-        // position everything
-        gStudPane.add(lblStudName, 0, 1);
-        gStudPane.add(txtStudName, 1, 1);
-        gStudPane.add(lblStudID, 0, 2);
-        gStudPane.add(txtStudID, 1, 2);
-        gStudPane.add(lblSSN, 0, 3);
-        gStudPane.add(txtSSN, 1, 3);
-        gStudPane.add(lblHomeAddress, 0, 4);
-        gStudPane.add(txtHomeAddress, 1, 4);
-        gStudPane.add(lblEmail, 0, 5);
-        gStudPane.add(txtEmail, 1, 5);
-        gStudPane.add(lblGPA, 0, 6);
-        gStudPane.add(txtGPA, 1, 6);
-        gStudPane.add(lblEmergName, 0, 7);
-        gStudPane.add(txtEmergName, 1, 7);
-        gStudPane.add(lblEmergEmail, 0, 8);
-        gStudPane.add(txtEmergEmail, 1, 8);
-        gStudPane.add(lblEmergPhone, 0, 9);
-        gStudPane.add(txtEmergPhone, 1, 9);
-        
-        gSemPane.add(lblPeriod, 0, 1);
-        gSemPane.add(txtPeriod, 1, 1);
-        gSemPane.add(lblYear, 0, 2);
-        gSemPane.add(txtYear, 1, 2);
-        
-        gCoursePane.add(lblCoursePrefix, 0, 1);
-        gCoursePane.add(txtCoursePrefix, 1, 1);
-        gCoursePane.add(lblCourseNum, 0, 2);
-        gCoursePane.add(txtCourseNum, 1, 2);
-        gCoursePane.add(lblCourseName, 0, 3);
-        gCoursePane.add(txtCourseName, 1, 3);
-        gCoursePane.add(lblCourseDays, 0, 4);
-        gCoursePane.add(txtCourseDays, 1, 4);
-        gCoursePane.add(lblStartTime, 0, 5);
-        gCoursePane.add(txtStartTime, 1, 5);
-        gCoursePane.add(lblEndTime, 0, 6);
-        gCoursePane.add(txtEndTime, 1, 6);
-        gCoursePane.add(lblCreditHours, 0, 7);
-        gCoursePane.add(txtCreditHours, 1, 7);
-        gCoursePane.add(lblCourseInst, 0, 8);
-        gCoursePane.add(txtCourseInst, 1, 8);
-        
-        
-        // add quit option to app menu 
-        mApp.getItems().add(miQuit);
-        mbarMenu.getMenus().addAll(mApp);
-        
-        // set save button to its own anchorPane/layout container
-        AnchorPane aStudPane = new AnchorPane();
-        aStudPane.getChildren().add(btnSaveStud);
-        
-        AnchorPane aSemPane = new AnchorPane();
-        aSemPane.getChildren().add(btnSaveSem);
-        
-        AnchorPane aCrsPane = new AnchorPane();
-        aCrsPane.getChildren().add(btnSaveCourse);
-        
-        // add to grids
-        gStudPane.add(aStudPane, 1, 10);
-        gSemPane.add(aSemPane, 1, 3);
-        gCoursePane.add(aCrsPane, 1, 8);
-        
-        // position the window and where it will pop up
-        gStudPane.setAlignment(Pos.CENTER);
-        gSemPane.setAlignment(Pos.CENTER);
-        gStudPane.setHgap(15);
-        gStudPane.setVgap(15);
-        gSemPane.setHgap(15);
-        gSemPane.setVgap(15);
-        gCoursePane.setHgap(15);
-        gCoursePane.setVgap(15);
-        
-        // add built gridPane to tab
-        tbStudent.setContent(gStudPane);
-        tbSemester.setContent(gSemPane);
-        tbCourse.setContent(gCoursePane);
-        
-        // padding??? idk
-        gStudPane.setPadding(new Insets(20, 0, 0, 0));
-        gSemPane.setPadding(new Insets(20, 0 , 0 ,0));
-        gCoursePane.setPadding(new Insets(20, 0, 0, 0));
-        
-        // add both tabs to tab pane
-        tPane.getTabs().addAll(tbStudent, tbSemester, tbCourse);
-        
-        // add tab pane to VBox (overall pane)
-        overallVPane.getChildren().add(tPane);
-        
-        // set everything up on the main window!
-        Scene primaryScene = new Scene(overallVPane, 700, 600);
-        stage.setScene(primaryScene);
-        stage.setTitle("Unversity Management");
-        stage.show();
+        this.coursePrefix = coursePrefix;
+        this.courseID = App.getCrsID();
+        this.courseNum = courseNum;
+        this.daysTaught = daysTaught;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.credits = credits;
+        semesters = new Semester[4];
+        assignedStudents = new ArrayList<>();
+        this.name = name;
         
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
+  
+ // All Getters
+  public int getCredits(){
+      return credits;
+  }
+  public int getID() {
+      return this.courseID;
+  }
+  public void setID (int ID) {
+      this.courseID = ID;
+  }
+  public String getPrefix(){
+      return coursePrefix;
+  }
+  public int getNum(){
+      return courseNum;
+  }
+  public String getDaysTaught(){
+      return daysTaught;
+  }
+  public String getStartTime(){
+      return startTime;
+  }
+  public String getEndTime(){
+      return endTime;
+  }
+  public String getName(){
+      return name;
+  }
+  
+  public Semester[] getSemesters(){
+      return this.semesters;
+  }
+  // All Setters
+  public void setCredits(int credits){
+      this.credits = credits;
+  }
+  public void setPrefix(String prefix){
+      this.coursePrefix = prefix;
+  }
+  public void setNum(int courseNum){
+      this.courseNum = courseNum;
+  }
+  public void setDaysTaught(String daysTaught){
+      this.daysTaught = daysTaught;
+  }
+  public void setStartTime(String startTime){
+      this.startTime = startTime;
+  }
+  public void setEndTime(String endTime){
+      this.endTime = endTime;
+  }
+  public void setName(String name){
+      this.name = name;
+  }
 
+  public void assignSemester(Semester semester){
+      int count = 0;
+      this.semesters[count++] = semester;
+  }
+  
+  public void addCourse(Course course){
+      int count = 0; //May reset to zero
+      allCourses[count++] = course;
+  }
+  
+  public String listAllCourses(){
+      String result = "";
+      for (Course course : allCourses){
+          result += course.getName() + "\n";
+      }
+      
+      return result;
+  }
+  //Print semesters in given course
+  public String semesterInCourse(){
+      String result = "";
+      for(Semester semester : this.semesters){
+       result += semester.toString() +" " + getName();
+      }
+      return result;
+  }
+  
+  public void addStudent(Student student){
+      if (this.assignedStudents.size() < 30)
+      {
+        this.assignedStudents.add(student);
+      }
+      
+  }
+  
+@Override
+public String toString() {
+   return this.getID() + ": " + this.getPrefix() + this.getNum();
+}
+  public String describeCourse() {
+      return String.format("%-15d%-5s%-5d%-20s%-20s%-10s%-10s%-5d", 
+              this.getID(), this.coursePrefix, this. courseNum, this.name, this.daysTaught,
+              this.startTime, this.endTime, this.credits);
+  }
 }
