@@ -1,8 +1,15 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.universityapp;
 
-package Project1;
+/**
+ *
+ * @author liahill
+ */
 
 import java.util.*;
-
 
 public class Faculty {
     
@@ -23,7 +30,7 @@ public class Faculty {
     
     public Faculty() {
         
-        this.facultyID = 0;
+        this.facultyID = App.getFacID();
         this.fullName = "n/a";
         this.email = "n/a";
         this.building = "n/a";
@@ -35,10 +42,10 @@ public class Faculty {
         
     }
     
-    public Faculty(int facultyID, String fullName, String email, String building, int officeNum,
+    public Faculty(String fullName, String email, String building, int officeNum,
             String phoneNum, String dept, String position) {
         
-        this.facultyID = facultyID;
+        this.facultyID = App.getFacID();
         this.fullName = fullName;
         this.email = email;
         this.building = building; 
@@ -77,10 +84,17 @@ public class Faculty {
     public String getEmail(){
         return this.email;
     }
+    public int getID(){
+        return this.facultyID;
+    }
+    
     // Setters
     public void setFullName(String fullName){
       this.fullName = fullName;
   }
+    public void setID(int ID){
+        this.facultyID = ID;
+    }
     public void setEmail(String email){
       this.email = email;
   }
@@ -101,7 +115,15 @@ public class Faculty {
   }
     // Member Methods
     
-    
+@Override
+public String toString() {
+    return this.getID() + ": " + this.getFullName();
+}
+public String describeFaculty() {
+    return String.format("%-15d%-20s%-25s%-20s%-10d%-15s%-15s%-15s", 
+            this.facultyID, this.fullName, this.email,
+            this.building, this.officeNum, this.phoneNum, this.dept, this.position);
+}
 
 
     
