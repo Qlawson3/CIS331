@@ -1389,6 +1389,14 @@ public class App extends Application {
                 // add student object to arrayList
                 students.add(student);
                 
+                // SQL 
+                /* String sqlQuery = "INSERT INTO Student(FULLNAME, SSN, HOMEADDRESS, EMAIL,
+                GPA, EMERGNAME, EMERGEMAIL, EMERGPHONE) VALUES + "('" + fullName + "','"  + ssn + "','" +
+                homeAddress + "','" + email + "'," + gpa + ",'" + emergName + "','" + 
+                "','" + emergEmail + "','" + emergPhone + "')";
+                */
+                
+                
                 lblRanStudID.setText(String.valueOf(student.getID()));
             }
             // for editing
